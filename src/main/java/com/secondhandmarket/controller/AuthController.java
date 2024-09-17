@@ -1,13 +1,11 @@
 package com.secondhandmarket.controller;
 
+import com.secondhandmarket.dto.auth.*;
 import com.secondhandmarket.service.AuthService;
 import com.secondhandmarket.dto.api.ApiResponse;
-import com.secondhandmarket.dto.auth.AuthResponse;
 import com.secondhandmarket.service.EmailService;
 import com.secondhandmarket.util.CodeUtil;
 import lombok.AccessLevel;
-import com.secondhandmarket.dto.auth.AuthLoginRequest;
-import com.secondhandmarket.dto.auth.AuthRegisterRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -59,6 +57,27 @@ public class AuthController {
                 .data(authResponse)
                 .code("auth-s-03")
                 .message("Login successful")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<ApiResponse<AuthResponse>> refreshToken(@RequestBody @Valid AuthRefreshTokenRequest request){
+        AuthResponse authResponse = authService.refreshToken(request);
+        ApiResponse<AuthResponse> apiResponse =  ApiResponse.<AuthResponse>builder()
+                .data(authResponse)
+                .code("auth-s-04")
+                .message("Refresh new access token successful")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<Void>> logOut(@RequestBody @Valid AuthLogOutRequest request){
+        authService.logOut(request);
+        ApiResponse<Void> apiResponse =  ApiResponse.<Void>builder()
+                .code("auth-s-05")
+                .message("Log out successful")
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }

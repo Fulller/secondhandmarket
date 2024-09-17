@@ -66,6 +66,7 @@ public abstract class BaseJWTUtil {
             return JWTPayloadDto.builder()
                     .id(claimsSet.getStringClaim("id"))
                     .email(claimsSet.getStringClaim("email"))
+                    .scope(claimsSet.getStringClaim("scope"))
                     .build();
         } catch (ParseException | JOSEException e) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Failed to verify JWT token", "jwt-e-04");

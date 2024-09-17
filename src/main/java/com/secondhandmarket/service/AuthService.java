@@ -1,8 +1,8 @@
 package com.secondhandmarket.service;
 
-import com.secondhandmarket.dto.auth.AuthResponse;
-import com.secondhandmarket.dto.auth.AuthLoginRequest;
-import com.secondhandmarket.dto.auth.AuthRegisterRequest;
+import com.secondhandmarket.dto.auth.*;
+import com.secondhandmarket.dto.jwt.JWTPayloadDto;
+import com.secondhandmarket.model.RefreshToken;
 import com.secondhandmarket.model.User;
 import com.secondhandmarket.enums.ERole;
 import com.secondhandmarket.exception.AppException;
@@ -31,11 +31,12 @@ public class AuthService {
     UserMapper userMapper;
     AccessTokenUtil accessTokenUtil;
     RefreshTokenUtil refreshTokenUtil;
+    RefreshTokenRepository refreshTokenRepository;
 
     public void register(AuthRegisterRequest request) {
         boolean existedUser = userRepository.existsByEmail(request.getEmail());
         if(existedUser){
-            throw new AppException(HttpStatus.BAD_REQUEST, "Email has existed.", "auth-e-01");
+            throw new AppException(HttpStatus.BAD_REQUEST, "Email has existed", "auth-e-01");
         }
     }
 
@@ -44,7 +45,7 @@ public class AuthService {
         // Find user if not existed
         boolean existedUser = userRepository.existsByEmail(request.getEmail());
         if(existedUser){
-            throw new AppException(HttpStatus.BAD_REQUEST, "Email has existed.", "auth-e-01");
+            throw new AppException(HttpStatus.BAD_REQUEST, "Email has existed", "auth-e-01");
         }
         // Hash password
         String hashedPassword = passwordUtil.encodePassword(request.getPassword());
@@ -71,11 +72,11 @@ public class AuthService {
 
     public AuthResponse login(AuthLoginRequest request){
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
-                ()-> new AppException(HttpStatus.NOT_FOUND, "Email user not found.", "auth-e-02")
+                ()-> new AppException(HttpStatus.NOT_FOUND, "Email user not found", "auth-e-02")
         );
         boolean isMatchPassword = passwordUtil.checkPassword(request.getPassword(), user.getPassword());
         if(!isMatchPassword){
-            throw new AppException(HttpStatus.BAD_REQUEST, "Wrong password.", "auth-e-03");
+            throw new AppException(HttpStatus.BAD_REQUEST, "Wrong password", "auth-e-03");
         }
         String accessTokenString =  accessTokenUtil.generateToken(userMapper.toJWTPayloadDto(user));
         String refreshTokenString =  refreshTokenUtil.generateToken(userMapper.toJWTPayloadDto(user),user);
@@ -83,5 +84,24 @@ public class AuthService {
                 .accessToken(accessTokenString)
                 .refreshToken(refreshTokenString)
                 .build();
+    }
+
+    public AuthResponse refreshToken(AuthRefreshTokenRequest request){
+        JWTPayloadDto payload = refreshTokenUtil.verifyToken(request.getRefreshToken());
+        String accessTokenString =  accessTokenUtil.generateToken(payload);
+        return AuthResponse.builder()
+                .accessToken(accessTokenString)
+                .build();
+    }
+
+    public void logOut(AuthLogOutRequest request){
+        JWTPayloadDto payload = refreshTokenUtil.verifyToken(request.getRefreshToken());
+        RefreshToken refreshToken =  refreshTokenRepository
+                .findByUserId(payload.getId())
+                .orElseThrow(
+                        () -> new AppException(HttpStatus.NOT_FOUND, "Refresh token not found", "auth-e-01")
+                );
+        refreshToken.setToken(null);
+        refreshTokenRepository.save(refreshToken);
     }
 }

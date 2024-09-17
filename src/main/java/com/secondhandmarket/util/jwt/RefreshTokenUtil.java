@@ -51,7 +51,7 @@ public class RefreshTokenUtil extends BaseJWTUtil {
                 .orElseThrow(
                         () -> new AppException(HttpStatus.NOT_FOUND, "Refresh token not found", "auth-e-01")
                 );
-        if(!refreshToken.getToken().equals(token)){
+        if(refreshToken.getToken() == null || !refreshToken.getToken().equals(token)){
             throw new AppException(HttpStatus.NOT_FOUND, "Refresh token not found", "auth-e-01");
         }
         return payload;
