@@ -3,6 +3,8 @@ package com.secondhandmarket.model;
 import com.secondhandmarket.enums.ERole;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -30,9 +32,12 @@ public class User {
 
     private String avatar;
 
-    private String provider_name;
+    @Column(nullable = false)
+    private boolean isFromOutside = false;
 
-    private String provider_id;
+    private String providerName;
+
+    private String providerId;
 
     @ElementCollection(targetClass = ERole.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
@@ -46,4 +51,8 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<Order> orders = new LinkedHashSet<>();
+
+    public boolean getIsFromOutside() {
+        return this.isFromOutside;
+    }
 }

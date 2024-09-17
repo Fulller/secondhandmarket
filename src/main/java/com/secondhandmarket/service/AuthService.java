@@ -99,9 +99,27 @@ public class AuthService {
         RefreshToken refreshToken =  refreshTokenRepository
                 .findByUserId(payload.getId())
                 .orElseThrow(
-                        () -> new AppException(HttpStatus.NOT_FOUND, "Refresh token not found", "auth-e-01")
+                        () -> new AppException(HttpStatus.NOT_FOUND, "Refresh token not found", "auth-e-04")
                 );
         refreshToken.setToken(null);
         refreshTokenRepository.save(refreshToken);
+    }
+
+    public void changePassword(String userId, AuthChangePasswordRequest request){
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(
+                        () -> new AppException(HttpStatus.NOT_FOUND, "User not found", "auth-e-05")
+                );
+        if(user.getIsFromOutside()){
+            throw new AppException(HttpStatus.BAD_REQUEST, "User is not internal", "auth-e-06");
+        }
+        boolean isMatchPassword = passwordUtil.checkPassword(request.getCurrentPassword(), user.getPassword());
+        if(!isMatchPassword){
+            throw new AppException(HttpStatus.BAD_REQUEST, "Wrong current password", "auth-e-07");
+        }
+        String hashedNewPassword = passwordUtil.encodePassword(request.getNewPassword());
+        user.setPassword(hashedNewPassword);
+        userRepository.save(user);
     }
 }
