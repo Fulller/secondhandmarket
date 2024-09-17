@@ -7,9 +7,11 @@ import com.secondhandmarket.model.User;
 import com.secondhandmarket.enums.ERole;
 import com.secondhandmarket.exception.AppException;
 import com.secondhandmarket.mapper.UserMapper;
+import com.secondhandmarket.repository.RefreshTokenRepository;
 import com.secondhandmarket.repository.UserRepository;
-import com.secondhandmarket.util.JWTUtil;
 import com.secondhandmarket.util.PasswordUtil;
+import com.secondhandmarket.util.jwt.AccessTokenUtil;
+import com.secondhandmarket.util.jwt.RefreshTokenUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -27,7 +29,8 @@ public class AuthService {
     PasswordUtil passwordUtil;
     UserRepository userRepository;
     UserMapper userMapper;
-    JWTUtil jwtUtil;
+    AccessTokenUtil accessTokenUtil;
+    RefreshTokenUtil refreshTokenUtil;
 
     public void register(AuthRegisterRequest request) {
         boolean existedUser = userRepository.existsByEmail(request.getEmail());
@@ -38,12 +41,16 @@ public class AuthService {
 
 
     public AuthResponse verifyRegister(AuthRegisterRequest request) {
+        // Find user if not existed
         boolean existedUser = userRepository.existsByEmail(request.getEmail());
         if(existedUser){
             throw new AppException(HttpStatus.BAD_REQUEST, "Email has existed.", "auth-e-01");
         }
+        // Hash password
         String hashedPassword = passwordUtil.encodePassword(request.getPassword());
         request.setPassword(hashedPassword);
+
+        // Roles for normal user
         Set<ERole> roles = new HashSet<>();
         roles.add(ERole.USER);
         User user = User.builder()
@@ -52,20 +59,29 @@ public class AuthService {
                 .build();
         user.setRoles(roles);
         userRepository.save(user);
-        String token =  jwtUtil.generateToken(userMapper.toJWTPayloadDto(user));
-        return AuthResponse.builder().token(token).build();
+
+        // Generate a pair of token
+        String accessTokenString =  accessTokenUtil.generateToken(userMapper.toJWTPayloadDto(user));
+        String refreshTokenString =  refreshTokenUtil.generateToken(userMapper.toJWTPayloadDto(user),user);
+        return AuthResponse.builder()
+                .accessToken(accessTokenString)
+                .refreshToken(refreshTokenString)
+                .build();
     }
 
     public AuthResponse login(AuthLoginRequest request){
-        Optional<User> user = userRepository.findByEmail(request.getEmail());
-        if(user.isEmpty()){
-            throw new AppException(HttpStatus.NOT_FOUND, "Email user not found.", "auth-e-02");
-        }
-        boolean isMatchPassword = passwordUtil.checkPassword(request.getPassword(), user.get().getPassword());
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
+                ()-> new AppException(HttpStatus.NOT_FOUND, "Email user not found.", "auth-e-02")
+        );
+        boolean isMatchPassword = passwordUtil.checkPassword(request.getPassword(), user.getPassword());
         if(!isMatchPassword){
             throw new AppException(HttpStatus.BAD_REQUEST, "Wrong password.", "auth-e-03");
         }
-        String token = jwtUtil.generateToken(userMapper.toJWTPayloadDto(user.get()));
-        return AuthResponse.builder().token(token).build();
+        String accessTokenString =  accessTokenUtil.generateToken(userMapper.toJWTPayloadDto(user));
+        String refreshTokenString =  refreshTokenUtil.generateToken(userMapper.toJWTPayloadDto(user),user);
+        return AuthResponse.builder()
+                .accessToken(accessTokenString)
+                .refreshToken(refreshTokenString)
+                .build();
     }
 }

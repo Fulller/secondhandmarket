@@ -13,7 +13,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
 public class JwtConfig {
-    @Value("${app.jwt.secret}")
+    @Value("${app.jwt.access.secret}")
     private String JWT_SECRET;
 
     @Bean

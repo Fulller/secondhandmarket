@@ -1,12 +1,10 @@
 package com.secondhandmarket.controller;
 
-import com.secondhandmarket.mapper.UserMapper;
 import com.secondhandmarket.service.AuthService;
 import com.secondhandmarket.dto.api.ApiResponse;
 import com.secondhandmarket.dto.auth.AuthResponse;
 import com.secondhandmarket.service.EmailService;
 import com.secondhandmarket.util.CodeUtil;
-import com.secondhandmarket.util.JWTUtil;
 import lombok.AccessLevel;
 import com.secondhandmarket.dto.auth.AuthLoginRequest;
 import com.secondhandmarket.dto.auth.AuthRegisterRequest;
@@ -64,5 +62,4 @@ public class AuthController {
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
-
 }

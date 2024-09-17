@@ -1,4 +1,4 @@
-package com.secondhandmarket.util;
+package com.secondhandmarket.util.jwt;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -8,7 +8,6 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.secondhandmarket.dto.jwt.JWTPayloadDto;
 import com.secondhandmarket.exception.AppException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -19,25 +18,22 @@ import java.text.ParseException;
 import java.util.Date;
 
 @Component
-public class JWTUtil {
-    @Value("${app.jwt.secret}")
-    public String JWT_SECRET;
+public abstract class BaseJWTUtil {
+    protected abstract String getSecret();
+    protected abstract long getExpiration();
 
-    @Value("${app.jwt.expiration}")
-    public long JWT_EXPIRATION;
-
-    private byte[] getSecretKey() {
-        return Base64URL.encode(JWT_SECRET.getBytes()).decode();
+    protected byte[] getSecretKey() {
+        return Base64URL.encode(getSecret().getBytes()).decode();
     }
 
-    public String generateToken(JWTPayloadDto payload){
+    public String generateToken(JWTPayloadDto payload) {
         try {
             JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                     .subject(payload.getId())
                     .issuer("secondhandmarket.com")
                     .issueTime(new Date())
-                    .expirationTime(new Date(System.currentTimeMillis() + JWT_EXPIRATION))
+                    .expirationTime(new Date(System.currentTimeMillis() + getExpiration()))
                     .claim("id", payload.getId())
                     .claim("email", payload.getEmail())
                     .claim("scope", payload.getScope())
@@ -47,26 +43,24 @@ public class JWTUtil {
             object.sign(new MACSigner(this.getSecretKey()));
             return object.serialize();
         } catch (JOSEException e) {
-            System.out.print(e.toString());
-            throw new AppException(HttpStatus.BAD_REQUEST, "JWT");
+            throw new AppException(HttpStatus.UNAUTHORIZED,"JWT error" ,"jwt-e-01");
         }
     }
 
-    // Verify and parse token
     public JWTPayloadDto verifyToken(String token) {
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
             JWSVerifier verifier = new MACVerifier(this.getSecretKey());
 
             if (!signedJWT.verify(verifier)) {
-                throw new AppException(HttpStatus.UNAUTHORIZED, "Invalid JWT signature");
+                throw new AppException(HttpStatus.UNAUTHORIZED, "Invalid JWT signature","jwt-e-02");
             }
 
             JWTClaimsSet claimsSet = signedJWT.getJWTClaimsSet();
             Date expirationTime = claimsSet.getExpirationTime();
 
             if (new Date().after(expirationTime)) {
-                throw new AppException(HttpStatus.UNAUTHORIZED, "Token has expired");
+                throw new AppException(HttpStatus.UNAUTHORIZED, "Token has expired","jwt-e-03");
             }
 
             return JWTPayloadDto.builder()
@@ -74,22 +68,10 @@ public class JWTUtil {
                     .email(claimsSet.getStringClaim("email"))
                     .build();
         } catch (ParseException | JOSEException e) {
-            System.out.print(e.toString());
-            throw new AppException(HttpStatus.BAD_REQUEST, "Failed to verify JWT token");
+            throw new AppException(HttpStatus.BAD_REQUEST, "Failed to verify JWT token", "jwt-e-04");
         }
     }
 
-    // Refresh token
-    public String refreshToken(String token) {
-        try {
-            JWTPayloadDto payload = this.verifyToken(token);
-            return this.generateToken(payload);
-        } catch (AppException e) {
-            throw new AppException(HttpStatus.UNAUTHORIZED, "Failed to refresh JWT token");
-        }
-    }
-
-    // Check if token is expired
     public boolean isTokenExpired(String token) {
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
@@ -97,12 +79,11 @@ public class JWTUtil {
             Date expirationTime = claimsSet.getExpirationTime();
             return new Date().after(expirationTime);
         } catch (ParseException e) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Failed to parse JWT token");
+            throw new AppException(HttpStatus.BAD_REQUEST, "Failed to parse JWT token", "jwt-e-05");
         }
     }
 
-    // Get jwt payload from context
-    public static JWTPayloadDto getPayload(SecurityContext context){
+    public static JWTPayloadDto getPayload(SecurityContext context) {
         Authentication authentication = context.getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
         return JWTPayloadDto.builder()
@@ -112,4 +93,3 @@ public class JWTUtil {
                 .build();
     }
 }
-
