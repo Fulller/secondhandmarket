@@ -101,9 +101,9 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-    @GetMapping("/google/success")
-    public RedirectView googleSuccess(@AuthenticationPrincipal OAuth2User oAuth2User) {
-        AuthResponse authResponse = authService.loginWithGoogle(oAuth2User);
+    @GetMapping("/login/oauth2/success")
+    public RedirectView loginOAuth2Success(@AuthenticationPrincipal OAuth2User oAuth2User) {
+        AuthResponse authResponse = authService.loginOAuth2Success(oAuth2User);
         String redirectUrl = UriComponentsBuilder.fromUriString(clientReceiveTokensPath)
                 .queryParam("accessToken", authResponse.getAccessToken())
                 .queryParam("refreshToken", authResponse.getRefreshToken())

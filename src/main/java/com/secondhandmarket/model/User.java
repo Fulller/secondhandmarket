@@ -1,11 +1,8 @@
 package com.secondhandmarket.model;
 
-import com.secondhandmarket.enums.EProvider;
 import com.secondhandmarket.enums.ERole;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -35,8 +32,7 @@ public class User {
     @Column(nullable = false)
     private boolean isFromOutside = false;
 
-    @Enumerated(EnumType.STRING)
-    private EProvider providerName;
+    private String providerName;
 
     private String providerId;
 

@@ -48,7 +48,8 @@ public class SecurityConfig {
         httpSecurity.oauth2Login(oauth2 -> oauth2
                 .userInfoEndpoint(userInfo -> userInfo
                         .userService(oAuth2UserService)
-                ).defaultSuccessUrl("/auth/google/success", true)
+                )
+                .defaultSuccessUrl("/auth/login/oauth2/success", true)
         );
 
         httpSecurity.oauth2ResourceServer(oauth2->

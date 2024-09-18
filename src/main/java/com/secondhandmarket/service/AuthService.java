@@ -2,7 +2,6 @@ package com.secondhandmarket.service;
 
 import com.secondhandmarket.dto.auth.*;
 import com.secondhandmarket.dto.jwt.JWTPayloadDto;
-import com.secondhandmarket.enums.EProvider;
 import com.secondhandmarket.model.RefreshToken;
 import com.secondhandmarket.model.User;
 import com.secondhandmarket.enums.ERole;
@@ -21,7 +20,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -125,9 +123,10 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public AuthResponse loginWithGoogle(OAuth2User oAuth2User){
-        String userGoogleId = oAuth2User.getAttribute("sub");
-        User user = userRepository.findByIsFromOutsideTrueAndProviderNameAndProviderId(EProvider.GOOGLE, userGoogleId)
+    public AuthResponse loginOAuth2Success(OAuth2User oAuth2User){
+        String userOAuthId = oAuth2User.getAttribute("sub");
+        String providerName = oAuth2User.getAttribute("provider");
+        User user = userRepository.findByIsFromOutsideTrueAndProviderNameAndProviderId(providerName, userOAuthId)
                 .orElseGet(() -> {
                     Set<ERole> roles = new HashSet<>();
                     roles.add(ERole.USER);
@@ -135,8 +134,8 @@ public class AuthService {
                             .email(oAuth2User.getAttribute("email"))
                             .name(oAuth2User.getAttribute("name"))
                             .isFromOutside(true)
-                            .providerId(userGoogleId)
-                            .providerName(EProvider.GOOGLE)
+                            .providerId(userOAuthId)
+                            .providerName(providerName)
                             .avatar(oAuth2User.getAttribute("picture"))
                             .roles(roles)
                             .build();
