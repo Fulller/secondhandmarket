@@ -2,6 +2,7 @@ package com.secondhandmarket.service;
 
 import com.secondhandmarket.dto.auth.*;
 import com.secondhandmarket.dto.jwt.JWTPayloadDto;
+import com.secondhandmarket.enums.EProvider;
 import com.secondhandmarket.model.RefreshToken;
 import com.secondhandmarket.model.User;
 import com.secondhandmarket.enums.ERole;
@@ -16,6 +17,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -34,7 +36,7 @@ public class AuthService {
     RefreshTokenRepository refreshTokenRepository;
 
     public void register(AuthRegisterRequest request) {
-        boolean existedUser = userRepository.existsByEmail(request.getEmail());
+        boolean existedUser = userRepository.existsByEmailAndIsFromOutsideFalse(request.getEmail());
         if(existedUser){
             throw new AppException(HttpStatus.BAD_REQUEST, "Email has existed", "auth-e-01");
         }
@@ -43,7 +45,7 @@ public class AuthService {
 
     public AuthResponse verifyRegister(AuthRegisterRequest request) {
         // Find user if not existed
-        boolean existedUser = userRepository.existsByEmail(request.getEmail());
+        boolean existedUser = userRepository.existsByEmailAndIsFromOutsideFalse(request.getEmail());
         if(existedUser){
             throw new AppException(HttpStatus.BAD_REQUEST, "Email has existed", "auth-e-01");
         }
@@ -71,7 +73,7 @@ public class AuthService {
     }
 
     public AuthResponse login(AuthLoginRequest request){
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
+        User user = userRepository.findByEmailAndIsFromOutsideFalse(request.getEmail()).orElseThrow(
                 ()-> new AppException(HttpStatus.NOT_FOUND, "Email user not found", "auth-e-02")
         );
         boolean isMatchPassword = passwordUtil.checkPassword(request.getPassword(), user.getPassword());
@@ -121,5 +123,33 @@ public class AuthService {
         String hashedNewPassword = passwordUtil.encodePassword(request.getNewPassword());
         user.setPassword(hashedNewPassword);
         userRepository.save(user);
+    }
+
+    public AuthResponse loginWithGoogle(OAuth2User oAuth2User){
+        String userGoogleId = oAuth2User.getAttribute("sub");
+        User user = userRepository.findByIsFromOutsideTrueAndProviderNameAndProviderId(EProvider.GOOGLE, userGoogleId)
+                .orElseGet(() -> {
+                    Set<ERole> roles = new HashSet<>();
+                    roles.add(ERole.USER);
+                    User newUser = User.builder()
+                            .email(oAuth2User.getAttribute("email"))
+                            .name(oAuth2User.getAttribute("name"))
+                            .isFromOutside(true)
+                            .providerId(userGoogleId)
+                            .providerName(EProvider.GOOGLE)
+                            .avatar(oAuth2User.getAttribute("picture"))
+                            .roles(roles)
+                            .build();
+                    return userRepository.save(newUser);
+                });
+
+        JWTPayloadDto payload = userMapper.toJWTPayloadDto(user);
+        String accessToken = accessTokenUtil.generateToken(payload);
+        String refreshToken = refreshTokenUtil.generateToken(payload, user);
+
+        return AuthResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 }

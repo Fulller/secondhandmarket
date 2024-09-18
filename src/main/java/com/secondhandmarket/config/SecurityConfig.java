@@ -1,5 +1,6 @@
 package com.secondhandmarket.config;
 
+import com.secondhandmarket.security.CustomOAuth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,14 +20,17 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private final String[] POST_PUBLIC_ROUTES = {"/auth/**"};
-    private final String[] GET_PUBLIC_ROUTES = {"/auth/**"};
+    private final String[] POST_PUBLIC_ROUTES = {"/auth/**","/", "/login", "/oauth2/**"};
+    private final String[] GET_PUBLIC_ROUTES = {"/auth/**","/", "/login", "/oauth2/**"};
 
     @Autowired
     public JwtDecoder jwtDecoder;
 
     @Autowired
     public JwtAuthenticationConverter jwtAuthenticationConverter;
+
+    @Autowired
+    private CustomOAuth2UserService oAuth2UserService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -39,7 +43,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, POST_PUBLIC_ROUTES).permitAll()
                         .requestMatchers(HttpMethod.GET, GET_PUBLIC_ROUTES).permitAll()
                         .anyRequest().authenticated()
+                );
+
+        httpSecurity.oauth2Login(oauth2 -> oauth2
+                .userInfoEndpoint(userInfo -> userInfo
+                        .userService(oAuth2UserService)
+                ).defaultSuccessUrl("/auth/google/success", true)
         );
+
         httpSecurity.oauth2ResourceServer(oauth2->
                 oauth2.jwt(jwtConfigurer -> jwtConfigurer
                         .decoder(jwtDecoder)

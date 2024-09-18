@@ -6,26 +6,30 @@ import com.secondhandmarket.dto.api.ApiResponse;
 import com.secondhandmarket.service.EmailService;
 import com.secondhandmarket.util.CodeUtil;
 import com.secondhandmarket.util.jwt.BaseJWTUtil;
-import lombok.AccessLevel;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class AuthController {
-    AuthService authService;
-    EmailService emailService;
-    CodeUtil<AuthRegisterRequest> codeUtil;
+    @Value("${app.clientReceiveTokensPath}")
+    private String clientReceiveTokensPath;
+    private final AuthService authService;
+    private final EmailService emailService;
+    private final CodeUtil<AuthRegisterRequest> codeUtil;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<Void>> register(@RequestBody @Valid AuthRegisterRequest request) {
@@ -41,17 +45,16 @@ public class AuthController {
     }
 
     @GetMapping("/register/verify/{verificationCode}")
-    public ResponseEntity<ApiResponse<AuthResponse>> verifyRegister(@PathVariable String verificationCode) {
+    public RedirectView verifyRegister(@PathVariable String verificationCode) {
         AuthRegisterRequest request =  codeUtil.get(verificationCode);
-        AuthResponse response = authService.verifyRegister(request);
+        AuthResponse authResponse = authService.verifyRegister(request);
         codeUtil.remove(verificationCode);
         emailService.sendEmailToWelcome(request.getEmail());
-        ApiResponse<AuthResponse> apiResponse = ApiResponse.<AuthResponse>builder()
-                .data(response)
-                .code("auth-s-02")
-                .message("Register successfully")
-                .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+        String redirectUrl = UriComponentsBuilder.fromUriString(clientReceiveTokensPath)
+                .queryParam("accessToken", authResponse.getAccessToken())
+                .queryParam("refreshToken", authResponse.getRefreshToken())
+                .toUriString();
+        return new RedirectView(redirectUrl);
     }
 
     @PostMapping("/login")
@@ -97,4 +100,15 @@ public class AuthController {
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+    @GetMapping("/google/success")
+    public RedirectView googleSuccess(@AuthenticationPrincipal OAuth2User oAuth2User) {
+        AuthResponse authResponse = authService.loginWithGoogle(oAuth2User);
+        String redirectUrl = UriComponentsBuilder.fromUriString(clientReceiveTokensPath)
+                .queryParam("accessToken", authResponse.getAccessToken())
+                .queryParam("refreshToken", authResponse.getRefreshToken())
+                .toUriString();
+        return new RedirectView(redirectUrl);
+    }
 }
+

@@ -1,5 +1,6 @@
 package com.secondhandmarket.model;
 
+import com.secondhandmarket.enums.EProvider;
 import com.secondhandmarket.enums.ERole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,7 +26,6 @@ public class User {
 
     private String phone;
 
-    @Column(nullable = false, unique = true)
     private String email;
 
     private String password;
@@ -35,7 +35,8 @@ public class User {
     @Column(nullable = false)
     private boolean isFromOutside = false;
 
-    private String providerName;
+    @Enumerated(EnumType.STRING)
+    private EProvider providerName;
 
     private String providerId;
 

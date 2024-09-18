@@ -28,7 +28,7 @@ public class InitAppConfig {
     @Bean
     ApplicationRunner applicationRunner() {
         return args -> {
-            boolean isExistedAdmin = userRepository.existsByEmail(ADMIN_EMAIL);
+            boolean isExistedAdmin = userRepository.existsByEmailAndIsFromOutsideFalse(ADMIN_EMAIL);
             if (isExistedAdmin) return;
             Set<ERole> roles = EnumSet.allOf(ERole.class);
             User admin = User.builder()
