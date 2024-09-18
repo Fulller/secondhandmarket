@@ -151,4 +151,25 @@ public class AuthService {
                 .refreshToken(refreshToken)
                 .build();
     }
+
+    public void forgotPassword(AuthForgotPasswordRequest request){
+        userRepository.findByEmailAndIsFromOutsideFalse(request.getEmail()).orElseThrow(
+                ()-> new AppException(HttpStatus.NOT_FOUND, "Email user not found", "auth-e-02")
+        );
+    }
+
+    public AuthResponse verifyForgotPassword(String email, AuthVerifyForgotPasswordRequest request){
+        User user = userRepository.findByEmailAndIsFromOutsideFalse(email).orElseThrow(
+                ()-> new AppException(HttpStatus.NOT_FOUND, "Email user not found", "auth-e-02")
+        );
+        String hashedPassword = passwordUtil.encodePassword(request.getNewPassword());
+        user.setPassword(hashedPassword);
+        userRepository.save(user);
+        String accessTokenString =  accessTokenUtil.generateToken(userMapper.toJWTPayloadDto(user));
+        String refreshTokenString =  refreshTokenUtil.generateToken(userMapper.toJWTPayloadDto(user),user);
+        return AuthResponse.builder()
+                .accessToken(accessTokenString)
+                .refreshToken(refreshTokenString)
+                .build();
+    }
 }

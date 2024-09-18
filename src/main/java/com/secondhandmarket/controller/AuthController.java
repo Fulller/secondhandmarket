@@ -5,6 +5,7 @@ import com.secondhandmarket.service.AuthService;
 import com.secondhandmarket.dto.api.ApiResponse;
 import com.secondhandmarket.service.EmailService;
 import com.secondhandmarket.util.CodeUtil;
+import com.secondhandmarket.util.CommonUtil;
 import com.secondhandmarket.util.jwt.BaseJWTUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.security.SecureRandom;
 import java.util.UUID;
 
 @RestController
@@ -30,6 +32,7 @@ public class AuthController {
     private final AuthService authService;
     private final EmailService emailService;
     private final CodeUtil<AuthRegisterRequest> codeUtil;
+    private final CodeUtil<String> forgotPasswordCodeUtil;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<Void>> register(@RequestBody @Valid AuthRegisterRequest request) {
@@ -109,6 +112,31 @@ public class AuthController {
                 .queryParam("refreshToken", authResponse.getRefreshToken())
                 .toUriString();
         return new RedirectView(redirectUrl);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ApiResponse<Void>> forGotPassword(@RequestBody AuthForgotPasswordRequest request) {
+        authService.forgotPassword(request);
+        String verificationCode = CommonUtil.generateVerificationCode();
+        forgotPasswordCodeUtil.save(CommonUtil.getForgotPasswordKey(verificationCode), request.getEmail(), 1);
+        emailService.sendEmailToVerifyForgotPassword(request.getEmail(), verificationCode);
+        ApiResponse<Void> apiResponse =  ApiResponse.<Void>builder()
+                .code("auth-s-08")
+                .message("Request to get new password successfully, please check your email")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @PostMapping("/forgot-password/verify")
+    public ResponseEntity<ApiResponse<AuthResponse>> verifyForgotPassword(@RequestBody @Valid AuthVerifyForgotPasswordRequest request) {
+        String email = forgotPasswordCodeUtil.get(CommonUtil.getForgotPasswordKey(request.getCode()));
+        AuthResponse authResponse =  authService.verifyForgotPassword(email, request);
+        ApiResponse<AuthResponse> apiResponse =  ApiResponse.<AuthResponse>builder()
+                .data(authResponse)
+                .code("auth-s-08")
+                .message("Verify forgot password successfully")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 }
 

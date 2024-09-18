@@ -53,4 +53,14 @@ public class EmailService {
                 .build();
         sendEmail(emailPayload);
     }
+
+    public void sendEmailToVerifyForgotPassword(String toEmail, String verificationCode) {
+        String emailText = "Verify forgot password code:\n" + verificationCode;
+        SendEmailDto emailPayload = SendEmailDto.builder()
+                .to(toEmail)
+                .subject("Verity to create new password")
+                .text(emailText)
+                .build();
+        sendEmail(emailPayload);
+    }
 }
