@@ -7,23 +7,34 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private Integer level;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Category parent;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "parent", orphanRemoval = true)
+    private List<Category> categoryChildren = new ArrayList<>();
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = true)
-    private List<CategoryChild> categoryChildrens = new ArrayList<>();
+    private Set<Attribute> attributes = new HashSet<>();
 }
