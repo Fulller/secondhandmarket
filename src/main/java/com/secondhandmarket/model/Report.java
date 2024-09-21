@@ -11,17 +11,23 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class Image {
-
+public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false)
-    private String url;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @JoinColumn(name = "defendant_id", nullable = false)
+    private User defendant;
+
+    @ManyToOne
+    @JoinColumn(name = "accused_id", nullable = false)
+    private User accused;
+
+    @Column(nullable = false)
+    private String reason;
+
+    private String phone;
+
+    private String email;
 }
