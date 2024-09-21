@@ -28,10 +28,4 @@ public class Address {
     private String ward;
 
     private String detail;
-
-    @OneToOne(mappedBy = "address", cascade = CascadeType.ALL)
-    private User user;
-
-    @OneToOne(mappedBy = "address", cascade = CascadeType.ALL)
-    private Product product;
 }

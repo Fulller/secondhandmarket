@@ -11,6 +11,7 @@ import com.secondhandmarket.exception.AppException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
@@ -92,5 +93,10 @@ public abstract class BaseJWTUtil {
                 .email(jwt.getClaim("email"))
                 .scope(jwt.getClaim("scope"))
                 .build();
+    }
+
+    public static JWTPayloadDto getPayload() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        return getPayload(context);
     }
 }
