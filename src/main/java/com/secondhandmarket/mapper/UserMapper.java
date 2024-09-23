@@ -1,10 +1,13 @@
 package com.secondhandmarket.mapper;
 
 import com.secondhandmarket.dto.jwt.JWTPayloadDto;
+import com.secondhandmarket.dto.request.UserUpdateRequest;
+import com.secondhandmarket.dto.response.UserResponse;
 import com.secondhandmarket.enums.ERole;
 import com.secondhandmarket.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.Set;
 
@@ -20,4 +23,8 @@ public interface UserMapper {
         }
         return scopeBuilder.toString().trim();
     }
+
+
+    void toUpdateUser(@MappingTarget User user, UserUpdateRequest request);
+    UserResponse toResponseUser(User user);
 }

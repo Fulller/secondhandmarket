@@ -1,5 +1,8 @@
 package com.secondhandmarket.repository;
 
+import com.secondhandmarket.dto.request.UserUpdateRequest;
+import com.secondhandmarket.dto.response.UserResponse;
+import org.mapstruct.MappingTarget;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.secondhandmarket.model.User;
 import org.springframework.stereotype.Repository;
