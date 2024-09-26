@@ -4,6 +4,7 @@ import com.secondhandmarket.dto.email.SendEmailDto;
 import com.secondhandmarket.exception.AppException;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -13,6 +14,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @Service
 @RequiredArgsConstructor
 public class EmailService {
+    @Value("${spring.mail.username}")
+    private String systemEmail;
+
     private final JavaMailSender mailSender;
 
     public void sendEmail(SendEmailDto emailPayload) {
@@ -22,6 +26,7 @@ public class EmailService {
             helper.setTo(emailPayload.getTo());
             helper.setSubject(emailPayload.getSubject());
             helper.setText(emailPayload.getText(), true);
+            helper.setFrom(systemEmail);
             mailSender.send(message);
         } catch (MessagingException e) {
             System.out.print(e.toString());
