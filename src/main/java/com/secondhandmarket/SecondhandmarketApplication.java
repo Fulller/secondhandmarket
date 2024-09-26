@@ -9,3 +9,4 @@ public class SecondhandmarketApplication {
 		SpringApplication.run(SecondhandmarketApplication.class, args);
 	}
 }
+
