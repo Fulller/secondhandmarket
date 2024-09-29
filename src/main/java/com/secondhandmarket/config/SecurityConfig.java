@@ -20,8 +20,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private final String[] POST_PUBLIC_ROUTES = {"/auth/**","/", "/login", "/oauth2/**"};
-    private final String[] GET_PUBLIC_ROUTES = {"/auth/**","/", "/login", "/oauth2/**"};
+    private final String[] POST_PUBLIC_ROUTES = {"/auth/**","/", "/login", "/signin", "/oauth2/**"};
+    private final String[] GET_PUBLIC_ROUTES = {"/auth/**","/", "/login",  "/signin", "/oauth2/**"};
 
     @Autowired
     public JwtDecoder jwtDecoder;
@@ -42,7 +42,19 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(request-> request
                         .requestMatchers(HttpMethod.POST, POST_PUBLIC_ROUTES).permitAll()
                         .requestMatchers(HttpMethod.GET, GET_PUBLIC_ROUTES).permitAll()
+                        .requestMatchers("/dashboard").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
+                );
+
+        httpSecurity.formLogin(form -> form
+                .loginPage("/sign-in")
+//                .defaultSuccessUrl("/dashboard", true)
+                .permitAll()
+        );
+
+        httpSecurity
+                .sessionManagement(session -> session
+                        .sessionFixation().migrateSession()  // Đảm bảo session không bị mất
                 );
 
         httpSecurity.oauth2Login(oauth2 -> oauth2

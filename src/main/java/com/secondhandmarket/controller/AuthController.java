@@ -1,7 +1,6 @@
 package com.secondhandmarket.controller;
 
 import com.secondhandmarket.dto.auth.*;
-import com.secondhandmarket.security.SecurityUtil;
 import com.secondhandmarket.service.AuthService;
 import com.secondhandmarket.dto.api.ApiResponse;
 import com.secondhandmarket.service.EmailService;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.security.SecureRandom;
 import java.util.UUID;
 
 @RestController
