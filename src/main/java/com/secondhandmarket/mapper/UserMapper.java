@@ -1,5 +1,6 @@
 package com.secondhandmarket.mapper;
 
+import com.secondhandmarket.dto.auth.AuthUserInfoResponse;
 import com.secondhandmarket.dto.jwt.JWTPayloadDto;
 import com.secondhandmarket.enums.ERole;
 import com.secondhandmarket.model.User;
@@ -20,4 +21,5 @@ public interface UserMapper {
         }
         return scopeBuilder.toString().trim();
     }
+    AuthUserInfoResponse toUserInfo(User user);
 }
