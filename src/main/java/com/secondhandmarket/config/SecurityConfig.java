@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -21,7 +22,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
     private final String[] POST_PUBLIC_ROUTES = {"/auth/**","/", "/login", "/signin", "/oauth2/**"};
-    private final String[] GET_PUBLIC_ROUTES = {"/auth/**","/", "/login",  "/signin", "/oauth2/**"};
+    private final String[] GET_PUBLIC_ROUTES = {"/auth/**","/", "/login", "/oauth2/**"};
+//private final String[] GET_PUBLIC_ROUTES = {"/", "/login", "/oauth2/**"};
 
     @Autowired
     public JwtDecoder jwtDecoder;
@@ -42,20 +44,17 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(request-> request
                         .requestMatchers(HttpMethod.POST, POST_PUBLIC_ROUTES).permitAll()
                         .requestMatchers(HttpMethod.GET, GET_PUBLIC_ROUTES).permitAll()
-                        .requestMatchers("/dashboard").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(("/css/output.css")).permitAll()
                         .anyRequest().authenticated()
                 );
 
         httpSecurity.formLogin(form -> form
                 .loginPage("/sign-in")
-//                .defaultSuccessUrl("/dashboard", true)
                 .permitAll()
         );
-
-        httpSecurity
-                .sessionManagement(session -> session
-                        .sessionFixation().migrateSession()  // Đảm bảo session không bị mất
-                );
+        httpSecurity.logout(logout -> logout
+                .logoutSuccessUrl("/sign-in")
+        );
 
         httpSecurity.oauth2Login(oauth2 -> oauth2
                 .userInfoEndpoint(userInfo -> userInfo

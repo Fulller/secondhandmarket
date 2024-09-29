@@ -10,23 +10,14 @@ import com.secondhandmarket.service.EmailService;
 import com.secondhandmarket.util.CodeUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.oauth2.jwt.Jwt;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
@@ -40,8 +31,6 @@ public class AuthController2 {
     private final CodeUtil<AuthRegisterRequest> codeUtil;
     private final CodeUtil<String> forgotPasswordCodeUtil;
 
-    private static final Logger logger = LoggerFactory.getLogger(DashboardController.class);
-
     @Autowired
     private JwtDecoder jwtDecoder;
 
@@ -52,23 +41,22 @@ public class AuthController2 {
     }
 
     @PostMapping("/signin")
-    public String login(@ModelAttribute("authLoginRequest") AuthLoginRequest request, Model model) {
+    public String login(@ModelAttribute("authLoginRequest") AuthLoginRequest request, Model model, RedirectAttributes redirectAttributes) {
         try {
             AuthResponse authResponse = authService.login(request);
             String accessToken = authResponse.getAccessToken();
-            Jwt jwt = jwtDecoder.decode(accessToken);
-            String scope = jwt.getClaimAsString("scope");
-            if (scope.contains("ROLE_ADMIN")) {
-                model.addAttribute("accessToken", accessToken);
-                return "redirect:/dashboard";
-            } else {
-                model.addAttribute("message", "Đăng nhập thành công nhưng không có quyền Admin");
-                return "signin";
-            }
+            redirectAttributes.addAttribute("accessToken", accessToken);
+            return "redirect:/auth/receive-token";
         } catch (AppException ex) {
             model.addAttribute("error", ex.getMessage());
             return "signin";
         }
+    }
+
+    @GetMapping("auth/receive-token")
+    public String receiveToken(@RequestParam("accessToken") String accessToken, Model model) {
+        model.addAttribute("accessToken", accessToken);
+        return "receive-token";
     }
 
     @PostMapping("/log-out")

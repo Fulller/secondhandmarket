@@ -8,5 +8,15 @@
 </head>
 <body>
     <p>Xin chào</p>
+    <h1>Welcome to Admin Dashboard</h1>
+
+    <script>
+        // Nhận accessToken từ backend thông qua Thymeleaf
+        const accessToken = /*[[${accessToken}]]*/ 'null';
+        if (accessToken && accessToken !== 'null') {
+            localStorage.setItem('accessToken', accessToken);
+            console.log("AccessToken has been saved to localStorage");
+        }
+    </script>
 </body>
 </html>
