@@ -44,12 +44,17 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(request-> request
                         .requestMatchers(HttpMethod.POST, POST_PUBLIC_ROUTES).permitAll()
                         .requestMatchers(HttpMethod.GET, GET_PUBLIC_ROUTES).permitAll()
-                        .requestMatchers(("/css/output.css")).permitAll()
+                        .requestMatchers(("/css/**")).permitAll()
+                        .requestMatchers(("/js/**")).permitAll()
+                        .requestMatchers(("/attribute/**")).permitAll()
+                        .requestMatchers(("/images/**")).permitAll()
+                        .requestMatchers("/dashboard").permitAll()
                         .anyRequest().authenticated()
                 );
 
         httpSecurity.formLogin(form -> form
                 .loginPage("/sign-in")
+//                .defaultSuccessUrl("/auth/receive-token")
                 .permitAll()
         );
         httpSecurity.logout(logout -> logout

@@ -35,6 +35,9 @@ public class Category {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "parent", orphanRemoval = true)
     private List<Category> categoryChildren = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = true)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "category_attribute",
+               joinColumns = @JoinColumn(name = "category_id", nullable = false),
+               inverseJoinColumns = @JoinColumn(name = "attribute_id", nullable = false))
     private Set<Attribute> attributes = new HashSet<>();
 }

@@ -55,7 +55,12 @@ public class AuthController2 {
 
     @GetMapping("auth/receive-token")
     public String receiveToken(@RequestParam("accessToken") String accessToken, Model model) {
+        Jwt jwt = jwtDecoder.decode(accessToken);
+        String role = jwt.getClaim("scope");
         model.addAttribute("accessToken", accessToken);
+//        if (role.contains("ROLE_ADMIN")) {
+//            return "redirect:/dashboard";
+//        }
         return "receive-token";
     }
 
