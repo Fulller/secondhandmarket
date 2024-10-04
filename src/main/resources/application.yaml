@@ -68,3 +68,8 @@ app:
   clientReceiveTokensPath: ${CLIENT_RECEIVE_TOKENS_PATH}
 server:
   port: ${PORT}
+
+cloudinary:
+  cloud-name:
+  api-key:
+  secret-key:
