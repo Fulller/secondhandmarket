@@ -1,5 +1,6 @@
 package com.secondhandmarket.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,5 +27,6 @@ public class Attribute {
     private String name;
 
     @ManyToMany(mappedBy = "attributes")
+    @JsonIgnore
     private Set<Category> categories = new HashSet<>();
 }

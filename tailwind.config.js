@@ -1,4 +1,5 @@
 module.exports = {
+  important: true,
   content: [
     './src/main/resources/templates/**/*.html',
   ],

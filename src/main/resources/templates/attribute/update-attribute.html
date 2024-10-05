@@ -18,8 +18,7 @@
                                 <a class="font-medium text-primary" th:href="@{/dashboard}">Dashboard /</a>
                             </li>
                             <li>
-                                <a class="font-medium text-primary" th:href="@{/attribute/add-attribute}">Thêm thuộc
-                                    tính</a>
+                                <a class="font-medium text-primary">Sửa thuộc tính</a>
                             </li>
                         </ol>
                     </nav>
@@ -33,13 +32,13 @@
                         <div class="rounded-sm bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <div class="border-b border-stroke px-6.5 pb-6 pt-2 dark:border-strokedark">
                                 <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                    <h3 class="font-medium text-black dark:text-white">FORM THÊM THUỘC TÍNH</h3>
+                                    <h3 class="font-medium text-black dark:text-white">FORM SỬA THUỘC TÍNH</h3>
                                     <div th:if="${successMessage}" class="text-green-500">
                                         <p th:text="${successMessage}"></p>
                                     </div>
                                 </div>
                             </div>
-                            <form method="post" th:action="@{/attribute/add-attribute-post}"
+                            <form method="post" th:action="@{/attribute/update-attribute-put/{id}(id=${id})}"
                                   th:object="${attributeRequest}">
                                 <div class="flex flex-col gap-5.5 p-6.5">
                                     <div>

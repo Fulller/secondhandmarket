@@ -4,7 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class AttributeRequest {
-    @NotBlank(message = "Bạn chưa nhập tên thuộc tính!")
+public class CategoryParentRequest {
+    @NotBlank(message = "Bạn chưa nhập tên danh mục cha!")
     private String name;
+
+    private Integer level = 1;
 }

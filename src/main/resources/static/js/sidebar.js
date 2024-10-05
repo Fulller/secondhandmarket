@@ -29,19 +29,19 @@ if (sidebar) {
         toggleSidebarMobile(sidebar, sidebarBackdrop, toggleSidebarMobileHamburger, toggleSidebarMobileClose);
     });
 
-        document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Lấy tất cả các button có data-collapse-toggle
         const buttons = document.querySelectorAll('[data-collapse-toggle]');
 
         buttons.forEach(button => {
-        button.addEventListener('click', function() {
-        const dropdownId = button.getAttribute('aria-controls');
-        const dropdown = document.getElementById(dropdownId);
+            button.addEventListener('click', function () {
+                const dropdownId = button.getAttribute('aria-controls');
+                const dropdown = document.getElementById(dropdownId);
 
-        // Toggle hiển thị của dropdown
-        dropdown.classList.toggle('hidden');
-    });
-    });
+                // Toggle hiển thị của dropdown
+                dropdown.classList.toggle('hidden');
+            });
+        });
     });
 
 }

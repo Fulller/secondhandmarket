@@ -1,10 +1,14 @@
 package com.secondhandmarket.config;
 
 import com.secondhandmarket.security.CustomOAuth2UserService;
+import com.secondhandmarket.service.thymeleaf.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,7 +25,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private final String[] POST_PUBLIC_ROUTES = {"/auth/**","/", "/login", "/signin", "/oauth2/**"};
+    private final String[] POST_PUBLIC_ROUTES = {"/auth/**","/", "/login", "/oauth2/**"};
     private final String[] GET_PUBLIC_ROUTES = {"/auth/**","/", "/login", "/oauth2/**"};
 //private final String[] GET_PUBLIC_ROUTES = {"/", "/login", "/oauth2/**"};
 
@@ -39,6 +43,23 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
+
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request-> request
@@ -46,19 +67,33 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, GET_PUBLIC_ROUTES).permitAll()
                         .requestMatchers(("/css/**")).permitAll()
                         .requestMatchers(("/js/**")).permitAll()
-                        .requestMatchers(("/attribute/**")).permitAll()
                         .requestMatchers(("/images/**")).permitAll()
-                        .requestMatchers("/dashboard").permitAll()
+                        .requestMatchers(("/api/**")).permitAll()
+                        .requestMatchers(("/dashboard/**")).authenticated()
+                        .requestMatchers("/sign-in").anonymous()
                         .anyRequest().authenticated()
                 );
 
+        httpSecurity.sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+
         httpSecurity.formLogin(form -> form
                 .loginPage("/sign-in")
-//                .defaultSuccessUrl("/auth/receive-token")
+                .loginProcessingUrl("/sign-in-post")
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .successHandler((request, response, authentication) -> {
+                    response.sendRedirect("/dashboard");
+                })
+                .failureUrl("/sign-in")
                 .permitAll()
         );
+
         httpSecurity.logout(logout -> logout
+                .logoutUrl("/log-out")
                 .logoutSuccessUrl("/sign-in")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
         );
 
         httpSecurity.oauth2Login(oauth2 -> oauth2
