@@ -46,5 +46,6 @@ public class Category {
     @JoinTable(name = "category_attribute",
                joinColumns = @JoinColumn(name = "category_id", nullable = false),
                inverseJoinColumns = @JoinColumn(name = "attribute_id", nullable = false))
+    @JsonIgnore
     private Set<Attribute> attributes = new HashSet<>();
 }

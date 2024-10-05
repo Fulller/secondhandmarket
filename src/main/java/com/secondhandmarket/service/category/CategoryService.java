@@ -79,18 +79,27 @@ public class CategoryService implements ICategoryService {
     public List<Category> getCategoryTree() {
         List<Category> categories = categoryRepository.findAll();
         Map<String, Category> categoryMap = new HashMap<>();
+
+        // Đầu tiên, thêm tất cả các danh mục vào map
         for (Category category : categories) {
             categoryMap.put(category.getId(), category);
-            category.setAttributes(new HashSet<>());
         }
+
         List<Category> categoryTree = new ArrayList<>();
+
+        // Xây dựng cây danh mục
         for (Category category : categories) {
             if (category.getParent() == null) {
+                // Nếu danh mục không có cha, thêm vào cây
                 categoryTree.add(category);
             } else {
+                // Nếu có cha, tìm cha và thêm danh mục vào danh sách con của cha
                 Category parent = categoryMap.get(category.getParent().getId());
                 if (parent != null) {
-                    parent.getCategoryChildren().add(category);
+                    // Kiểm tra xem danh mục đã có trong danh sách con của cha chưa
+                    if (!parent.getCategoryChildren().contains(category)) {
+                        parent.getCategoryChildren().add(category);
+                    }
                 }
             }
         }
