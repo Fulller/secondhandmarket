@@ -172,4 +172,13 @@ public class AuthService {
                 .refreshToken(refreshTokenString)
                 .build();
     }
+
+    public AuthUserInfoResponse getUserInfo(String userId) {
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(
+                        () -> new AppException(HttpStatus.NOT_FOUND, "User not found", "auth-e-05")
+                );
+        return userMapper.toUserInfo(user);
+    }
 }
