@@ -1,6 +1,6 @@
 package com.secondhandmarket.controller.thymeleaf;
 
-import com.secondhandmarket.dto.AttributeRequest;
+import com.secondhandmarket.dto.attribute.AttributeRequest;
 import com.secondhandmarket.model.Attribute;
 import com.secondhandmarket.repository.AttributeRepository;
 import com.secondhandmarket.service.attribute.AttributeService;

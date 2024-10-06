@@ -1,9 +1,8 @@
-package com.secondhandmarket.dto;
+package com.secondhandmarket.dto.category;
 
 import com.secondhandmarket.model.Attribute;
 import com.secondhandmarket.model.Category;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 

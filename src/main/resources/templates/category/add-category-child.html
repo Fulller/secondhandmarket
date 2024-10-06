@@ -63,6 +63,8 @@
                                                th:field="*{name}" name="name" id="name">
                                         <p th:if="${#fields.hasErrors('name')}" class="text-red-500"
                                            th:errors="*{name}"></p>
+                                        <p th:if="${errorMessageExist}" class="text-red-500"
+                                           th:text="${errorMessageExist}"></p>
                                     </div>
                                     <div>
                                         <label class=" mb-3 block text-base font-medium text-black dark:text-white">
@@ -74,7 +76,7 @@
                                                     th:value="${attribute.id}"
                                                     th:text="${attribute.name}"></option>
                                         </select>
-                                        <p th:if="${#fields.hasErrors('attributes')}" th:errorclass="error"
+                                        <p th:if="${#fields.hasErrors('attributes')}" class="text-red-500"
                                            th:errors="*{attributes}"></p>
                                     </div>
                                     <button type="submit"

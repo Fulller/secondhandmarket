@@ -1,4 +1,4 @@
-package com.secondhandmarket.dto;
+package com.secondhandmarket.dto.category;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

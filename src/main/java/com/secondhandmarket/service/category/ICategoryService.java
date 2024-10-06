@@ -1,7 +1,7 @@
 package com.secondhandmarket.service.category;
 
-import com.secondhandmarket.dto.CategoryChildRequest;
-import com.secondhandmarket.dto.CategoryParentRequest;
+import com.secondhandmarket.dto.category.CategoryChildRequest;
+import com.secondhandmarket.dto.category.CategoryParentRequest;
 import com.secondhandmarket.model.Attribute;
 import com.secondhandmarket.model.Category;
 

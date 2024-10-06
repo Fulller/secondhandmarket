@@ -1,5 +1,5 @@
 package com.secondhandmarket.service.attribute;
-import com.secondhandmarket.dto.AttributeRequest;
+import com.secondhandmarket.dto.attribute.AttributeRequest;
 import com.secondhandmarket.model.Attribute;
 
 import java.util.List;

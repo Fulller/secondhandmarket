@@ -1,8 +1,7 @@
 package com.secondhandmarket.controller.thymeleaf;
 
-import com.secondhandmarket.dto.AttributeRequest;
-import com.secondhandmarket.dto.CategoryChildRequest;
-import com.secondhandmarket.dto.CategoryParentRequest;
+import com.secondhandmarket.dto.category.CategoryChildRequest;
+import com.secondhandmarket.dto.category.CategoryParentRequest;
 import com.secondhandmarket.model.Attribute;
 import com.secondhandmarket.model.Category;
 import com.secondhandmarket.repository.CategoryRepository;
@@ -20,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.List;
 
 @Controller
@@ -47,7 +47,7 @@ public class CategoryController {
     @PostMapping("/add-category-parent-post")
     @PreAuthorize("hasRole('ADMIN')")
     public String addCategoryParent(@ModelAttribute("categoryParentRequest") @Valid CategoryParentRequest categoryParentRequest,
-                               BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+                                    BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldError().getDefaultMessage();
             redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
@@ -62,12 +62,16 @@ public class CategoryController {
         return "redirect:/category/add-category-parent";
     }
 
+    private void prepareModelAttributes(Model model) {
+
+    }
+
     @GetMapping("/add-category-child")
     @PreAuthorize("hasRole('ADMIN')")
     public String showCategoryChildForm(Model model) {
+        model.addAttribute("categoryChildRequest", new CategoryChildRequest());
         List<Category> parentCategories = categoryService.findAllCategoryParent();
         List<Attribute> attributes = attributeService.findAll();
-        model.addAttribute("categoryChildRequest", new CategoryChildRequest());
         model.addAttribute("parentCategories", parentCategories);
         model.addAttribute("attributes", attributes);
         return "/category/add-category-child";
