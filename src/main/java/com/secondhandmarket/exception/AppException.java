@@ -25,5 +25,7 @@ public class AppException extends RuntimeException {
         this.status = HttpStatus.INTERNAL_SERVER_ERROR;
         this.code = null;
     }
+
+    
 }
 

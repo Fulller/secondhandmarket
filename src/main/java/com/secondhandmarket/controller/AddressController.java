@@ -1,61 +1,73 @@
 package com.secondhandmarket.controller;
 
+import com.secondhandmarket.dto.address.AddressRequetst;
 import com.secondhandmarket.model.Address;
 import com.secondhandmarket.service.AddressService;
+import com.secondhandmarket.dto.api.ApiResponse;
+import com.secondhandmarket.exception.AppException;
+
+
+
 import org.springframework.beans.factory.annotation.Autowired;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/addresses")
-@Tag(name = "Quản lý địa chỉ", description = "Các API cho CRUD địa chỉ")
 public class AddressController {
 
     @Autowired
     private AddressService addressService;
 
-    // Thêm địa chỉ mới
     @PostMapping
-    @Operation(summary = "Thêm địa chỉ", description = "Thêm một địa chỉ mới vào hệ thống")
-    public ResponseEntity<Address> createAddress(@RequestBody Address address) {
-        Address createdAddress = addressService.createAddress(address);
-        return ResponseEntity.ok(createdAddress);
+    public ResponseEntity<ApiResponse<Address>> createAddress(@RequestBody @Valid AddressRequetst addressRequetst) {
+        Address createdAddress = addressService.createAddress(addressRequetst);
+        ApiResponse<Address> response = ApiResponse.<Address>builder()
+                .data(createdAddress)
+                .code("address-s-01")
+                .message("Address created successfully")
+                .build();
+        return ResponseEntity.ok(response);
     }
 
-    // Lấy danh sách tất cả địa chỉ
-    @GetMapping
-    @Operation(summary = "Lấy danh sách địa chỉ", description = "Hiển thị danh sách tất cả địa chỉ")
-    public ResponseEntity<List<Address>> getAllAddresses() {
-        List<Address> addresses = addressService.getAllAddresses();
-        return ResponseEntity.ok(addresses);
+    @GetMapping("/{addressId}")
+    public ResponseEntity<ApiResponse<Address>> getAddressById(@PathVariable String addressId) {
+        Address address = addressService.getAddressById(addressId)
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Address not found", "address-e-01"));
+    
+        ApiResponse<Address> response = ApiResponse.<Address>builder()
+                .data(address)
+                .code("address-s-02")
+                .message("Địa chỉ lấy thành công")
+                .build();
+    
+        return ResponseEntity.ok(response);
+    }
+    
+    
+
+
+    @PutMapping("/{addressId}")
+    public ResponseEntity<ApiResponse<Address>> updateAddress(@PathVariable String addressId, @RequestBody @Valid AddressRequetst addressRequetst) {
+        Address updatedAddress = addressService.updateAddress(addressId, addressRequetst);
+        ApiResponse<Address> response = ApiResponse.<Address>builder()
+                .data(updatedAddress)
+                .code("address-s-03")
+                .message("Address updated successfully")
+                .build();
+        return ResponseEntity.ok(response);
     }
 
-    // Lấy địa chỉ theo id
-    @GetMapping("/{id}")
-    @Operation(summary = "Lấy địa chỉ theo ID", description = "Lấy chi tiết địa chỉ theo mã ID")
-    public ResponseEntity<Address> getAddressById(@PathVariable String id) {
-        return addressService.getAddressById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    // Cập nhật địa chỉ theo id
-    @PutMapping("/{id}")
-    @Operation(summary = "Cập nhật địa chỉ", description = "Cập nhật thông tin địa chỉ theo ID")
-    public ResponseEntity<Address> updateAddress(@PathVariable String id, @RequestBody Address updatedAddress) {
-        Address updated = addressService.updateAddress(id, updatedAddress);
-        return ResponseEntity.ok(updated);
-    }
-
-    // Xóa địa chỉ theo id
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Xóa địa chỉ", description = "Xóa địa chỉ theo mã ID")
-    public ResponseEntity<Void> deleteAddress(@PathVariable String id) {
-        addressService.deleteAddress(id);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/{addressId}")
+    public ResponseEntity<ApiResponse<Void>> deleteAddress(@PathVariable String addressId) {
+        addressService.deleteAddress(addressId);
+        ApiResponse<Void> response = ApiResponse.<Void>builder()
+                .code("address-s-04")
+                .message("Address deleted successfully")
+                .build();
+        return ResponseEntity.ok(response);
     }
 }
