@@ -1,4 +1,4 @@
-package com.secondhandmarket.dto.request;
+package com.secondhandmarket.dto.user;
 
 import com.secondhandmarket.model.Address;
 import lombok.*;

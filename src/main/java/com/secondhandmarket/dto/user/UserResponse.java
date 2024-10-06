@@ -1,6 +1,5 @@
-package com.secondhandmarket.dto.response;
+package com.secondhandmarket.dto.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.secondhandmarket.model.Address;
 import lombok.*;

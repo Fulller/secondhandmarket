@@ -1,8 +1,8 @@
 package com.secondhandmarket.mapper;
 
 import com.secondhandmarket.dto.jwt.JWTPayloadDto;
-import com.secondhandmarket.dto.request.UserUpdateRequest;
-import com.secondhandmarket.dto.response.UserResponse;
+import com.secondhandmarket.dto.user.UserUpdateRequest;
+import com.secondhandmarket.dto.user.UserResponse;
 import com.secondhandmarket.enums.ERole;
 import com.secondhandmarket.model.User;
 import org.mapstruct.Mapper;
