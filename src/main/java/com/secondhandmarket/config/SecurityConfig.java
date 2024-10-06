@@ -88,8 +88,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
                 .csrf(csrf -> csrf.disable()) // Disable CSRF if not needed
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS with your configuration
                 .authorizeHttpRequests(auth -> auth
@@ -130,10 +130,6 @@ public class SecurityConfig {
                 .userInfoEndpoint(userInfo -> userInfo
                         .userService(oAuth2UserService)
                 )
-                .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .userService(oAuth2UserService)
-                        )
                         .defaultSuccessUrl("/auth/login/oauth2/success", true)
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
@@ -143,6 +139,6 @@ public class SecurityConfig {
                         )
                 );
 
-        return http.build();
+        return httpSecurity.build();
     }
 }

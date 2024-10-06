@@ -1,6 +1,7 @@
 package com.secondhandmarket.controller;
 
 import com.secondhandmarket.dto.auth.*;
+import com.secondhandmarket.security.SecurityUtil;
 import com.secondhandmarket.service.AuthService;
 import com.secondhandmarket.dto.api.ApiResponse;
 import com.secondhandmarket.service.EmailService;
