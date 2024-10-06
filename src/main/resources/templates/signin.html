@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng nhập</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+</head>
+
+<body class="bg-white">
+<div class="flex flex-col items-center justify-center px-6 pt-6 mx-auto md:h-screen pt:mt-0">
+    <a href="" class="flex items-center justify-center mb-8 text-2xl font-semibold lg:mb-10 text-gray-900">
+        <img th:src="@{/images/logo.svg}" class="mr-4 h-11" alt="FlowBite Logo">
+        <span>CHỢ CŨ</span>
+    </a>
+    <div class="w-full max-w-xl p-6 space-y-8 sm:p-8 bg-white rounded-lg shadow border border-gray-500">
+        <h2 class="text-2xl font-bold text-gray-900">
+            Đăng nhập trang quản lý chợ cũ
+        </h2>
+        <form class="mt-8 space-y-6" th:action="@{/sign-in-post}" method="post" th:object="${authLoginRequest}">
+            <div>
+                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Tài khoản admin</label>
+                <input th:field="*{email}" type="email" name="email" id="email"
+                       class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
+                       placeholder="name@company.com">
+            </div>
+            <div>
+                <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Mật khẩu admin</label>
+                <input th:field="*{password}" type="text" name="password" id="password" placeholder="••••••••"
+                       class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
+            </div>
+            <div class="flex items-start">
+                <div class="flex items-center h-5">
+                    <input id="remember" aria-describedby="remember" name="remember" type="checkbox"
+                           class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300">
+                </div>
+                <div class="ml-3 text-sm">
+                    <label for="remember" class="font-medium text-gray-900">Ghi nhớ</label>
+                </div>
+                <a href="#" class="ml-auto text-sm text-primary-700 hover:underline">Quên mật khẩu?</a>
+            </div>
+            <!-- Đặt nút và thông báo trong flex và dùng justify-between -->
+            <div class="flex justify-between items-center w-full">
+                <button type="submit"
+                        class="px-5 py-3 text-base font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300">
+                    Đăng nhập
+                </button>
+                <!-- Thông báo lỗi căn phải -->
+                <div class="text-right">
+                    <div th:if="${errorMessage}" class="text-red-500">
+                        <p th:text="${errorMessage}"></p>
+                    </div>
+<!--                    <div th:if="${message}" class="text-green-500">-->
+<!--                        <p th:text="${message}"></p>-->
+<!--                    </div>-->
+                </div>
+            </div>
+            <div class="text-sm font-medium text-gray-500">
+                Chưa có tài khoản?
+                <a href="#" class="text-primary-700 hover:underline">Tạo tài khoản</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+
+</html>
