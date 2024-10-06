@@ -17,6 +17,9 @@ public class CloudinaryConfig {
     @Value("${cloudinary.secret-key}")
     private String secretKey;
 
+    @Value("${cloudinary.folder}")
+    public String folder;
+
     @Bean
     public Cloudinary cloudinary() {
         return new Cloudinary(ObjectUtils.asMap(

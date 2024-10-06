@@ -2,13 +2,10 @@ package com.secondhandmarket.service;
 
 import com.cloudinary.utils.ObjectUtils;
 import com.secondhandmarket.config.CloudinaryConfig;
-import com.secondhandmarket.exception.AppException;
-import com.secondhandmarket.model.User;
 import com.secondhandmarket.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,45 +20,38 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
 public class CloudinaryService {
-
     CloudinaryConfig cloudinary;
     UserRepository userRepository;
 
-    public String uploadImg(MultipartFile file) throws IOException {
-        String id = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "User not found", "user-s-01"));
+    private String getFolder(String type){
+        String folder = this.cloudinary.folder;
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return String.format("%s/%s/%s", folder,userId, type );
+    }
 
+    public String uploadImg(MultipartFile file) throws IOException {
         var result = cloudinary.cloudinary().uploader()
                 .upload(file.getBytes(), ObjectUtils.asMap(
-                        "folder", "secondhandmarket/product_owner_"+user.getId()+"/images"
+                        "folder", getFolder("images")
                 ));
         return (String) result.get("secure_url");
     }
 
     public Set<String> uploadMultiImg(List<MultipartFile> files) throws IOException {
-        String id = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "User not found", "user-s-01"));
-
         Set<String> urlList = new HashSet<>();
         for (MultipartFile file : files) {
             var result = cloudinary.cloudinary().uploader()
                     .upload(file.getBytes(), ObjectUtils.asMap(
-                            "folder", "secondhandmarket/product_owner_"+user.getId()+"/images"
+                            "folder", getFolder("images")
                     ));
             urlList.add((String) result.get("secure_url"));;
         }
         return urlList;
     }
     public String uploadMultiVideos(MultipartFile vid) throws IOException {
-        String id = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "User not found", "user-s-01"));
-
         var result = cloudinary.cloudinary().uploader().upload(vid.getBytes(), ObjectUtils.asMap(
                 "resource_type", "video",
-                "folder", "secondhandmarket/product_owner_"+user.getId()+"/videos"
+                "folder",  getFolder("videos")
         ));
         return (String) result.get("secure_url");
     }
@@ -95,7 +85,7 @@ public class CloudinaryService {
 
     private String extractPublicIdFromUrl(String url) {
         // Tìm vị trí bắt đầu của "secondhandmarket"
-        int startIndex = url.indexOf("secondhandmarket");
+        int startIndex = url.indexOf(this.cloudinary.folder);
 
         // Tìm vị trí của dấu chấm (phần mở rộng)
         int endIndex = url.indexOf(".", startIndex);

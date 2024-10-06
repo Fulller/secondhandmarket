@@ -34,8 +34,8 @@ public class CloudinaryController {
             @ModelAttribute("file") List<MultipartFile> files
     ) throws IOException {
         return ApiResponse.builder()
-                .code("upload-s-01")
-                .message("User upload image success")
+                .code("upload-s-02")
+                .message("User upload images success")
                 .data(cloudinaryService.uploadMultiImg(files))
                 .build();
     }
@@ -45,7 +45,7 @@ public class CloudinaryController {
             @ModelAttribute("file") MultipartFile file
     ) throws IOException {
         return ApiResponse.builder()
-                .code("upload-s-02")
+                .code("upload-s-03")
                 .message("User upload video success")
                 .data(cloudinaryService.uploadMultiVideos(file))
                 .build();
@@ -56,12 +56,12 @@ public class CloudinaryController {
         Map<String, Object> deleteResult = cloudinaryService.deleteImg(url);
         if ("ok".equals(deleteResult.get("result"))) {
             return ApiResponse.builder()
-                    .code("delete-s-01")
+                    .code("upload-s-04")
                     .message("Image deleted successfully")
                     .build();
         } else {
             return ApiResponse.builder()
-                    .code("delete-e-01")
+                    .code("upload-e-01")
                     .message("Failed to delete image")
                     .data(deleteResult)
                     .build();
@@ -73,12 +73,12 @@ public class CloudinaryController {
 
         if ("ok".equals(deleteResult.get("result"))) {
             return ApiResponse.builder()
-                    .code("delete-s-02")
+                    .code("upload-s-05")
                     .message("Video deleted successfully")
                     .build();
         } else {
             return ApiResponse.builder()
-                    .code("delete-e-02")
+                    .code("upload-e-02")
                     .message("Failed to delete video")
                     .data(deleteResult)
                     .build();
