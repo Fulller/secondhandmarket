@@ -14,10 +14,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @Service
 @RequiredArgsConstructor
 public class EmailService {
-    @Value("${spring.mail.username}")
-    private String systemEmail;
+//    @Value("${spring.mail.username}")
+//    private String systemEmail;
 
     private final JavaMailSender mailSender;
+
+    @Value("${spring.mail.username}")
+    private String systemEmail;
 
     public void sendEmail(SendEmailDto emailPayload) {
         var message = mailSender.createMimeMessage();
