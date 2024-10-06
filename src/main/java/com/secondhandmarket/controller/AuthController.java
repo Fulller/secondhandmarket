@@ -34,6 +34,8 @@ public class AuthController {
     private final EmailService emailService;
     private final CodeUtil<AuthRegisterRequest> codeUtil;
     private final CodeUtil<String> forgotPasswordCodeUtil;
+    private final SecurityUtil securityUtil;
+
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<Void>> register(@RequestBody @Valid AuthRegisterRequest request) {
@@ -134,8 +136,20 @@ public class AuthController {
         AuthResponse authResponse =  authService.verifyForgotPassword(email, request);
         ApiResponse<AuthResponse> apiResponse =  ApiResponse.<AuthResponse>builder()
                 .data(authResponse)
-                .code("auth-s-08")
+                .code("auth-s-09")
                 .message("Verify forgot password successfully")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @GetMapping("/info")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<AuthUserInfoResponse>> getInfo() {
+        String userId = securityUtil.getCurrentUserId();
+        ApiResponse<AuthUserInfoResponse> apiResponse =  ApiResponse.<AuthUserInfoResponse>builder()
+                .data(authService.getUserInfo(userId))
+                .code("auth-s-10")
+                .message("Get user info successfully")
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }

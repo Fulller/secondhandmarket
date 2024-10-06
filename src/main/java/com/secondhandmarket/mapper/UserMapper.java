@@ -1,5 +1,6 @@
 package com.secondhandmarket.mapper;
 
+import com.secondhandmarket.dto.auth.AuthUserInfoResponse;
 import com.secondhandmarket.dto.jwt.JWTPayloadDto;
 import com.secondhandmarket.dto.user.UserUpdateRequest;
 import com.secondhandmarket.dto.user.UserResponse;
@@ -24,7 +25,7 @@ public interface UserMapper {
         return scopeBuilder.toString().trim();
     }
 
-
     void toUpdateUser(@MappingTarget User user, UserUpdateRequest request);
     UserResponse toResponseUser(User user);
+    AuthUserInfoResponse toUserInfo(User user);
 }
