@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -62,10 +63,6 @@ public class CategoryController {
         return "redirect:/category/add-category-parent";
     }
 
-    private void prepareModelAttributes(Model model) {
-
-    }
-
     @GetMapping("/add-category-child")
     @PreAuthorize("hasRole('ADMIN')")
     public String showCategoryChildForm(Model model) {
@@ -77,22 +74,50 @@ public class CategoryController {
         return "/category/add-category-child";
     }
 
-    @PostMapping("/add-category-child-post")
+//    @PostMapping("/add-category-child-post")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public String addCategoryChild(@ModelAttribute("categoryChildRequest") @Valid CategoryChildRequest categoryChildRequest,
+//                                    BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+//        if (bindingResult.hasErrors()) {
+//            String errorMessage = bindingResult.getFieldError().getDefaultMessage();
+//            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+//            return "redirect:/category/add-category-child";
+//        }
+//        if (categoryRepository.existsByName(categoryChildRequest.getName())) {
+//            redirectAttributes.addFlashAttribute("errorMessage", "Tên danh mục đã tồn tại!");
+//            return "redirect:/category/add-category-child";
+//        }
+//        categoryService.saveCategoryChild(categoryChildRequest);
+//        redirectAttributes.addFlashAttribute("successMessage", "Thêm danh mục con thành công!");
+//        return "redirect:/category/add-category-child";
+//    }
+
+    @PostMapping("/add-category-child")
     @PreAuthorize("hasRole('ADMIN')")
-    public String addCategoryChild(@ModelAttribute("categoryChildRequest") @Valid CategoryChildRequest categoryChildRequest,
-                                    BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldError().getDefaultMessage();
-            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
-            return "redirect:/category/add-category-child";
-        }
+    public ModelAndView addCategoryChild(@ModelAttribute("categoryChildRequest") @Valid CategoryChildRequest categoryChildRequest,
+                                         BindingResult bindingResult) {
         if (categoryRepository.existsByName(categoryChildRequest.getName())) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Tên danh mục đã tồn tại!");
-            return "redirect:/category/add-category-child";
+            bindingResult.rejectValue("name", "error.category", "Tên danh mục đã tồn tại!");
+        }
+        ModelAndView modelAndView = new ModelAndView();
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName("/category/add-category-child");
+            List<Category> parentCategories = categoryService.findAllCategoryParent();
+            List<Attribute> attributes = attributeService.findAll();
+            modelAndView.addObject("parentCategories", parentCategories);
+            modelAndView.addObject("attributes", attributes);
+            modelAndView.addObject("categoryParentRequest", new CategoryParentRequest());
+            return modelAndView;
         }
         categoryService.saveCategoryChild(categoryChildRequest);
-        redirectAttributes.addFlashAttribute("successMessage", "Thêm danh mục con thành công!");
-        return "redirect:/category/add-category-child";
+        modelAndView.addObject("successMessage", "Thêm danh mục con thành công!");
+        List<Category> parentCategories = categoryService.findAllCategoryParent();
+        List<Attribute> attributes = attributeService.findAll();
+        modelAndView.addObject("parentCategories", parentCategories);
+        modelAndView.addObject("attributes", attributes);
+        modelAndView.addObject("categoryParentRequest", new CategoryParentRequest());
+        modelAndView.setViewName("/category/add-category-child");
+        return modelAndView;
     }
 
     @GetMapping("/list-category")

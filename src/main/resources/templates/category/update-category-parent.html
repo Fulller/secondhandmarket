@@ -18,8 +18,8 @@
                                 <a class="font-medium text-primary" th:href="@{/dashboard}">Dashboard /</a>
                             </li>
                             <li>
-                                <a class="font-medium text-primary" th:href="@{/category/add-category-child}">
-                                    Thêm danh mục con
+                                <a class="font-medium text-primary" th:href="@{/category/update-category-parent}">
+                                    Sửa danh mục cha
                                 </a>
                             </li>
                         </ol>
@@ -34,52 +34,29 @@
                         <div class="rounded-sm bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <div class="border-b border-stroke px-6.5 pb-6 pt-2 dark:border-strokedark">
                                 <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                    <h3 class="font-medium text-black dark:text-white">FORM THÊM DANH MỤC CON</h3>
+                                    <h3 class="font-medium text-black dark:text-white">FORM SỬA DANH MỤC CHA</h3>
                                     <div th:if="${successMessage}" class="text-green-500">
                                         <p th:text="${successMessage}"></p>
                                     </div>
                                 </div>
                             </div>
-                            <form method="post" th:action="@{/category/add-category-child}"
-                                  th:object="${categoryChildRequest}">
+                            <form method="post" th:action="@{/category/add-category-parent-post}"
+                                  th:object="${categoryParentRequest}">
                                 <div class="flex flex-col gap-5.5 p-6.5">
                                     <div>
                                         <label class="mb-3 block text-base font-medium text-black dark:text-white">
-                                            Chọn danh mục cha <span class="text-red-500"> (*) </span>
+                                            Tên danh mục cha <span class="text-red-500"> (*) </span>
                                         </label>
-                                        <select class=" rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                th:field="*{parent}" required>
-                                            <option th:each="parent : ${parentCategories}"
-                                                    th:value="${parent.id}"
-                                                    th:text="${parent.name}"></option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="mb-3 block text-base font-medium text-black dark:text-white">
-                                            Tên danh mục con <span class="text-red-500"> (*) </span>
-                                        </label>
-                                        <input type="text" placeholder="Ví dụ: Điện thoại, Laptop, ..."
+                                        <input type="text" placeholder="Ví dụ: Đồ điện tử, Thú cưng, ..."
                                                class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                th:field="*{name}" name="name" id="name">
-                                        <p th:if="${#fields.hasErrors('name')}" class="text-red-500"
-                                           th:errors="*{name}"></p>
-                                    </div>
-                                    <div>
-                                        <label class=" mb-3 block text-base font-medium text-black dark:text-white">
-                                            Chọn thuộc tính - Có thể chọn nhiều <span class="text-red-500"> (*) </span>
-                                        </label>
-                                        <select class="select2-attribute w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                th:field="*{attributes}" name="states[]" multiple="multiple">
-                                            <option th:each="attribute : ${attributes}"
-                                                    th:value="${attribute.id}"
-                                                    th:text="${attribute.name}"></option>
-                                        </select>
-                                        <p th:if="${#fields.hasErrors('attributes')}" class="text-red-500"
-                                           th:errors="*{attributes}"></p>
+                                        <div th:if="${errorMessage}" class="italic text-red-500">
+                                            <p th:text="${errorMessage}"></p>
+                                        </div>
                                     </div>
                                     <button type="submit"
                                             class="inline-flex items-center justify-center rounded-md bg-primary px-10 py-4 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
-                                        Lưu danh mục con mới
+                                        Lưu danh mục cha mới
                                     </button>
                                 </div>
                             </form>
@@ -90,5 +67,6 @@
         </main>
     </div>
 </div>
+
 </body>
 </html>

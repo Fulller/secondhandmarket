@@ -2,6 +2,7 @@ package com.secondhandmarket.service.category;
 
 import com.secondhandmarket.dto.category.CategoryChildRequest;
 import com.secondhandmarket.dto.category.CategoryParentRequest;
+import com.secondhandmarket.exception.AppException;
 import com.secondhandmarket.model.Attribute;
 import com.secondhandmarket.model.Category;
 import com.secondhandmarket.repository.CategoryRepository;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -62,7 +64,14 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public void updateCategoryParent(String id, CategoryParentRequest categoryParentRequest) {
-
+        Optional<Category> attributeOptional = categoryRepository.findById(id);
+        if (attributeOptional.isPresent()) {
+            Category existingCategoryParent = attributeOptional.get();
+            existingCategoryParent.setName(categoryParentRequest.getName());
+            categoryRepository.save(existingCategoryParent);
+        } else {
+            throw new AppException(HttpStatus.NOT_FOUND, "Category not found with id: " + id);
+        }
     }
 
     @Override
