@@ -17,7 +17,7 @@
         <h2 class="text-2xl font-bold text-gray-900">
             Đăng nhập trang quản lý chợ cũ
         </h2>
-        <form class="mt-8 space-y-6" th:action="@{/sign-in-post}" method="post" th:object="${authLoginRequest}">
+        <form class="mt-8 space-y-6" th:action="@{/sign-in}" method="post" th:object="${authLoginRequest}">
             <div>
                 <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Tài khoản admin</label>
                 <input th:field="*{email}" type="email" name="email" id="email"
@@ -47,9 +47,7 @@
                 </button>
                 <!-- Thông báo lỗi căn phải -->
                 <div class="text-right">
-                    <div th:if="${errorMessage}" class="text-red-500">
-                        <p th:text="${errorMessage}"></p>
-                    </div>
+                    <p th:if="${param.error}" class="error text-red-500">Email hoặc password không đúng</p>
                 </div>
             </div>
             <div class="text-sm font-medium text-gray-500">

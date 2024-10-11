@@ -109,13 +109,14 @@ public class SecurityConfig {
 
         httpSecurity.formLogin(form -> form
                 .loginPage("/sign-in")
-                .loginProcessingUrl("/sign-in-post")
+                .loginProcessingUrl("/sign-in")
                 .usernameParameter("email")
                 .passwordParameter("password")
-                .successHandler((request, response, authentication) -> {
-                    response.sendRedirect("/dashboard");
-                })
-                .failureUrl("/sign-in")
+                        .defaultSuccessUrl("/dashboard")
+//                .successHandler((request, response, authentication) -> {
+//                    response.sendRedirect("/dashboard");
+//                })
+                .failureUrl("/sign-in?error=true")
                 .permitAll()
         );
 

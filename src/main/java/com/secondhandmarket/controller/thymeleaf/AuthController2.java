@@ -5,6 +5,7 @@ import com.secondhandmarket.dto.auth.AuthLoginRequest;
 import com.secondhandmarket.dto.auth.AuthRegisterRequest;
 import com.secondhandmarket.dto.auth.AuthResponse;
 import com.secondhandmarket.exception.AppException;
+import com.secondhandmarket.repository.UserRepository;
 import com.secondhandmarket.service.AuthService;
 import com.secondhandmarket.service.EmailService;
 import com.secondhandmarket.util.CodeUtil;
@@ -20,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
@@ -36,6 +38,8 @@ public class AuthController2 {
 
     @Autowired
     private JwtDecoder jwtDecoder;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/sign-in")
     public String loginPage(Model model, Authentication authentication, HttpSession session) {
@@ -46,14 +50,4 @@ public class AuthController2 {
         return "signin";
     }
 
-//    @PostMapping("/sign-in-post")
-//    public String login(@Valid @ModelAttribute("authLoginRequest") AuthLoginRequest request, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-//        if (bindingResult.hasErrors()) {
-//            String errorMessage = bindingResult.getFieldError().getDefaultMessage();
-//            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
-//            return "redirect:/sign-in";
-//        }
-//        authService.login(request);
-//        return "redirect:/dashboard";
-//    }
 }
