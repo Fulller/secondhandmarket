@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -108,16 +107,16 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
 
         httpSecurity.formLogin(form -> form
-                .loginPage("/sign-in")
-                .loginProcessingUrl("/sign-in")
-                .usernameParameter("email")
-                .passwordParameter("password")
+                        .loginPage("/sign-in")
+                        .loginProcessingUrl("/sign-in")
+                        .usernameParameter("email")
+                        .passwordParameter("password")
                         .defaultSuccessUrl("/dashboard")
 //                .successHandler((request, response, authentication) -> {
 //                    response.sendRedirect("/dashboard");
 //                })
-                .failureUrl("/sign-in?error=true")
-                .permitAll()
+                        .failureUrl("/sign-in?error=true")
+                        .permitAll()
         );
 
         httpSecurity.logout(logout -> logout
@@ -128,9 +127,9 @@ public class SecurityConfig {
         );
 
         httpSecurity.oauth2Login(oauth2 -> oauth2
-                .userInfoEndpoint(userInfo -> userInfo
-                        .userService(oAuth2UserService)
-                )
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(oAuth2UserService)
+                        )
                         .defaultSuccessUrl("/auth/login/oauth2/success", true)
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2

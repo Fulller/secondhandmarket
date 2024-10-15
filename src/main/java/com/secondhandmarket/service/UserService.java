@@ -1,7 +1,7 @@
 package com.secondhandmarket.service;
 
-import com.secondhandmarket.dto.user.UserUpdateRequest;
 import com.secondhandmarket.dto.user.UserResponse;
+import com.secondhandmarket.dto.user.UserUpdateRequest;
 import com.secondhandmarket.exception.AppException;
 import com.secondhandmarket.mapper.UserMapper;
 import com.secondhandmarket.model.User;
@@ -17,7 +17,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public UserResponse updateUser(UserUpdateRequest request){
+    public UserResponse updateUser(UserUpdateRequest request) {
         String id = SecurityContextHolder.getContext().getAuthentication().getName();
 
         User user = userRepository.findById(id)
