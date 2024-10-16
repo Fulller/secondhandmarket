@@ -50,7 +50,7 @@ public class Order {
     @PrePersist
     protected void onCreate() {
         this.created_at = LocalDateTime.now();
-        this.status = OrderStatus.PENDING;
+        this.status = OrderStatus.ACCEPTED;
     }
 
     @PreUpdate
