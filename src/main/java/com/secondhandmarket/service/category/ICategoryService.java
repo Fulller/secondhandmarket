@@ -4,6 +4,8 @@ import com.secondhandmarket.dto.category.CategoryChildRequest;
 import com.secondhandmarket.dto.category.CategoryParentRequest;
 import com.secondhandmarket.model.Attribute;
 import com.secondhandmarket.model.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +18,9 @@ public interface ICategoryService {
     Optional<Category> findById(String id);
     void updateCategoryParent(String id, CategoryParentRequest categoryParentRequest);
     void updateCategoryChild(String id, CategoryChildRequest categoryChildRequest);
+    Page<Category> findAllCategoryParent(Pageable pageable);
+    Page<Category> findAllCategoryChild(Pageable pageable);
     List<Category> findAllCategoryParent();
-
     List<Category> getCategoryTree();
     Set<Attribute> getAttributesByCategoryId(String categoryId);
 }

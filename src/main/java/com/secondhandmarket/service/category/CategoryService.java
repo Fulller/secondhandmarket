@@ -50,7 +50,12 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public void deleteCategory(String id) {
-
+        Optional<Category> category = categoryRepository.findById(id);
+        if (category.isPresent()) {
+            categoryRepository.delete(category.get());
+        } else {
+            throw new AppException(HttpStatus.NOT_FOUND, "Category not found with id: " + id);
+        }
     }
 
     @Override
@@ -64,9 +69,9 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public void updateCategoryParent(String id, CategoryParentRequest categoryParentRequest) {
-        Optional<Category> attributeOptional = categoryRepository.findById(id);
-        if (attributeOptional.isPresent()) {
-            Category existingCategoryParent = attributeOptional.get();
+        Optional<Category> categoryOptional = categoryRepository.findById(id);
+        if (categoryOptional.isPresent()) {
+            Category existingCategoryParent = categoryOptional.get();
             existingCategoryParent.setName(categoryParentRequest.getName());
             categoryRepository.save(existingCategoryParent);
         } else {
@@ -76,12 +81,37 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public void updateCategoryChild(String id, CategoryChildRequest categoryChildRequest) {
+        Optional<Category> attributeOptional = categoryRepository.findById(id);
+        if (attributeOptional.isPresent()) {
+            Category existingCategoryChild = attributeOptional.get();
+            existingCategoryChild.setName(categoryChildRequest.getName());
+            existingCategoryChild.setLevel(categoryChildRequest.getLevel());
+            if (categoryChildRequest.getParent() != null) {
+                existingCategoryChild.setParent(categoryChildRequest.getParent());
+            }
+            for (Attribute attribute : categoryChildRequest.getAttributes()) {
+                existingCategoryChild.getAttributes().add(attribute);
+                attribute.getCategories().add(existingCategoryChild);
+            }
+            categoryRepository.save(existingCategoryChild);
+        } else {
+            throw new AppException(HttpStatus.NOT_FOUND, "Category not found with id: " + id);
+        }
+    }
 
+    @Override
+    public Page<Category> findAllCategoryParent(Pageable pageable) {
+        return categoryRepository.findAllByParentIsNull(pageable);
     }
 
     @Override
     public List<Category> findAllCategoryParent() {
-        return categoryRepository.findAllByParentNull();
+        return categoryRepository.findAllByParentIsNull();
+    }
+
+    @Override
+    public Page<Category> findAllCategoryChild(Pageable pageable) {
+        return categoryRepository.findAllByParentIsNotNull(pageable);
     }
 
     @Override

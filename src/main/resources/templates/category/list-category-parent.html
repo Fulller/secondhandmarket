@@ -18,8 +18,8 @@
                                 <a class="font-medium text-primary" th:href="@{/dashboard}">Dashboard /</a>
                             </li>
                             <li>
-                                <a class="font-medium text-primary" th:href="@{/category/list-category}">Danh sách
-                                    danh mục con</a>
+                                <a class="font-medium text-primary" th:href="@{/category/list-category-parent}">Danh sách
+                                    danh mục cha</a>
                             </li>
                         </ol>
                     </nav>
@@ -29,13 +29,13 @@
                 <!-- ====== Table Three Start -->
                 <div class="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
                     <div class="flex justify-between items-center w-full">
-                        <h2 class="font-extra bold mb-4">DANH SÁCH DANH MỤC CON</h2>
-                        <div th:if="${errorMessage}" class="text-red-500">
-                            <p th:text="${errorMessage}"></p>
-                        </div>
-                        <div th:if="${successMessage}" class="text-green-500">
-                            <p th:text="${successMessage}"></p>
-                        </div>
+                    <h2 class="font-extra bold mb-4">DANH SÁCH DANH MỤC CHA</h2>
+                    <div th:if="${errorMessage}" class="text-red-500">
+                        <p th:text="${errorMessage}"></p>
+                    </div>
+                    <div th:if="${successMessage}" class="text-green-500">
+                        <p th:text="${successMessage}"></p>
+                    </div>
                     </div>
                     <div class="max-w-full overflow-x-auto">
                         <table class="w-full table-auto">
@@ -46,9 +46,6 @@
                                 </th>
                                 <th class="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                                     Tên danh mục
-                                </th>
-                                <th class="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                                    Tên danh mục cha
                                 </th>
                                 <th class="px-4 py-4 font-medium text-black dark:text-white">
                                     Thao tác
@@ -65,32 +62,20 @@
                                     class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                                 </td>
 
-                                <td th:text="${category.parent != null ? category.parent.name : 'No Parent'}"
-                                    class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                                </td>
-
                                 <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                                     <div class="flex items-center space-x-3.5">
+
                                         <button class="hover:text-primary">
-                                            <a th:href="@{/category/detail-category-child/{id}(id=${category.id})}" class="hover:text-primary">
-                                            <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18"
-                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M8.99981 14.8219C3.43106 14.8219 0.674805 9.50624 0.562305 9.28124C0.47793 9.11249 0.47793 8.88749 0.562305 8.71874C0.674805 8.49374 3.43106 3.20624 8.99981 3.20624C14.5686 3.20624 17.3248 8.49374 17.4373 8.71874C17.5217 8.88749 17.5217 9.11249 17.4373 9.28124C17.3248 9.50624 14.5686 14.8219 8.99981 14.8219ZM1.85605 8.99999C2.4748 10.0406 4.89356 13.5562 8.99981 13.5562C13.1061 13.5562 15.5248 10.0406 16.1436 8.99999C15.5248 7.95936 13.1061 4.44374 8.99981 4.44374C4.89356 4.44374 2.4748 7.95936 1.85605 8.99999Z"
-                                                      fill=""></path>
-                                                <path d="M9 11.3906C7.67812 11.3906 6.60938 10.3219 6.60938 9C6.60938 7.67813 7.67812 6.60938 9 6.60938C10.3219 6.60938 11.3906 7.67813 11.3906 9C11.3906 10.3219 10.3219 11.3906 9 11.3906ZM9 7.875C8.38125 7.875 7.875 8.38125 7.875 9C7.875 9.61875 8.38125 10.125 9 10.125C9.61875 10.125 10.125 9.61875 10.125 9C10.125 8.38125 9.61875 7.875 9 7.875Z"
-                                                      fill=""></path>
-                                            </svg>
+                                            <a th:href="@{/category/update-category-parent/{id}(id=${category.id})}"  class="hover:text-primary">
+                                                <svg class="fill-current" width="18" height="18" viewBox="0 0 24 24"
+                                                     fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25ZM20.71 7.04C21.1 6.65 21.1 6 20.71 5.61L18.39 3.29C18 2.9 17.35 2.9 16.96 3.29L15.13 5.12L18.88 8.87L20.71 7.04Z"
+                                                          fill="currentColor"></path>
+                                                </svg>
                                             </a>
                                         </button>
-                                        <button class="hover:text-primary">
-                                            <a th:href="@{/category/update-category-child/{id}(id=${category.id})}" class="hover:text-primary">
-                                            <svg class="fill-current" width="18" height="18" viewBox="0 0 24 24"
-                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25ZM20.71 7.04C21.1 6.65 21.1 6 20.71 5.61L18.39 3.29C18 2.9 17.35 2.9 16.96 3.29L15.13 5.12L18.88 8.87L20.71 7.04Z"
-                                                      fill="currentColor"></path>
-                                            </svg>
-                                        </a>
-                                        </button>
+
+
                                         <button tabindex="-1"
                                                 th:attr="data-id=${category.id}, data-name=${category.name}, data-modal-target='popup-modal-' + ${category.id}"
                                                 class="block text-red-500 hover:text-red-700" type="button">
@@ -135,7 +120,7 @@
                                                 Bạn có chắc chắn xóa thuộc tính
                                                 <span th:text="${category.name}"></span>?
                                             </h3>
-                                            <form th:action="@{/category/delete-category-child/{id}(id=${category.id})}" method="get">
+                                            <form th:action="@{/category/delete-category-parent/{id}(id=${category.id})}" method="get">
                                                 <button data-modal-hide="popup-modal" type="submit"
                                                         style="color: white !important; background-color: #c53030 !important;"
                                                         class="font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
