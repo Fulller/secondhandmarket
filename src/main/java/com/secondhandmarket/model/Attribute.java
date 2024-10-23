@@ -27,9 +27,4 @@ public class Attribute {
     @ManyToMany(mappedBy = "attributes")
     @JsonIgnore
     private Set<Category> categories = new HashSet<>();
-
-    @Override
-    public String toString() {
-        return "Attribute{id=" + id + ", name='" + name + '\'' + '}';
-    }
 }
