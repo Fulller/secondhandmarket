@@ -19,11 +19,9 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 
-public class AttributeService implements IAttributeService {
-    @Autowired
+public class AttributeService {
     private final AttributeRepository attributeRepository;
 
-    @Override
     public void saveAttribute(AttributeRequest attributeRequest) {
         Attribute attribute = new Attribute();
         attribute.setId(UUID.randomUUID().toString());
@@ -36,7 +34,6 @@ public class AttributeService implements IAttributeService {
         return attributeRepository.findAll(pageable); // Gọi phương thức tìm tất cả với phân trang
     }
 
-    @Override
     public void deleteAttribute(String id) {
         Optional<Attribute> attribute = attributeRepository.findById(id);
         if (attribute.isPresent()) {
@@ -46,12 +43,10 @@ public class AttributeService implements IAttributeService {
         }
     }
 
-    @Override
     public Optional<Attribute> findById(String id) {
         return attributeRepository.findById(id);
     }
 
-    @Override
     public void updateAttribute(String id, AttributeRequest attribute) {
         Optional<Attribute> attributeOptional = attributeRepository.findById(id);
         if (attributeOptional.isPresent()) {
@@ -63,7 +58,6 @@ public class AttributeService implements IAttributeService {
         }
     }
 
-    @Override
     public List<Attribute> findAll() {
         return attributeRepository.findAll();
     }

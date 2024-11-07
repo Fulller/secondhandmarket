@@ -18,12 +18,9 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryService implements ICategoryService {
-
-    @Autowired
+public class CategoryService {
     private final CategoryRepository categoryRepository;
 
-    @Override
     public void saveCategoryParent(CategoryParentRequest categoryParentRequest) {
         Category category = new Category();
         category.setId(UUID.randomUUID().toString());
@@ -32,7 +29,6 @@ public class CategoryService implements ICategoryService {
         categoryRepository.save(category);
     }
 
-    @Override
     public void saveCategoryChild(CategoryChildRequest categoryChildRequest) {
         Category category = new Category();
         category.setId(UUID.randomUUID().toString());
@@ -48,7 +44,6 @@ public class CategoryService implements ICategoryService {
         categoryRepository.save(category);
     }
 
-    @Override
     public void deleteCategory(String id) {
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isPresent()) {
@@ -58,7 +53,6 @@ public class CategoryService implements ICategoryService {
         }
     }
 
-    @Override
     public Optional<Category> findById(String id) {
         return categoryRepository.findById(id);
     }
@@ -67,7 +61,6 @@ public class CategoryService implements ICategoryService {
         return categoryRepository.findAll(pageable);
     }
 
-    @Override
     public void updateCategoryParent(String id, CategoryParentRequest categoryParentRequest) {
         Optional<Category> categoryOptional = categoryRepository.findById(id);
         if (categoryOptional.isPresent()) {
@@ -79,7 +72,6 @@ public class CategoryService implements ICategoryService {
         }
     }
 
-    @Override
     public void updateCategoryChild(String id, CategoryChildRequest categoryChildRequest) {
         Optional<Category> attributeOptional = categoryRepository.findById(id);
         if (attributeOptional.isPresent()) {
@@ -99,22 +91,18 @@ public class CategoryService implements ICategoryService {
         }
     }
 
-    @Override
     public Page<Category> findAllCategoryParent(Pageable pageable) {
         return categoryRepository.findAllByParentIsNull(pageable);
     }
 
-    @Override
     public List<Category> findAllCategoryParent() {
         return categoryRepository.findAllByParentIsNull();
     }
 
-    @Override
     public Page<Category> findAllCategoryChild(Pageable pageable) {
         return categoryRepository.findAllByParentIsNotNull(pageable);
     }
 
-    @Override
     public List<Category> getCategoryTree() {
         List<Category> categories = categoryRepository.findAll();
         Map<String, Category> categoryMap = new HashMap<>();
@@ -145,7 +133,6 @@ public class CategoryService implements ICategoryService {
         return categoryTree;
     }
 
-    @Override
     public Set<Attribute> getAttributesByCategoryId(String categoryId) {
         Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
         if (categoryOptional.isPresent()) {
