@@ -22,7 +22,7 @@ public class ProductUpdateRequest {
     String description;
 
     @NotNull(message = "Price is required")
-    Double price;
+        Double price;
 
     @NotNull(message = "Address ID is required")
     String addressId;

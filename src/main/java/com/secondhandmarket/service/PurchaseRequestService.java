@@ -1,5 +1,6 @@
 package com.secondhandmarket.service;
 
+import com.secondhandmarket.dto.order.OrderRequest;
 import com.secondhandmarket.dto.purchaserequest.PurchaseRequestResponseDTO;
 import com.secondhandmarket.enums.ProductStatus;
 import com.secondhandmarket.enums.PurchaseRequestStatus;
@@ -29,6 +30,7 @@ public class PurchaseRequestService {
     ProductRepository productRepository;
     UserRepository userRepository;
     SecurityUtil securityUtil;
+    private final OrderService orderService;
 
     public PurchaseRequestResponseDTO createPurchaseRequest(String productId, String message) {
         String buyerId = securityUtil.getCurrentUserId();
@@ -102,6 +104,16 @@ public class PurchaseRequestService {
             throw new AppException(HttpStatus.UNAUTHORIZED, "No permit", "purchaseRequest-e-02");
         }
         request.setStatus(PurchaseRequestStatus.ACCEPTED); // Cập nhật trạng thái yêu cầu mua
+
+        //tạo order
+        User seller = userRepository.findById(sellerId).orElse(null);
+        OrderRequest orderRequest = OrderRequest.builder()
+                .purchase_request(request)
+                .buyer(request.getBuyer())
+                .seller(seller)
+                .product_id(request.getProduct().getId())
+                .build();
+        orderService.createOrder(orderRequest);
         purchaseRequestRepository.save(request);
     }
 
