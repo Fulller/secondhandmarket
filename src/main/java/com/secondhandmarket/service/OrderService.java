@@ -120,7 +120,7 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    //complete order
+    //complete order fixed
     public void completeOrder(String id) {
         User buyer = securityUtil.getCurrentUser();
 
