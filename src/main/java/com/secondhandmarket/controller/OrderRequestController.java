@@ -6,17 +6,19 @@ import com.secondhandmarket.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/orders")
 public class OrderRequestController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping("/seller/order")
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/seller")
     ResponseEntity<ApiResponse<List<OrderResponse>>> getYourOrderSeller() {
         ApiResponse<List<OrderResponse>> apiResponse = ApiResponse.<List<OrderResponse>>builder()
                 .code("order-s-01")
@@ -25,8 +27,8 @@ public class OrderRequestController {
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
-
-    @GetMapping("/product/{id}/order")
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/product/{id}")
     ResponseEntity<ApiResponse<List<OrderResponse>>> getYourOrderProduct(@PathVariable String id) {
         ApiResponse<List<OrderResponse>> apiResponse = ApiResponse.<List<OrderResponse>>builder()
                 .code("order-s-02")
@@ -35,7 +37,8 @@ public class OrderRequestController {
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
-    @GetMapping("/buyer/order")
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/buyer")
     ResponseEntity<ApiResponse<List<OrderResponse>>> getYourOrderBuyer() {
         ApiResponse<List<OrderResponse>> apiResponse = ApiResponse.<List<OrderResponse>>builder()
                 .code("order-s-03")
@@ -45,7 +48,8 @@ public class OrderRequestController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-    @PutMapping("/cancel/{id}/order")
+    @PreAuthorize("hasRole('USER')")
+    @PutMapping("/cancel/{id}")
     ResponseEntity<ApiResponse> cancelOrder(@PathVariable String id) {
         orderService.cancelOrder(id);
         ApiResponse apiResponse = ApiResponse.builder()
@@ -54,7 +58,8 @@ public class OrderRequestController {
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
-    @PutMapping("/complete/{id}/order")
+    @PreAuthorize("hasRole('USER')")
+    @PutMapping("/complete/{id}")
     ResponseEntity<ApiResponse> completeOrder(@PathVariable String id) {
         orderService.completeOrder(id);
         ApiResponse apiResponse = ApiResponse.builder()
