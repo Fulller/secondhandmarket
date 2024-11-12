@@ -9,4 +9,5 @@ public class AuthUserInfoResponse {
     private String email;
     private String avatar;
     private Double rating;
+    private boolean isFromOutside;
 }
