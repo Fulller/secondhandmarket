@@ -30,7 +30,7 @@ public class User {
     private String avatar;
 
     @Column(nullable = false)
-    private boolean isFromOutside = false;
+    private Boolean isFromOutside = false;
 
     private String providerName;
 
@@ -51,8 +51,4 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "seller", orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<Product> products = new HashSet<>();
-
-    public boolean getIsFromOutside() {
-        return this.isFromOutside;
-    }
 }
