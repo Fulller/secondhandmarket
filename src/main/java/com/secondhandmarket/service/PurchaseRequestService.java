@@ -1,5 +1,6 @@
 package com.secondhandmarket.service;
 
+import com.secondhandmarket.dto.order.OrderRequest;
 import com.secondhandmarket.dto.purchaserequest.PurchaseRequestResponseDTO;
 import com.secondhandmarket.enums.ProductStatus;
 import com.secondhandmarket.enums.PurchaseRequestStatus;
@@ -29,6 +30,7 @@ public class PurchaseRequestService {
     ProductRepository productRepository;
     UserRepository userRepository;
     SecurityUtil securityUtil;
+    private final OrderService orderService;
 
     public PurchaseRequestResponseDTO createPurchaseRequest(String productId, String message) {
         String buyerId = securityUtil.getCurrentUserId();
@@ -42,6 +44,12 @@ public class PurchaseRequestService {
         // Kiểm tra trạng thái sản phẩm
         if (!product.getStatus().equals(ProductStatus.AVAILABLE)) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Product is not available for purchase", "product-e-02");
+        }
+        List<PurchaseRequest> purchaseRequests = product.getPurchaseRequests();
+        for(PurchaseRequest purchaseRequest : purchaseRequests) {
+            if(purchaseRequest.getBuyer().equals(buyer) && purchaseRequest.getStatus().equals(PurchaseRequestStatus.PENDING)) {
+                throw new AppException(HttpStatus.BAD_REQUEST, "Purchase already existed", "product-e-03");
+            }
         }
 
         PurchaseRequest purchaseRequest = new PurchaseRequest();
@@ -102,6 +110,16 @@ public class PurchaseRequestService {
             throw new AppException(HttpStatus.UNAUTHORIZED, "No permit", "purchaseRequest-e-02");
         }
         request.setStatus(PurchaseRequestStatus.ACCEPTED); // Cập nhật trạng thái yêu cầu mua
+
+        //tạo order
+        User seller = userRepository.findById(sellerId).orElse(null);
+        OrderRequest orderRequest = OrderRequest.builder()
+                .purchase_request(request)
+                .buyer(request.getBuyer())
+                .seller(seller)
+                .product_id(request.getProduct().getId())
+                .build();
+        orderService.createOrder(orderRequest);
         purchaseRequestRepository.save(request);
     }
 

@@ -46,10 +46,6 @@ public class AddressController {
     
         return ResponseEntity.ok(response);
     }
-    
-    
-
-
     @PutMapping("/{addressId}")
     public ResponseEntity<ApiResponse<Address>> updateAddress(@PathVariable String addressId, @RequestBody @Valid AddressRequetst addressRequetst) {
         Address updatedAddress = addressService.updateAddress(addressId, addressRequetst);
