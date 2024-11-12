@@ -1,5 +1,6 @@
 package com.secondhandmarket.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.secondhandmarket.enums.ERole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -46,6 +47,10 @@ public class User {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
     private Address address;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seller", orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Set<Product> products = new HashSet<>();
 
     public boolean getIsFromOutside() {
         return this.isFromOutside;

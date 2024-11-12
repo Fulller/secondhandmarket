@@ -19,6 +19,10 @@ public class BlogService {
         return productRepository.findAllByStatusIsPending(pageable);
     }
 
+    public Page<Product> findAllProductAvailable(Pageable pageable) {
+        return productRepository.findAllByStatusIsAvailable(pageable);
+    }
+
     public Product updateProductAvailable(String id) {
         Product oldProduct = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy id"));

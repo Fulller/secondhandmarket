@@ -1,5 +1,6 @@
 package com.secondhandmarket.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.secondhandmarket.enums.ProductStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -42,8 +43,25 @@ public class Product {
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
+    @Column(name = "posted_at", nullable = false)
+    private LocalDateTime postedAt;
+
+    @Column(name = "expired_at", nullable = false)
+    private LocalDateTime expiredAt;
+
+    private String video;
+
     @Column(nullable = false)
-    private LocalDateTime posted_at;
+    private String thumbnail;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "seller_id")
+    @JsonManagedReference
+    protected User seller;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product", orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
@@ -59,6 +77,9 @@ public class Product {
 
     @PrePersist
     protected void onCreate() {
-        this.posted_at = LocalDateTime.now();
+        this.postedAt = LocalDateTime.now();
+        if (this.expiredAt == null) {
+            this.expiredAt = this.postedAt.plusMonths(2);
+        }
     }
 }
