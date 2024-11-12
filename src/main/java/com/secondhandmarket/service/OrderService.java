@@ -4,12 +4,15 @@ import com.secondhandmarket.dto.order.OrderRequest;
 import com.secondhandmarket.dto.order.OrderResponse;
 import com.secondhandmarket.enums.OrderStatus;
 import com.secondhandmarket.enums.ProductStatus;
+import com.secondhandmarket.enums.ReviewStatus;
 import com.secondhandmarket.exception.AppException;
 import com.secondhandmarket.model.Order;
 import com.secondhandmarket.model.Product;
+import com.secondhandmarket.model.Review;
 import com.secondhandmarket.model.User;
 import com.secondhandmarket.repository.OrderRepository;
 import com.secondhandmarket.repository.ProductRepository;
+import com.secondhandmarket.repository.ReviewRepository;
 import com.secondhandmarket.repository.UserRepository;
 import com.secondhandmarket.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,8 @@ public class OrderService {
     private SecurityUtil securityUtil;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     //accept order
     public void createOrder(OrderRequest orderRequest) {
@@ -134,5 +139,10 @@ public class OrderService {
         orderRepository.save(order);
 
         productService.changeStatus(order.getProduct().getId(), ProductStatus.SOLD);
+        //TẠO REVIEW PENDING
+        Review review = Review.builder()
+                .status(ReviewStatus.PENDING)
+                .build();
+        reviewRepository.save(review);
     }
 }

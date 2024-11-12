@@ -1,11 +1,9 @@
 package com.secondhandmarket.model;
 
+import com.secondhandmarket.enums.ReviewStatus;
 import com.secondhandmarket.enums.ReviewType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -15,6 +13,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Review {
 
     @Id
@@ -30,6 +29,8 @@ public class Review {
     private String image;
 
     private String feedbackFromSeller;
+
+    private ReviewStatus status;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
