@@ -81,6 +81,7 @@ public class CategoryService {
             if (categoryChildRequest.getParent() != null) {
                 existingCategoryChild.setParent(categoryChildRequest.getParent());
             }
+            existingCategoryChild.getAttributes().clear();
             for (Attribute attribute : categoryChildRequest.getAttributes()) {
                 existingCategoryChild.getAttributes().add(attribute);
                 attribute.getCategories().add(existingCategoryChild);
