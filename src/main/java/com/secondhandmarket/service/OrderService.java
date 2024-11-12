@@ -2,14 +2,9 @@ package com.secondhandmarket.service;
 
 import com.secondhandmarket.dto.order.OrderRequest;
 import com.secondhandmarket.dto.order.OrderResponse;
-import com.secondhandmarket.enums.OrderStatus;
-import com.secondhandmarket.enums.ProductStatus;
-import com.secondhandmarket.enums.ReviewStatus;
+import com.secondhandmarket.enums.*;
 import com.secondhandmarket.exception.AppException;
-import com.secondhandmarket.model.Order;
-import com.secondhandmarket.model.Product;
-import com.secondhandmarket.model.Review;
-import com.secondhandmarket.model.User;
+import com.secondhandmarket.model.*;
 import com.secondhandmarket.repository.OrderRepository;
 import com.secondhandmarket.repository.ProductRepository;
 import com.secondhandmarket.repository.ReviewRepository;
@@ -18,6 +13,7 @@ import com.secondhandmarket.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -111,19 +107,21 @@ public class OrderService {
 
     //cancel order
     public void cancelOrder(String id) {
-        User buyer = securityUtil.getCurrentUser();
+        User user = securityUtil.getCurrentUser();
 
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "Order not found"));
 
-        if(!order.getBuyer().equals(buyer)) {
+        if(!order.getBuyer().equals(user) || !order.getSeller().equals(user)) {
             throw new AppException(HttpStatus.BAD_REQUEST, "You are not buyer of this product");
         }
         order.setStatus(OrderStatus.CANCELED);
+        order.getPurchaseRequest().setStatus(PurchaseRequestStatus.REJECTED);
         orderRepository.save(order);
     }
 
     //complete order fixed
+    @Transactional
     public void completeOrder(String id) {
         User buyer = securityUtil.getCurrentUser();
 
@@ -134,12 +132,25 @@ public class OrderService {
             throw new AppException(HttpStatus.BAD_REQUEST, "You are not buyer of this product");
         }
         order.setStatus(OrderStatus.COMPLETED);
+        order.getPurchaseRequest().getProduct().setStatus(ProductStatus.SOLD);
+
         orderRepository.save(order);
 
-        productService.changeStatus(order.getProduct().getId(), ProductStatus.SOLD);
+//        productService.changeStatus(order.getProduct().getId(), ProductStatus.SOLD);
+
+        Product product = order.getProduct();
+        List<PurchaseRequest> purchaseRequests = product.getPurchaseRequests();
+        for (PurchaseRequest purchaseRequest : purchaseRequests) {
+            purchaseRequest.setStatus(PurchaseRequestStatus.REJECTED);
+        }
+
         //TẠO REVIEW PENDING
         Review review = Review.builder()
                 .status(ReviewStatus.PENDING)
+                .reviewer(buyer)
+                .product(product)
+                .seller(product.getSeller())
+                .reviewType(ReviewType.PURCHASED_PRODUCT)
                 .build();
         reviewRepository.save(review);
     }

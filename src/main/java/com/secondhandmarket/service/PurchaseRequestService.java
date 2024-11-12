@@ -45,6 +45,12 @@ public class PurchaseRequestService {
         if (!product.getStatus().equals(ProductStatus.AVAILABLE)) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Product is not available for purchase", "product-e-02");
         }
+        List<PurchaseRequest> purchaseRequests = product.getPurchaseRequests();
+        for(PurchaseRequest purchaseRequest : purchaseRequests) {
+            if(purchaseRequest.getBuyer().equals(buyer) && purchaseRequest.getStatus().equals(PurchaseRequestStatus.PENDING)) {
+                throw new AppException(HttpStatus.BAD_REQUEST, "Purchase already existed", "product-e-03");
+            }
+        }
 
         PurchaseRequest purchaseRequest = new PurchaseRequest();
         purchaseRequest.setProduct(product);
