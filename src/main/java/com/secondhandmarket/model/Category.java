@@ -42,10 +42,7 @@ public class Category {
     @JsonManagedReference
     private List<Category> categoryChildren = new ArrayList<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "category_attribute",
-               joinColumns = @JoinColumn(name = "category_id", nullable = false),
-               inverseJoinColumns = @JoinColumn(name = "attribute_id", nullable = false))
-    @JsonIgnore
-    private Set<Attribute> attributes = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<Attribute> attributes = new ArrayList<>();
 }

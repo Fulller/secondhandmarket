@@ -10,6 +10,7 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, String> {
     Boolean existsByName(String name);
     List<Category> findAllByParentIsNull();
+    List<Category> findAllByParentIsNotNull();
     Page<Category> findAllByParentIsNull(Pageable pageable);
     Page<Category> findAllByParentIsNotNull(Pageable pageable);
     Boolean existsByCategoryChildrenIsNotEmptyAndId(String id);
