@@ -2,10 +2,7 @@ package com.secondhandmarket.model;
 
 import com.secondhandmarket.enums.OrderStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +10,7 @@ import java.time.LocalDateTime;
 @Table(name = "orders")
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Order {
@@ -50,7 +48,7 @@ public class Order {
     @PrePersist
     protected void onCreate() {
         this.created_at = LocalDateTime.now();
-        this.status = OrderStatus.PENDING;
+        this.status = OrderStatus.ACCEPTED;
     }
 
     @PreUpdate

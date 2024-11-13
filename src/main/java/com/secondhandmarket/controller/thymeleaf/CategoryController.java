@@ -52,7 +52,8 @@ public class CategoryController {
     @PostMapping("/add-category-parent-post")
     @PreAuthorize("hasRole('ADMIN')")
     public String addCategoryParent(@ModelAttribute("categoryParentRequest") @Valid CategoryParentRequest categoryParentRequest,
-                                    BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+                               BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldError().getDefaultMessage();
             redirectAttributes.addFlashAttribute("errorMessage", errorMessage);

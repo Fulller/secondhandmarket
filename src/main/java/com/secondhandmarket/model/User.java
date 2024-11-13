@@ -30,7 +30,7 @@ public class User {
     private String avatar;
 
     @Column(nullable = false)
-    private boolean isFromOutside = false;
+    private Boolean isFromOutside = false;
 
     private String providerName;
 
@@ -55,4 +55,5 @@ public class User {
     public boolean getIsFromOutside() {
         return this.isFromOutside;
     }
+
 }
