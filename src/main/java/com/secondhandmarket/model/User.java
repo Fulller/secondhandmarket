@@ -51,9 +51,4 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "seller", orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<Product> products = new HashSet<>();
-
-    public boolean getIsFromOutside() {
-        return this.isFromOutside;
-    }
-
 }

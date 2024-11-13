@@ -35,6 +35,7 @@ public class InitAppConfig {
                     .email(ADMIN_EMAIL)
                     .name("Root Admin")
                     .password(passwordUtil.encodePassword(ADMIN_PASSWORD))
+                    .isFromOutside(false)
                     .roles(roles)
                     .build();
             userRepository.save(admin);

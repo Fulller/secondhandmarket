@@ -100,7 +100,6 @@
             <scope>test</scope>
         </dependency>
 
-		<!-- MapStruct (Dùng để map giữa DTO và entity) -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
@@ -144,6 +143,7 @@
 
 	</dependencies>
 
+    </dependencies>
     <build>
         <plugins>
             <!-- Spring Boot Maven Plugin -->
