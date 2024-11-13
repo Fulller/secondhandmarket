@@ -1,6 +1,8 @@
 package com.secondhandmarket.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,10 +28,11 @@ public class Attribute {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id",nullable = false)
+    @JsonBackReference
     private Category category;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "attribute", orphanRemoval = true)
-    @JsonIgnore
+    @JsonManagedReference
     private List<Option> options = new ArrayList<>();
 
     private Boolean isRequired = false;

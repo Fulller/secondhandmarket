@@ -5,7 +5,10 @@ import com.secondhandmarket.dto.category.CategoryParentRequest;
 import com.secondhandmarket.exception.AppException;
 import com.secondhandmarket.model.Attribute;
 import com.secondhandmarket.model.Category;
+import com.secondhandmarket.model.Option;
+import com.secondhandmarket.repository.AttributeRepository;
 import com.secondhandmarket.repository.CategoryRepository;
+import com.secondhandmarket.repository.OptionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final AttributeRepository attributeRepository;
+    private final OptionRepository optionRepository;
 
     public void saveCategoryParent(CategoryParentRequest categoryParentRequest) {
         Category category = new Category();
@@ -129,12 +134,18 @@ public class CategoryService {
         return categoryTree;
     }
 
-//    public Set<Attribute> getAttributesByCategoryId(String categoryId) {
-//        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
-//        if (categoryOptional.isPresent()) {
-//            return categoryOptional.get().getAttributes();
-//        } else {
-//            throw new EntityNotFoundException("Danh mục không tồn tại");
-//        }
-//    }
+    public List<Attribute> getAttributesByCategoryId(String categoryId) {
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+
+        if (categoryOptional.isPresent()) {
+            List<Attribute> attributes = attributeRepository.findByCategoryId(categoryId);
+            for (Attribute attribute : attributes) {
+                List<Option> options = optionRepository.findByAttributeId(attribute.getId());
+                attribute.setOptions(options);  // Giả sử bạn có phương thức setOptions trong Attribute
+            }
+            return attributes;
+        } else {
+            throw new AppException(HttpStatus.NOT_FOUND, "Category not found with id: " + categoryId);
+        }
+    }
 }

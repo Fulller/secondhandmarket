@@ -34,26 +34,36 @@ public class OptionController {
         return modelAndView;
     }
 
-    @PostMapping("/add-option")
+    @PostMapping("/add-option/{attributeId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView addOption(@ModelAttribute("optionRequest") @Valid OptionRequest request,
-                                  BindingResult bindingResult) {
+                                  @PathVariable("attributeId") String attributeId,
+                                  BindingResult bindingResult,
+                                  RedirectAttributes redirectAttributes) {
+
         ModelAndView modelAndView = new ModelAndView();
-        if(optionRepository.existsByName(request.getName())){
+
+        // Check if option name already exists
+        if (optionRepository.existsByName(request.getName())) {
             bindingResult.rejectValue("name", "error.name", "Tên thuộc tính đã tồn tại");
         }
+
+        // If there are binding errors, redirect with error messages
         if (bindingResult.hasErrors()) {
-            modelAndView.addObject("errorMessage", bindingResult.getAllErrors().get(0).getDefaultMessage());
-            modelAndView.addObject("optionRequest", new OptionRequest());
-            modelAndView.setViewName("/option/add-option");
+            redirectAttributes.addFlashAttribute("errorMessage", bindingResult.getAllErrors().get(0).getDefaultMessage());
+            redirectAttributes.addFlashAttribute("optionRequest", request); // retain data across redirect
+            modelAndView.setViewName("redirect:/attribute/list-attribute");
             return modelAndView;
         }
-        optionService.saveOption(request);
-        modelAndView.addObject("successMessage", "Thêm option thành công");
-        modelAndView.addObject("optionRequest", new OptionRequest());
-        modelAndView.setViewName("/option/add-option");
+        System.out.println(attributeId);
+        // Save the option and add success message
+        optionService.saveOption(request, attributeId);
+        redirectAttributes.addFlashAttribute("successMessage", "Thêm option thành công");
+        modelAndView.setViewName("redirect:/attribute/list-attribute");
+
         return modelAndView;
     }
+
 
     @GetMapping("/list-option")
     @PreAuthorize("hasRole('ADMIN')")
@@ -109,5 +119,10 @@ public class OptionController {
         modelAndView.setViewName("redirect:/attribute/list-attribute");
         return modelAndView;
     }
+
+//    @PostMapping("/add-option-attribute/{attributeId}")
+//    public ModelAndView addOptionAttribute(@PathVariable("attributeId") String attributeId){
+//        optionService
+//    }
 
 }

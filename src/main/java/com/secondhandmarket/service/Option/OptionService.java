@@ -2,7 +2,9 @@ package com.secondhandmarket.service.Option;
 
 import com.secondhandmarket.dto.option.OptionRequest;
 import com.secondhandmarket.exception.AppException;
+import com.secondhandmarket.model.Attribute;
 import com.secondhandmarket.model.Option;
+import com.secondhandmarket.repository.AttributeRepository;
 import com.secondhandmarket.repository.OptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,9 +20,12 @@ import java.util.UUID;
 
 public class OptionService {
     private final OptionRepository optionRepository;
+    private final AttributeRepository attributeRepository;
 
-    public void saveOption(OptionRequest request) {
+    public void saveOption(OptionRequest request, String attributeId) {
         Option option = new Option();
+        Attribute attribute = attributeRepository.findById(attributeId).orElse(null);
+        option.setAttribute(attribute);
         option.setId(UUID.randomUUID().toString());
         option.setName(request.getName());
         optionRepository.save(option);
@@ -53,4 +58,7 @@ public class OptionService {
     public Page<Option> findAll(Pageable pageable) {
         return optionRepository.findAll(pageable);
     }
+
+
+
 }

@@ -43,6 +43,6 @@ public class Category {
     private List<Category> categoryChildren = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = true, fetch = FetchType.EAGER)
-    @JsonIgnore
+    @JsonManagedReference
     private List<Attribute> attributes = new ArrayList<>();
 }

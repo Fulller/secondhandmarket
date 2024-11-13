@@ -3,6 +3,7 @@ package com.secondhandmarket.controller;
 import com.secondhandmarket.dto.api.ApiResponse;
 import com.secondhandmarket.model.Attribute;
 import com.secondhandmarket.model.Category;
+import com.secondhandmarket.service.attribute.AttributeService;
 import com.secondhandmarket.service.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,9 @@ public class CategoryApiController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private AttributeService attributeService;
+
     @GetMapping("/categories")
     public ResponseEntity<ApiResponse<List<Category>>> getCategoryTree() {
         List<Category> categories = categoryService.getCategoryTree();
@@ -33,14 +37,17 @@ public class CategoryApiController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-//    @GetMapping("/categories/{categoryId}")
-//    public ResponseEntity<ApiResponse<Set<Attribute>>> getAttributesByCategoryId(@PathVariable String categoryId) {
-//        Set<Attribute> attributes = categoryService.getAttributesByCategoryId(categoryId);
-//        ApiResponse<Set<Attribute>> apiResponse = ApiResponse.<Set<Attribute>>builder()
-//                .data(attributes)
-//                .code("attribute-s-01")
-//                .message("Lấy thuộc tính thành công")
-//                .build();
-//        return ResponseEntity.ok(apiResponse);
-//    }
+
+    @GetMapping("/categories/{categoryId}")
+    public ResponseEntity<ApiResponse<List<Attribute>>> getAttributesByCategoryId(@PathVariable String categoryId) {
+        List<Attribute> attributes = categoryService.getAttributesByCategoryId(categoryId);
+        ApiResponse<List<Attribute>> apiResponse = ApiResponse.<List<Attribute>>builder()
+                .data(attributes)
+                .code("attribute-s-01")
+                .message("Lấy thuộc tính thành công")
+                .build();
+        return ResponseEntity.ok(apiResponse);
+    }
+
+
 }
