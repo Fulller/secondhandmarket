@@ -8,8 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class BlogService {
@@ -33,7 +31,7 @@ public class BlogService {
     public Product updateProductRemove(String id) {
         Product oldProduct = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy id"));
-        oldProduct.setStatus(ProductStatus.REMOVED);
+        oldProduct.setStatus(ProductStatus.REJECTED);
         return productRepository.save(oldProduct); // Return updated product
     }
 }
