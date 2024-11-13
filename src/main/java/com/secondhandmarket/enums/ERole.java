@@ -4,5 +4,6 @@ public enum ERole {
     USER,
     ADMIN,
     PARTNER,
-    MODERATOR
+    MODERATOR,
+
 }

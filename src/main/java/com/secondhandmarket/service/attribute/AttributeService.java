@@ -1,6 +1,6 @@
 package com.secondhandmarket.service.attribute;
 
-import com.secondhandmarket.dto.AttributeRequest;
+import com.secondhandmarket.dto.attribute.AttributeRequest;
 import com.secondhandmarket.exception.AppException;
 import com.secondhandmarket.model.Attribute;
 import com.secondhandmarket.repository.AttributeRepository;

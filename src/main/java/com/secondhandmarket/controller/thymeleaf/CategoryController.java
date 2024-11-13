@@ -1,8 +1,6 @@
 package com.secondhandmarket.controller.thymeleaf;
-
-import com.secondhandmarket.dto.AttributeRequest;
-import com.secondhandmarket.dto.CategoryChildRequest;
-import com.secondhandmarket.dto.CategoryParentRequest;
+import com.secondhandmarket.dto.category.CategoryChildRequest;
+import com.secondhandmarket.dto.category.CategoryParentRequest;
 import com.secondhandmarket.model.Attribute;
 import com.secondhandmarket.model.Category;
 import com.secondhandmarket.repository.CategoryRepository;
@@ -48,6 +46,7 @@ public class CategoryController {
     @PreAuthorize("hasRole('ADMIN')")
     public String addCategoryParent(@ModelAttribute("categoryParentRequest") @Valid CategoryParentRequest categoryParentRequest,
                                BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldError().getDefaultMessage();
             redirectAttributes.addFlashAttribute("errorMessage", errorMessage);

@@ -74,7 +74,7 @@
                                                     th:value="${attribute.id}"
                                                     th:text="${attribute.name}"></option>
                                         </select>
-                                        <p th:if="${#fields.hasErrors('attributes')}" th:errorclass="error"
+                                        <p th:if="${#fields.hasErrors('attributes')}" class="text-red-500"
                                            th:errors="*{attributes}"></p>
                                     </div>
                                     <button type="submit"

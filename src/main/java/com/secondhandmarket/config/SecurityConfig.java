@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -88,8 +87,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
                 .csrf(csrf -> csrf.disable()) // Disable CSRF if not needed
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS with your configuration
                 .authorizeHttpRequests(auth -> auth
@@ -108,15 +107,17 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
 
         httpSecurity.formLogin(form -> form
-                .loginPage("/sign-in")
-                .loginProcessingUrl("/sign-in-post")
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .successHandler((request, response, authentication) -> {
-                    response.sendRedirect("/dashboard");
-                })
-                .failureUrl("/sign-in")
-                .permitAll()
+
+                        .loginPage("/sign-in")
+                        .loginProcessingUrl("/sign-in")
+                        .usernameParameter("email")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/dashboard")
+//                .successHandler((request, response, authentication) -> {
+//                    response.sendRedirect("/dashboard");
+//                })
+                        .failureUrl("/sign-in?error=true")
+                        .permitAll()
         );
 
         httpSecurity.logout(logout -> logout
@@ -127,10 +128,6 @@ public class SecurityConfig {
         );
 
         httpSecurity.oauth2Login(oauth2 -> oauth2
-                .userInfoEndpoint(userInfo -> userInfo
-                        .userService(oAuth2UserService)
-                )
-                .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(oAuth2UserService)
                         )
@@ -143,6 +140,6 @@ public class SecurityConfig {
                         )
                 );
 
-        return http.build();
+        return httpSecurity.build();
     }
 }

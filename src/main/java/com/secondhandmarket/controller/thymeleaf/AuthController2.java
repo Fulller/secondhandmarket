@@ -45,15 +45,4 @@ public class AuthController2 {
         model.addAttribute("authLoginRequest", new AuthLoginRequest());
         return "signin";
     }
-
-//    @PostMapping("/sign-in-post")
-//    public String login(@Valid @ModelAttribute("authLoginRequest") AuthLoginRequest request, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-//        if (bindingResult.hasErrors()) {
-//            String errorMessage = bindingResult.getFieldError().getDefaultMessage();
-//            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
-//            return "redirect:/sign-in";
-//        }
-//        authService.login(request);
-//        return "redirect:/dashboard";
-//    }
 }
