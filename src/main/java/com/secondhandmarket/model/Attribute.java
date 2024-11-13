@@ -24,7 +24,15 @@ public class Attribute {
     @Column(nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "attributes")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id",nullable = false)
+    private Category category;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "attribute", orphanRemoval = true)
     @JsonIgnore
-    private Set<Category> categories = new HashSet<>();
+    private List<Option> options = new ArrayList<>();
+
+    private Boolean isRequired = false;
+
+    private Boolean isEnter = false;
 }

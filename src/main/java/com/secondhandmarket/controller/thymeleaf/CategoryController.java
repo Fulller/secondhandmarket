@@ -78,24 +78,6 @@ public class CategoryController {
         return "/category/add-category-child";
     }
 
-//    @PostMapping("/add-category-child-post")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public String addCategoryChild(@ModelAttribute("categoryChildRequest") @Valid CategoryChildRequest categoryChildRequest,
-//                                    BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-//        if (bindingResult.hasErrors()) {
-//            String errorMessage = bindingResult.getFieldError().getDefaultMessage();
-//            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
-//            return "redirect:/category/add-category-child";
-//        }
-//        if (categoryRepository.existsByName(categoryChildRequest.getName())) {
-//            redirectAttributes.addFlashAttribute("errorMessage", "Tên danh mục đã tồn tại!");
-//            return "redirect:/category/add-category-child";
-//        }
-//        categoryService.saveCategoryChild(categoryChildRequest);
-//        redirectAttributes.addFlashAttribute("successMessage", "Thêm danh mục con thành công!");
-//        return "redirect:/category/add-category-child";
-//    }
-
     @PostMapping("/add-category-child")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView addCategoryChild(@ModelAttribute("categoryChildRequest") @Valid CategoryChildRequest categoryChildRequest,
@@ -194,8 +176,6 @@ public class CategoryController {
         CategoryChildRequest categoryChildRequest = new CategoryChildRequest();
         categoryChildRequest.setName(category.getName());
         categoryChildRequest.setParent(category.getParent());
-        Set<Attribute> attributeSet = new HashSet<>(category.getAttributes());
-        categoryChildRequest.setAttributes(attributeSet);
         modelAndView.addObject("categoryChildRequest", categoryChildRequest);
         modelAndView.addObject("parentCategories", parentCategories);
         modelAndView.addObject("attributes", attributes);
@@ -211,12 +191,9 @@ public class CategoryController {
                                             BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         List<Category> parentCategories = categoryService.findAllCategoryParent();
-        List<Attribute> attributes = attributeService.findAll();
-
         if (bindingResult.hasErrors()) {
             modelAndView.addObject("categoryChildRequest", categoryChildRequest);
             modelAndView.addObject("parentCategories", parentCategories);
-            modelAndView.addObject("attributes", attributes);
             modelAndView.setViewName("/category/update-category-child");
             return modelAndView;
         }
@@ -224,7 +201,6 @@ public class CategoryController {
         modelAndView.addObject("successMessage","Cập nhật danh mục thành công!");
         modelAndView.addObject("categoryChildRequest", categoryChildRequest);
         modelAndView.addObject("parentCategories", parentCategories);
-        modelAndView.addObject("attributes", attributes);
         modelAndView.setViewName("/category/update-category-child");
         return modelAndView;
     }
@@ -234,17 +210,13 @@ public class CategoryController {
     public ModelAndView detailCategoryChild(@PathVariable("id") String id) {
         ModelAndView modelAndView = new ModelAndView();
         List<Category> parentCategories = categoryService.findAllCategoryParent();
-        List<Attribute> attributes = attributeService.findAll();
         Optional<Category> categoryOptional = categoryService.findById(id);
         Category category = categoryOptional.get();
         CategoryChildRequest categoryChildRequest = new CategoryChildRequest();
         categoryChildRequest.setName(category.getName());
         categoryChildRequest.setParent(category.getParent());
-        Set<Attribute> attributeSet = new HashSet<>(category.getAttributes());
-        categoryChildRequest.setAttributes(attributeSet);
         modelAndView.addObject("categoryChildRequest", categoryChildRequest);
         modelAndView.addObject("parentCategories", parentCategories);
-        modelAndView.addObject("attributes", attributes);
         modelAndView.addObject("id", id);
         modelAndView.setViewName("/category/detail-category-child");
         return modelAndView;

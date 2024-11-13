@@ -33,14 +33,14 @@ public class CategoryApiController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-    @GetMapping("/categories/{categoryId}")
-    public ResponseEntity<ApiResponse<Set<Attribute>>> getAttributesByCategoryId(@PathVariable String categoryId) {
-        Set<Attribute> attributes = categoryService.getAttributesByCategoryId(categoryId);
-        ApiResponse<Set<Attribute>> apiResponse = ApiResponse.<Set<Attribute>>builder()
-                .data(attributes)
-                .code("attribute-s-01")
-                .message("Lấy thuộc tính thành công")
-                .build();
-        return ResponseEntity.ok(apiResponse);
-    }
+//    @GetMapping("/categories/{categoryId}")
+//    public ResponseEntity<ApiResponse<Set<Attribute>>> getAttributesByCategoryId(@PathVariable String categoryId) {
+//        Set<Attribute> attributes = categoryService.getAttributesByCategoryId(categoryId);
+//        ApiResponse<Set<Attribute>> apiResponse = ApiResponse.<Set<Attribute>>builder()
+//                .data(attributes)
+//                .code("attribute-s-01")
+//                .message("Lấy thuộc tính thành công")
+//                .build();
+//        return ResponseEntity.ok(apiResponse);
+//    }
 }

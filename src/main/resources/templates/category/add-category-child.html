@@ -64,19 +64,6 @@
                                             <p th:if="${#fields.hasErrors('name')}" class="text-red-500"
                                                th:errors="*{name}"></p>
                                         </div>
-                                        <div>
-                                            <label class=" mb-3 block text-base font-medium text-black dark:text-white">
-                                                Chọn thuộc tính - Có thể chọn nhiều <span class="text-red-500"> (*) </span>
-                                            </label>
-                                            <select class="select2-attribute w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    th:field="*{attributes}" name="states[]" multiple="multiple">
-                                                <option th:each="attribute : ${attributes}"
-                                                        th:value="${attribute.id}"
-                                                        th:text="${attribute.name}"></option>
-                                            </select>
-                                            <p th:if="${#fields.hasErrors('attributes')}" class="text-red-500"
-                                               th:errors="*{attributes}"></p>
-                                        </div>
                                         <button type="submit"
                                                 class="inline-flex items-center justify-center rounded-md bg-primary px-10 py-4 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
                                             Lưu danh mục con mới

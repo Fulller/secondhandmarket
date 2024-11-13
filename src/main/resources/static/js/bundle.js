@@ -1,5 +1,4 @@
 
-
 const toggleButtons = document.querySelectorAll('[data-modal-toggle]');
 const hideButtons = document.querySelectorAll('[data-modal-hide]');
 const modal = document.getElementById('popup-modal');

@@ -37,10 +37,6 @@ public class CategoryService {
         if (categoryChildRequest.getParent() != null) {
             category.setParent(categoryChildRequest.getParent());
         }
-        for (Attribute attribute : categoryChildRequest.getAttributes()) {
-            category.getAttributes().add(attribute);
-            attribute.getCategories().add(category);
-        }
         categoryRepository.save(category);
     }
 
@@ -81,11 +77,6 @@ public class CategoryService {
             if (categoryChildRequest.getParent() != null) {
                 existingCategoryChild.setParent(categoryChildRequest.getParent());
             }
-            existingCategoryChild.getAttributes().clear();
-            for (Attribute attribute : categoryChildRequest.getAttributes()) {
-                existingCategoryChild.getAttributes().add(attribute);
-                attribute.getCategories().add(existingCategoryChild);
-            }
             categoryRepository.save(existingCategoryChild);
         } else {
             throw new AppException(HttpStatus.NOT_FOUND, "Category not found with id: " + id);
@@ -98,6 +89,10 @@ public class CategoryService {
 
     public List<Category> findAllCategoryParent() {
         return categoryRepository.findAllByParentIsNull();
+    }
+
+    public List<Category> findAllCategoryChild() {
+        return categoryRepository.findAllByParentIsNotNull();
     }
 
     public Page<Category> findAllCategoryChild(Pageable pageable) {
@@ -134,12 +129,12 @@ public class CategoryService {
         return categoryTree;
     }
 
-    public Set<Attribute> getAttributesByCategoryId(String categoryId) {
-        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
-        if (categoryOptional.isPresent()) {
-            return categoryOptional.get().getAttributes();
-        } else {
-            throw new EntityNotFoundException("Danh mục không tồn tại");
-        }
-    }
+//    public Set<Attribute> getAttributesByCategoryId(String categoryId) {
+//        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+//        if (categoryOptional.isPresent()) {
+//            return categoryOptional.get().getAttributes();
+//        } else {
+//            throw new EntityNotFoundException("Danh mục không tồn tại");
+//        }
+//    }
 }
