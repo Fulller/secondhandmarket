@@ -33,7 +33,7 @@ public class BlogService {
     public Product updateProductRemove(String id) {
         Product oldProduct = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy id"));
-        oldProduct.setStatus(ProductStatus.REMOVED);
+        oldProduct.setStatus(ProductStatus.REJECTED);
         return productRepository.save(oldProduct); // Return updated product
     }
 }
