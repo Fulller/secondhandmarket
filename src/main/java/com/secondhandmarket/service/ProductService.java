@@ -222,4 +222,8 @@ public class ProductService {
         productRepository.save(product);
         return productMapper.toProductGetBySellerResponse(product);
     }
+    public List<Product> getAvailableProductsByUser(String sellerId) {
+        return productRepository.findBySellerIdAndStatus(sellerId, ProductStatus.AVAILABLE);
+    }
+
 }

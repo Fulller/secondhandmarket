@@ -1,6 +1,8 @@
 package com.secondhandmarket.dto.user;
 
 
+import com.secondhandmarket.model.Address;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -14,4 +16,6 @@ public class UserSellerInProductDTO {
     String name;
     String avatar;
     Double rating;
+    String phone;
+    Address address;
 }

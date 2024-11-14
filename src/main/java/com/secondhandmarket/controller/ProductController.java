@@ -4,6 +4,7 @@ import com.secondhandmarket.dto.api.ApiResponse;
 import com.secondhandmarket.dto.api.PagedResponse;
 import com.secondhandmarket.dto.product.*;
 import com.secondhandmarket.enums.ProductStatus;
+import com.secondhandmarket.model.Product;
 import com.secondhandmarket.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -148,4 +149,16 @@ public class ProductController {
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
+    @GetMapping("/seller/{sellerId}/available")
+    public ResponseEntity<ApiResponse<List<Product>>> getAvailableProductsByUser(@PathVariable String sellerId) {
+        List<Product> availableProducts = productService.getAvailableProductsByUser(sellerId);
+        
+        ApiResponse<List<Product>> apiResponse = ApiResponse.<List<Product>>builder()
+                .code("product-s-10")
+                .message("Get available products by user successfully")
+                .data(availableProducts)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
 }

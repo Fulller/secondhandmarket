@@ -34,4 +34,5 @@ public interface UserMapper {
     AuthUserInfoResponse toUserInfo(User user);
 
     UserSellerInProductDTO toUserSellerInProductDto(User user);
+    
 }
