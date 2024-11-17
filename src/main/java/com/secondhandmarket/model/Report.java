@@ -1,16 +1,16 @@
 package com.secondhandmarket.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,6 +28,5 @@ public class Report {
     private String reason;
 
     private String phone;
-
-    private String email;
+    private LocalDateTime reportedAt;
 }

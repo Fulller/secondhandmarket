@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -172,7 +173,9 @@ public class ProductService {
         });
 
         // Save product
-        product.setStatus(ProductStatus.PENDING);
+        if (ProductStatus.AVAILABLE.equals(product.getStatus())) {
+            product.setStatus(ProductStatus.PENDING);
+        }
         productRepository.save(product);
         return productMapper.toProductGetBySellerResponse(product);
     }
@@ -210,16 +213,56 @@ public class ProductService {
         return productMapper.toProductDetailResponse(product);
     }
 
-    public ProductGetBySellerResponse changeStatus(String productId, ProductStatus productStatus) {
+
+    public ProductGetBySellerResponse changeStatus(String productId, String status) {
+        ProductStatus productStatus = ProductStatus.valueOf(status);
+
         String sellerId = securityUtil.getCurrentUserId();
         Product product = productRepository
                 .findByIdAndSellerId(productId, sellerId)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Product not found", "product-e-02"));
-        if (productStatus != ProductStatus.HIDDEN && productStatus != ProductStatus.AVAILABLE) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Cannot change status while in status ::" + productStatus.name(), "product-e-03");
+
+        ProductStatus currentStatus = product.getStatus();
+
+        Map<ProductStatus, ProductStatus[]> allowedTransitions = Map.of(
+                ProductStatus.PENDING, new ProductStatus[]{ProductStatus.HIDDEN},
+                ProductStatus.AVAILABLE, new ProductStatus[]{ProductStatus.HIDDEN},
+                ProductStatus.HIDDEN, new ProductStatus[]{ProductStatus.PENDING},
+                ProductStatus.REJECTED, new ProductStatus[]{ProductStatus.PENDING, ProductStatus.HIDDEN},
+                ProductStatus.EXPIRED, new ProductStatus[]{ProductStatus.PENDING, ProductStatus.HIDDEN}
+        );
+
+        if (currentStatus == ProductStatus.SOLD) {
+            throw new AppException(HttpStatus.BAD_REQUEST,
+                    "Cannot change status for product in SOLD state", "product-e-03");
         }
+
+        if (allowedTransitions.containsKey(currentStatus)) {
+            ProductStatus[] validNextStatuses = allowedTransitions.get(currentStatus);
+            boolean isValidTransition = false;
+            for (ProductStatus validStatus : validNextStatuses) {
+                if (validStatus == productStatus) {
+                    isValidTransition = true;
+                    break;
+                }
+            }
+            if (!isValidTransition) {
+                throw new AppException(HttpStatus.BAD_REQUEST,
+                        "Cannot set product to " + productStatus.name() + " from " + currentStatus.name(), "product-e-04");
+            }
+        } else {
+            throw new AppException(HttpStatus.BAD_REQUEST,
+                    "Invalid status transition", "product-e-09");
+        }
+
         product.setStatus(productStatus);
         productRepository.save(product);
+
         return productMapper.toProductGetBySellerResponse(product);
     }
+
+    public List<Product> getAvailableProductsByUser(String sellerId) {
+        return productRepository.findBySellerIdAndStatus(sellerId, ProductStatus.AVAILABLE);
+    }
+
 }

@@ -49,6 +49,7 @@ public class CategoryApiController {
         return ResponseEntity.ok(apiResponse);
     }
 
+
     @GetMapping("/list-category-child/{categoryId}")
     public ResponseEntity<List<Category>> getCategoryChild(@PathVariable String categoryId) {
         List<Category> categories = categoryService.getCategoryChildByCategoryId(categoryId);

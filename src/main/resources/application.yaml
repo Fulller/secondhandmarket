@@ -79,3 +79,4 @@ cloudinary:
   api-key: ${CLOUDINARY_API_KEY}
   secret-key: ${CLOUDINARY_SECRET_KEY}
   folder: ${CLOUDINARY_FOLDER}
+  

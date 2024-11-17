@@ -282,3 +282,12 @@ document.getElementById('childCategorySelect').addEventListener('change', functi
 
 
 
+
+
+function openAddOptionModal() {
+    document.getElementById('addOptionModal').classList.remove('hidden');
+}
+
+function closeAddOptionModal() {
+    document.getElementById('addOptionModal').classList.add('hidden');
+}

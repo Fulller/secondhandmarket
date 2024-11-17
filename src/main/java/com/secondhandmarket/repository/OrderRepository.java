@@ -13,4 +13,5 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     List<Order> findBySeller(User seller);
     List<Order> findByBuyer(User buyer);
     List<Order> findByProduct(Product product);
+    Boolean existsBySellerAndBuyer(User seller, User buyer);
 }

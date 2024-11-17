@@ -2,6 +2,7 @@ package com.secondhandmarket.service;
 
 import com.secondhandmarket.dto.email.SendEmailDto;
 import com.secondhandmarket.exception.AppException;
+import com.secondhandmarket.model.Report;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -67,6 +68,18 @@ public class EmailService {
         SendEmailDto emailPayload = SendEmailDto.builder()
                 .to(toEmail)
                 .subject("Verity to create new password")
+                .text(emailText)
+                .build();
+        sendEmail(emailPayload);
+    }
+
+    public void sendEmailReport(String toEmail, Report report) {
+        String emailText = """
+                <div>Report to Secondhand Market</div>
+                """;
+        SendEmailDto emailPayload = SendEmailDto.builder()
+                .to(toEmail)
+                .subject("Report to Secondhand Market")
                 .text(emailText)
                 .build();
         sendEmail(emailPayload);

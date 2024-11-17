@@ -12,4 +12,5 @@ public interface UserRepository extends JpaRepository<User, String> {
     boolean existsByEmailAndIsFromOutsideFalse(String email);
     Optional<User> findByEmailAndIsFromOutsideFalse(String email);
     Optional<User> findByIsFromOutsideTrueAndProviderNameAndProviderId(String providerName, String providerId);
+    
 }
