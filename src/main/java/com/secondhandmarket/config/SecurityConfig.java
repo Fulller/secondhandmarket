@@ -96,6 +96,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, GET_PUBLIC_ROUTES).permitAll()
                         .requestMatchers(("/css/**")).permitAll()
                         .requestMatchers(("/js/**")).permitAll()
+                        .requestMatchers(("/video/**")).permitAll()
                         .requestMatchers(("/images/**")).permitAll()
                         .requestMatchers(("/api/**")).permitAll()
                         .requestMatchers(("/dashboard/**")).authenticated()
