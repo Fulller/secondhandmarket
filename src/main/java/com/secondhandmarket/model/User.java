@@ -2,6 +2,7 @@ package com.secondhandmarket.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.secondhandmarket.enums.ERole;
+import com.secondhandmarket.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,6 +39,12 @@ public class User {
 
     private Double rating;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus status = UserStatus.ACTIVE;
+
+    private Integer reported = 0;
+
     @ElementCollection(targetClass = ERole.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
@@ -51,4 +58,9 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "seller", orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<Product> products = new HashSet<>();
+    @PrePersist
+    protected void onCreate() {
+        this.reported = 0;
+        this.status = UserStatus.ACTIVE;
+    }
 }

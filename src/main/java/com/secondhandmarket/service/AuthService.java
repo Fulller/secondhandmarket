@@ -3,6 +3,7 @@ package com.secondhandmarket.service;
 import com.secondhandmarket.dto.auth.*;
 import com.secondhandmarket.dto.jwt.JWTPayloadDto;
 import com.secondhandmarket.enums.ERole;
+import com.secondhandmarket.enums.UserStatus;
 import com.secondhandmarket.exception.AppException;
 import com.secondhandmarket.mapper.UserMapper;
 import com.secondhandmarket.model.RefreshToken;
@@ -75,6 +76,8 @@ public class AuthService {
         User user = userRepository.findByEmailAndIsFromOutsideFalse(request.getEmail()).orElseThrow(
                 () -> new AppException(HttpStatus.NOT_FOUND, "Email user not found", "auth-e-02")
         );
+        // CHECK ACTIVE
+        checkStatus(user);
         boolean isMatchPassword = passwordUtil.checkPassword(request.getPassword(), user.getPassword());
         if (!isMatchPassword) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Wrong password", "auth-e-03");
@@ -142,7 +145,8 @@ public class AuthService {
                             .build();
                     return userRepository.save(newUser);
                 });
-
+        // CHECK ACTIVE
+        checkStatus(user);
         JWTPayloadDto payload = userMapper.toJWTPayloadDto(user);
         String accessToken = accessTokenUtil.generateToken(payload);
         String refreshToken = refreshTokenUtil.generateToken(payload, user);
@@ -154,9 +158,11 @@ public class AuthService {
     }
 
     public void forgotPassword(AuthForgotPasswordRequest request) {
-        userRepository.findByEmailAndIsFromOutsideFalse(request.getEmail()).orElseThrow(
+        User user = userRepository.findByEmailAndIsFromOutsideFalse(request.getEmail()).orElseThrow(
                 () -> new AppException(HttpStatus.NOT_FOUND, "Email user not found", "auth-e-02")
         );
+        // CHECK ACTIVE
+        checkStatus(user);
     }
 
     public AuthResponse verifyForgotPassword(String email, AuthVerifyForgotPasswordRequest request) {
@@ -181,5 +187,11 @@ public class AuthService {
                         () -> new AppException(HttpStatus.NOT_FOUND, "User not found", "auth-e-05")
                 );
         return userMapper.toUserInfo(user);
+    }
+
+    private void checkStatus(User user){
+        if(!user.getStatus().equals(UserStatus.ACTIVE)){
+            throw new AppException(HttpStatus.BAD_REQUEST, "User is not active", "auth-e-06");
+        }
     }
 }
