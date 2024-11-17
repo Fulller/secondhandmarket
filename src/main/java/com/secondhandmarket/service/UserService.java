@@ -2,6 +2,7 @@ package com.secondhandmarket.service;
 
 import com.secondhandmarket.dto.user.UserResponse;
 import com.secondhandmarket.dto.user.UserUpdateRequest;
+import com.secondhandmarket.dto.user.UserSellerInProductDTO;
 import com.secondhandmarket.exception.AppException;
 import com.secondhandmarket.mapper.UserMapper;
 import com.secondhandmarket.model.User;
@@ -27,4 +28,12 @@ public class UserService {
 
         return userMapper.toResponseUser(userRepository.save(user));
     }
+
+    public UserSellerInProductDTO getUserById(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "User not found", "user-e-02"));
+        
+        return userMapper.toUserSellerInProductDto(user);
+    }
+
 }
