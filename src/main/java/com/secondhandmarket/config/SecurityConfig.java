@@ -128,7 +128,7 @@ public class SecurityConfig {
 
         httpSecurity.oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo
-                                .userService(oAuth2UserService)
+                            .userService(oAuth2UserService)
                         )
                         .defaultSuccessUrl("/auth/login/oauth2/success", true)
                 )

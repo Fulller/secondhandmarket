@@ -2,8 +2,10 @@ package com.secondhandmarket.controller.thymeleaf;
 
 import com.secondhandmarket.dto.attribute.AttributeRequest;
 import com.secondhandmarket.model.Attribute;
+import com.secondhandmarket.model.Category;
 import com.secondhandmarket.repository.AttributeRepository;
 import com.secondhandmarket.service.attribute.AttributeService;
+import com.secondhandmarket.service.category.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +14,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -26,34 +30,50 @@ import java.util.Optional;
 
 public class AttributeController {
 
-    @Autowired
     private final AttributeService attributeService;
     private final AttributeRepository attributeRepository;
+    private final CategoryService categoryService;
 
     @GetMapping("/add-attribute")
     @PreAuthorize("hasRole('ADMIN')")
-    public String showAddAttributeForm(Model model) {
-        model.addAttribute("attributeRequest", new AttributeRequest());
-        return "/attribute/add-attribute";
+    public ModelAndView showAddAttributeForm( ) {
+        ModelAndView modelAndView = new ModelAndView("attribute/add-attribute");
+        List<Category> categoryList = categoryService.findAllCategoryChild();
+        modelAndView.addObject("categories", categoryList);
+        modelAndView.addObject("attributeRequest", new AttributeRequest());
+        return modelAndView;
     }
 
-    @PostMapping("/add-attribute-post")
+    @PostMapping("/add-attribute")
     @PreAuthorize("hasRole('ADMIN')")
-    public String addAttribute(@ModelAttribute("attributeRequest") @Valid AttributeRequest attributeRequest,
-                                     BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldError().getDefaultMessage();
-            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
-            return "redirect:/attribute/add-attribute";
-        }
+    public ModelAndView addAttribute(@ModelAttribute("attributeRequest") @Valid AttributeRequest attributeRequest,
+                                     BindingResult bindingResult) {
+        ModelAndView modelAndView = new ModelAndView();
         if (attributeRepository.existsByName(attributeRequest.getName())) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Tên thuộc tính đã tồn tại!");
-            return "redirect:/attribute/add-attribute";
+            bindingResult.rejectValue("name", "error.name", "Tên thuộc tính đã tồn tại!");
+            List<Category> categoryList = categoryService.findAllCategoryChild();
+            modelAndView.addObject("categories", categoryList);
+            modelAndView.addObject("attributeRequest", attributeRequest);
+            modelAndView.setViewName("attribute/add-attribute");
+            return modelAndView;
+        }
+        if (bindingResult.hasErrors()) {
+            modelAndView.addObject("fieldErrors", bindingResult.getFieldErrors());
+            List<Category> categoryList = categoryService.findAllCategoryChild();
+            modelAndView.addObject("categories", categoryList);
+            modelAndView.addObject("attributeRequest", attributeRequest);  // Giữ lại giá trị đã nhập
+            modelAndView.setViewName("attribute/add-attribute");
+            return modelAndView;
         }
         attributeService.saveAttribute(attributeRequest);
-        redirectAttributes.addFlashAttribute("successMessage", "Thêm thuộc tính thành công!");
-        return "redirect:/attribute/add-attribute";
+        modelAndView.addObject("successMessage", "Thêm thuộc tính thành công!");
+        List<Category> categoryList = categoryService.findAllCategoryChild();
+        modelAndView.addObject("categories", categoryList);
+        modelAndView.addObject("attributeRequest", new AttributeRequest());  // Tạo form mới
+        modelAndView.setViewName("attribute/add-attribute");
+        return modelAndView;
     }
+
 
     @GetMapping("/update-attribute/{id}")
     @PreAuthorize("hasRole('ADMIN')")

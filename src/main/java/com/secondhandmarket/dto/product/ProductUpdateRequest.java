@@ -12,7 +12,6 @@ import java.util.List;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductUpdateRequest {
-    @NotBlank(message = "Product ID is required")
     String productId;
 
     @NotBlank(message = "Name is required")

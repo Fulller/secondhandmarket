@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="vi" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -7,9 +8,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Quản lý Chợ Cũ</title>
     <link th:href="@{/css/style.css}" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
 </head>
 <body
         x-data="{ page: 'ecommerce', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -17,6 +18,7 @@
          darkMode = JSON.parse(localStorage.getItem('darkMode'));
          $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
         :class="{'dark text-bodydark bg-boxdark-2': darkMode === true}">
+
 <div class="flex h-screen overflow-hidden">
     <div th:replace="~{fragments/sidebar :: sidebar}"></div>
     <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
@@ -26,10 +28,5 @@
     </div>
 </div>
 <script src="/js/bundle.js"></script>
-<script>
-    $(document).ready(function() {
-        $('.select2-attribute').select2();
-    });
-</script>
 </body>
 </html>

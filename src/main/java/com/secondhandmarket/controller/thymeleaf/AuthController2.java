@@ -49,5 +49,4 @@ public class AuthController2 {
         model.addAttribute("authLoginRequest", new AuthLoginRequest());
         return "signin";
     }
-
 }

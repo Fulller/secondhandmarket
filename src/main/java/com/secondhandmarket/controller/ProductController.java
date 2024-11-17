@@ -3,7 +3,6 @@ package com.secondhandmarket.controller;
 import com.secondhandmarket.dto.api.ApiResponse;
 import com.secondhandmarket.dto.api.PagedResponse;
 import com.secondhandmarket.dto.product.*;
-import com.secondhandmarket.enums.ProductStatus;
 import com.secondhandmarket.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -116,25 +115,16 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-    @PatchMapping("/seller/{productId}/hidden")
-    public ResponseEntity<ApiResponse<ProductGetBySellerResponse>> hideProduct(@PathVariable String productId) {
+    @PutMapping("/seller/{productId}/change-status/{status}")
+    public ResponseEntity<ApiResponse<ProductGetBySellerResponse>> changeStatus(@PathVariable String productId, @PathVariable String status) {
         ApiResponse<ProductGetBySellerResponse> apiResponse = ApiResponse.<ProductGetBySellerResponse>builder()
                 .code("product-s-07")
-                .message("Changed product status to HIDDEN successfully")
-                .data(productService.changeStatus(productId, ProductStatus.HIDDEN))
+                .message("Changed product status successfully")
+                .data(productService.changeStatus(productId, status))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-    @PatchMapping("/seller/{productId}/available")
-    public ResponseEntity<ApiResponse<ProductGetBySellerResponse>> availableProduct(@PathVariable String productId) {
-        ApiResponse<ProductGetBySellerResponse> apiResponse = ApiResponse.<ProductGetBySellerResponse>builder()
-                .code("product-s-08")
-                .message("Changed product status to AVAILABLE successfully")
-                .data(productService.changeStatus(productId, ProductStatus.AVAILABLE))
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
-    }
 
     @PutMapping("/seller/{productId}")
     public ResponseEntity<ApiResponse<ProductGetBySellerResponse>> updateProduct(
@@ -142,7 +132,7 @@ public class ProductController {
             @RequestBody @Valid ProductUpdateRequest productUpdateRequest) {
         productUpdateRequest.setProductId(productId);
         ApiResponse<ProductGetBySellerResponse> apiResponse = ApiResponse.<ProductGetBySellerResponse>builder()
-                .code("product-s-09")
+                .code("product-s-08")
                 .message("Product updated successfully")
                 .data(productService.updateProduct(productUpdateRequest))
                 .build();
