@@ -1,10 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="vi" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="layout.html">
 <head>
-    <meta charset="UTF-8">
-    <title> </title>
+    <title>Quản lý Chợ Cũ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
+<div layout:fragment="content">
+    <div>
+        <main>
+            <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+                <!-- Breadcrumb Start -->
+                <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <nav>
+                        <ol class="flex items-center gap-2">
+                            <li>
+                                <a class="font-medium text-primary" th:href="@{/dashboard}">Dashboard /</a>
+                            </li>
+                            <li>
+                                <a class="font-medium text-primary" th:href="@{/templates/blog/list-blog}">Chi tiết bài đăng</a>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+                <!-- Breadcrumb End -->
+
+                <!-- Row and Column Layout -->
+                <div class="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+                    <div class="mb-6">
+                        <h2 class="font-bold text-lg">CHI TIẾT BÀI ĐĂNG</h2>
+                    </div>
+                    <div class="flex flex-wrap ">
+                        <div class="w-full lg:w-1/2 mb-4 lg:mb-0 ml pr-4" >
+                            <div th:each="image : ${product.images}">
+                                <img
+                                    class="w-full h-[300px] object-cover rounded-md shadow-md"
+                                    th:src="@{${image.url}}"
+                                    alt="Product Image">
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-1/2 pl-4">
+                            <p class="mb-2"><strong>Tên sản phẩm:</strong> <span th:text="${product.name}"></span></p>
+                            <p class="mb-2"><strong>Mô tả:</strong> <span th:text="${product.description}"></span></p>
+                            <p class="mb-2"><strong>Ngày hết hạn:</strong>
+                                <span th:text="${#temporals.format(product.expiredAt, 'dd/MM/yyyy HH:mm')}"></span>
+                            </p>
+                            <p class="mb-2"><strong>Ngày đăng:</strong>
+                                <span th:text="${#temporals.format(product.postedAt, 'dd/MM/yyyy HH:mm')}"></span>
+                            </p>
+                            <p class="mb-2"><strong>Giá:</strong>
+                                <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 3, 'POINT')}"></span>
+                            </p>
+                            <p class="mb-2"><strong>Slug:</strong> <span th:text="${product.slug}"></span></p>
+                            <p class="mb-2"><strong>Trạng thái:</strong> <span th:text="${product.status}"></span></p>
+                            <p class="mb-2"><strong>Ảnh đại diện:</strong> <img th:src="@{${product.thumbnail}}" alt="Thumbnail" class="w-16 h-16"></p>
+                            <p class="mb-2"><strong>Video:</strong> <a th:href="${product.video}" target="_blank">Xem video</a></p>
+                            <p class="mb-2"><strong>Địa chỉ:</strong> <span th:text="${product.address.getDetail()} + ' - ' + ${product.address.getWard()} + ' - ' + ${product.address.getDistrict()} + ' - ' + ${product.address.getProvince()}"></span></p>
+                            <p class="mb-2"><strong>Danh mục:</strong> <span th:text="${product.category.name}"></span></p>
+                            <p class="mb-2"><strong>Người bán:</strong> <span th:text="${product.seller.name}"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
 
 </body>
 </html>
+
+
+

@@ -38,7 +38,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <form method="post" th:action="@{/attribute/update-attribute-put/{id}(id=${id})}"
+                            <form method="post" th:action="@{/attribute/update-attribute/{id}(id=${id})}"
                                   th:object="${attributeRequest}">
                                 <div class="flex flex-col gap-5.5 p-6.5">
                                     <div>
@@ -51,10 +51,24 @@
                                         <div th:if="${errorMessage}" class="italic text-red-500">
                                             <p th:text="${errorMessage}"></p>
                                         </div>
+                                        <div class="flex gap-4">
+                                            <div class="flex items-center">
+                                                <input type="checkbox" th:field="*{isRequired}"
+                                                       class="rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                       name="isRequired" id="isRequired">
+                                                <label for="isRequired" class="text-base font-medium text-black dark:text-white ml-2">Bắt buộc</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="checkbox" th:field="*{isEnter}"
+                                                       class="rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                       name="isEnter" id="isEnter">
+                                                <label for="isEnter" class="text-base font-medium text-black dark:text-white ml-2">Nhập tay</label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <button type="submit"
                                             class="inline-flex items-center justify-center rounded-md bg-primary px-10 py-4 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
-                                        Lưu thuộc tính mới
+                                        Cập nhật thuộc tính
                                     </button>
                                 </div>
                             </form>

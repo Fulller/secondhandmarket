@@ -68,4 +68,14 @@ public class BlogController {
         modelAndView.setViewName("redirect:/blog/list-blog");
         return modelAndView;
     }
+
+    @GetMapping("/detail-blog/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView productDetails(@PathVariable("id") String id){
+        ModelAndView modelAndView = new ModelAndView();
+        Product product = blogService.getProduct(id);
+        modelAndView.addObject("product", product);
+        modelAndView.setViewName("/blog/detail-blog");
+        return modelAndView;
+    }
 }

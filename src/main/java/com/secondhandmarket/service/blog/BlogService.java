@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class BlogService {
@@ -32,6 +34,15 @@ public class BlogService {
         Product oldProduct = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy id"));
         oldProduct.setStatus(ProductStatus.REJECTED);
-        return productRepository.save(oldProduct); // Return updated product
+        return productRepository.save(oldProduct);
+    }
+
+    public Product getProduct(String id) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if (productOptional.isPresent()) {
+            return productOptional.get();
+        } else {
+            throw new RuntimeException("Không tìm thấy sản phẩm với id: " + id);
+        }
     }
 }

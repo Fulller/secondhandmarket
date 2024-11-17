@@ -142,8 +142,6 @@
 		</dependency>
 
 	</dependencies>
-
-    </dependencies>
     <build>
         <plugins>
             <!-- Spring Boot Maven Plugin -->
