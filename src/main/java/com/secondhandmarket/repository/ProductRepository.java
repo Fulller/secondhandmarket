@@ -44,12 +44,9 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     Optional<Product> findByIdOrSlugAndStatus(String id, String slug, ProductStatus status);
 
-<<<<<<< HEAD
     @Query("SELECT p FROM Product p WHERE p.status = 'PENDING'")
     Page<Product> findAllByStatusIsPending(Pageable pageable);
 
     @Query("SELECT p FROM Product p WHERE p.status = 'AVAILABLE'")
     Page<Product> findAllByStatusIsAvailable(Pageable pageable);
-=======
->>>>>>> feature/be11
 }

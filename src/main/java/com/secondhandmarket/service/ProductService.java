@@ -260,11 +260,9 @@ public class ProductService {
 
         return productMapper.toProductGetBySellerResponse(product);
     }
-<<<<<<< HEAD
-=======
+
     public List<Product> getAvailableProductsByUser(String sellerId) {
         return productRepository.findBySellerIdAndStatus(sellerId, ProductStatus.AVAILABLE);
     }
->>>>>>> feature/be11
 
 }
