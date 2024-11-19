@@ -26,11 +26,7 @@ public class OrderService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private SecurityUtil securityUtil;
-    @Autowired
-    private ProductService productService;
     @Autowired
     private ReviewRepository reviewRepository;
 
@@ -51,10 +47,14 @@ public class OrderService {
     }
 
     //lấy tất cả order của seller
-    public List<OrderResponse> getYourOrderSeller() {
+    public List<OrderResponse> getYourOrderSeller(OrderStatus status) {
         User seller = securityUtil.getCurrentUser();
-
-        List<Order> orders = orderRepository.findBySeller(seller);
+        List<Order> orders;
+        if(status == null){
+            orders = orderRepository.findBySeller(seller);
+        }else {
+            orders = orderRepository.findBySellerAndStatus(seller, status);
+        }
         List<OrderResponse> orderResponses = new ArrayList<>();
         for (Order order : orders) {
             OrderResponse orderResponse = new OrderResponse();
@@ -77,7 +77,7 @@ public class OrderService {
         }
 
         List<Order> orders = orderRepository.findByProduct(product);
-        List<OrderResponse> orderResponses = new ArrayList<OrderResponse>();
+        List<OrderResponse> orderResponses = new ArrayList<>();
         for (Order order : orders) {
             OrderResponse orderResponse = new OrderResponse();
             orderResponse.setBuyer(order.getBuyer());
@@ -89,11 +89,15 @@ public class OrderService {
         return orderResponses;
     }
     //lấy tất cả order của người mua
-    public List<OrderResponse> getYourOrderBuyer() {
+    public List<OrderResponse> getYourOrderBuyer(OrderStatus status) {
         User buyer = securityUtil.getCurrentUser();
-
-        List<Order> orders = orderRepository.findByBuyer(buyer);
-        List<OrderResponse> orderResponses = new ArrayList<OrderResponse>();
+        List<Order> orders;
+        if(status == null){
+            orders = orderRepository.findByBuyer(buyer);
+        }else {
+            orders = orderRepository.findByBuyerAndStatus(buyer, status);
+        }
+        List<OrderResponse> orderResponses = new ArrayList<>();
         for (Order order : orders) {
             OrderResponse orderResponse = new OrderResponse();
             orderResponse.setBuyer(order.getBuyer());
