@@ -1,0 +1,196 @@
+{
+    "35d98e2e-eef0-4211-a1a9-e434c7c774f2": [
+        {
+            "id": "1adadb84-77ed-4768-bab5-cc5dd3af949e",
+            "name": "Xuất xứ",
+            "options": [
+                {
+                    "id": "0626b7e5-8a01-482d-9ac9-9b9df4e62ed3",
+                    "name": "Lan"
+                },
+                {
+                    "id": "06d223e0-8acd-48e6-a924-522636af4c92",
+                    "name": "Mỹ"
+                },
+                {
+                    "id": "2004b6b1-27cf-4bfe-a196-39a9ddf95f68",
+                    "name": "Đức"
+                },
+                {
+                    "id": "2e3cd61e-7aa1-4ece-9cd3-b9c8f343ec7b",
+                    "name": "Nhật"
+                },
+                {
+                    "id": "972a883e-12c3-476c-9f21-eadf8e2e5eef",
+                    "name": "Loan"
+                },
+                {
+                    "id": "c4576657-0f73-41ff-a0c1-e55be8085bc7",
+                    "name": "Pháp"
+                },
+                {
+                    "id": "d6db5f23-d58d-4500-a230-8844336da2ba",
+                    "name": "bản"
+                },
+                {
+                    "id": "d70c7e64-0427-41b2-a8e6-e979c71892e0",
+                    "name": "Đài"
+                },
+                {
+                    "id": "f8f1e939-26df-4ac9-806f-41da6728b04d",
+                    "name": "Thái"
+                }
+            ],
+            "isRequired": false,
+            "isEnter": true
+        },
+        {
+            "id": "20b45a33-e9b0-4a98-a3k8-bdb3a33c4432",
+            "name": "Loại xe đạp",
+            "options": [
+                {
+                    "id": "1a36745f-afd0-47ff-aeab-7e9d96169111",
+                    "name": "Xe"
+                },
+                {
+                    "id": "3053dcfc-91b7-4b33-ba7b-11e04d7fc061",
+                    "name": "thao"
+                },
+                {
+                    "id": "3e3b2086-7009-4823-9708-3834daa81482",
+                    "name": "Xe"
+                },
+                {
+                    "id": "403d19f1-ec2c-40f2-944d-4ef4372e32ca",
+                    "name": "em"
+                },
+                {
+                    "id": "41a958d1-51d4-4dbb-a83c-db772367cbf8",
+                    "name": "khác"
+                },
+                {
+                    "id": "47b3e650-e17e-4475-8dc9-1982dfa4a746",
+                    "name": "đạp"
+                },
+                {
+                    "id": "614d29d4-b8e8-4cf7-b395-81bd95f526b8",
+                    "name": "đạp"
+                },
+                {
+                    "id": "75e9d060-8d8e-4982-a25b-cf537f32e4a4",
+                    "name": "đạp"
+                },
+                {
+                    "id": "8e098ae3-fbbd-46db-9335-241985836065",
+                    "name": "phổ"
+                },
+                {
+                    "id": "992fedcd-6245-4342-aebc-9d5169f4cfc8",
+                    "name": "Xe"
+                },
+                {
+                    "id": "9ca5cc3b-939d-4fdd-8b6f-847df42c9f8c",
+                    "name": "trẻ"
+                },
+                {
+                    "id": "b4145f89-8708-4c89-b6b7-904212068242",
+                    "name": "Xe"
+                },
+                {
+                    "id": "bbd09e80-7dff-4fcd-929c-515b532ceb01",
+                    "name": "đạp"
+                },
+                {
+                    "id": "c0eafb4e-9220-4486-ae1f-d1338ba139c9",
+                    "name": "thể"
+                },
+                {
+                    "id": "d18c17dd-91d0-40f0-8cf5-7b7bc0d43c8a",
+                    "name": "thông"
+                }
+            ],
+            "isRequired": true,
+            "isEnter": true
+        },
+        {
+            "id": "65e8a8f1-20d8-4344-a859-fb165e5107dc",
+            "name": "Hãng xe",
+            "options": [
+                {
+                    "id": "0ef0cbe7-9a85-457f-8dfc-b3e7001ca305",
+                    "name": "Bianchi"
+                },
+                {
+                    "id": "4a059af8-e5e0-445a-85e1-a1612087e25e",
+                    "name": "Asama"
+                },
+                {
+                    "id": "a38e044b-6a5f-4d0d-afb4-5ff220ebfbf6",
+                    "name": "Ander"
+                },
+                {
+                    "id": "f3a505be-102b-40e0-97b4-14680865705e",
+                    "name": "Baileys"
+                }
+            ],
+            "isRequired": true,
+            "isEnter": true
+        },
+        {
+            "id": "15e8a8f1-20d8-4x44-a859-fb165e5107dc",
+            "name": "Kích thước khung",
+            "options": [
+                {
+                    "id": "1ef0cbe7-9a85-457f-8dfc-b3e7001ca305",
+                    "name": "XS"
+                },
+                {
+                    "id": "1a059af8-e5e0-445a-85e1-a1612087e25e",
+                    "name": "S"
+                },
+                {
+                    "id": "138e044b-6a5f-4d0d-afb4-5ff220ebfbf6",
+                    "name": "M"
+                },
+                {
+                    "id": "13a505be-102b-40e0-57b4-14680865705e",
+                    "name": "L"
+                },
+                {
+                    "id": "13a505be-102b-40e0-97b4-15680865705e",
+                    "name": "XL"
+                }
+            ],
+            "isRequired": true,
+            "isEnter": true
+        },
+        {
+            "id": "15e8a8f1-20d8-4344-a859-fb165e5107dc",
+            "name": "Chất liệu khung",
+            "options": [
+                {
+                    "id": "0ef0cbe7-9a85-457f-8dfc-b3e7001ca305",
+                    "name": "Thép"
+                },
+                {
+                    "id": "4a059af8-e5e0-c45a-85e1-a1612087e25e",
+                    "name": "Carbon"
+                },
+                {
+                    "id": "a38e044b-6a5f-4d0d-afb4-5ff22cebfbf6",
+                    "name": "Inox"
+                },
+                {
+                    "id": "f3a505be-102b-40e0-97b4-14680c65705e",
+                    "name": "Nhôm"
+                },
+                {
+                    "id": "f3a505be-102b-40e0-97b4-14680c65c05e",
+                    "name": "Sắt"
+                }
+            ],
+            "isRequired": true,
+            "isEnter": true
+        }
+    ]
+}

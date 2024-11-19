@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.util.Map;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/blog")
@@ -109,9 +112,13 @@ public class BlogController {
 
     @GetMapping("/detail-blog/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView productDetails(@PathVariable("id") String id){
+    public ModelAndView productDetails(@PathVariable("id") String id) throws IOException {
         ModelAndView modelAndView = new ModelAndView();
         Product product = blogService.getProduct(id);
+        Map<String, Object> addressData = blogService.getAddressData(product);
+        modelAndView.addObject("provinceName", addressData.get("provinceName"));
+        modelAndView.addObject("districtName", addressData.get("districtName"));
+        modelAndView.addObject("wardName", addressData.get("wardName"));
         modelAndView.addObject("product", product);
         modelAndView.setViewName("/blog/detail-blog");
         return modelAndView;
