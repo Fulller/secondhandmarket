@@ -1,0 +1,255 @@
+{
+    "id": "98d770a4-edaf-42f6-a85a-093226773757",
+    "name": "Tủ lạnh đẹp như mới bao sài bao đổi 30 ngày BH 4th",
+    "slug": "tu-la-nh-e-p-nhu-mo-i-bao-sa-i-bao-o-i-30-nga-y-bh-4th.130275",
+    "description": "Thanh lý tủ lạnh Sharp 2 ngăn ko đóng tuyết 180L, sạch sẽ đẹp như mới bo điện tử  ít hao điện làm lạnh nhanh. Máy chạy êm. Bao sài  bao đổi 30 ngày  bảo hành 4 tháng quý khách an tâm sử dụng ah\n Shop có thu mua, trao đổi bù tiền tủ lạnh, máy giặt, tủ mát, tủ đông \nQuý khách ko sử dụng shop thu mua lại 50-70% giá trị \n Shop có tủ lạnh 50L đến 600L có tủ lạnh investment, nhiều mẫu tủ khác quý khách thảo ah\nCam kết bảo hành \nBảo hành tại nhà quý khách, tận tâm, lịch sự, vui vẻ hòa đồng \nCó ship giao tận nơi bao lắp đặt. ACE quan tâm LH ĐT Zalo  *** Tư vấn thêm ah",
+    "price": 1750000,
+    "status": "PENDING",
+    "address": {
+        "id": "9c99b8df-c744-4e30-9962-40ecf0c2f5c4",
+        "province": "89",
+        "district": "886",
+        "ward": "30341",
+        "detail": "123"
+    },
+    "video": "",
+    "thumbnail": "https://res.cloudinary.com/dt2tfpjrm/image/upload/v1731747422/secondhandmarket/7cced58b-41e4-410c-9462-906ff7329faa/images/u3khszra9m0ngwegg9up.webp",
+    "seller": {
+        "id": "7cced58b-41e4-410c-9462-906ff7329faa",
+        "name": "FULL COPPER",
+        "avatar": "https://lh3.googleusercontent.com/a/ACg8ocK_UJGkEpkjZsP3iOjxzJ-oBLsPySvTaxL--0CA03J7BCQaNBwO-Q=s96-c",
+        "rating": null
+    },
+    "category": {
+        "id": "ed0934c0-7151-40c2-b336-b86ec404997d",
+        "name": "Tủ lạnh",
+        "level": 2,
+        "categoryChildren": [],
+        "attributes": [
+            {
+                "id": "0982cacf-062d-4f80-9d23-33818f630094",
+                "name": "Hãng",
+                "options": [
+                    {
+                        "id": "23a53b64-b6b2-4175-81db-4d5412ceaec5",
+                        "name": "Lenovo"
+                    },
+                    {
+                        "id": "29b914f6-23c9-44f0-b936-4fdbf2e12872",
+                        "name": "Alaska"
+                    },
+                    {
+                        "id": "6b9510c4-7893-4f57-b7bf-d25f8ffa4c38",
+                        "name": "Bosch"
+                    },
+                    {
+                        "id": "c2cbf2a9-46fa-4ae5-ada8-5373ccc0b572",
+                        "name": "AQUA"
+                    }
+                ],
+                "isRequired": true,
+                "isEnter": true
+            },
+            {
+                "id": "6b289b02-76fa-4de7-913b-61bd3665014e",
+                "name": "Thể tích",
+                "options": [
+                    {
+                        "id": "1e2d3f3f-66e6-4de6-9d8c-a4cba2119591",
+                        "name": "150-199lit"
+                    },
+                    {
+                        "id": "921fe359-0cd7-4cd7-be86-9559bb51459e",
+                        "name": "<100lit"
+                    },
+                    {
+                        "id": "ab236e4f-8bbb-4c9f-b6cc-f9341d1d1278",
+                        "name": "200-299lit"
+                    },
+                    {
+                        "id": "b8378fe0-f4e2-485a-a397-a1ea9fa970e4",
+                        "name": "100-149lit"
+                    }
+                ],
+                "isRequired": true,
+                "isEnter": true
+            },
+            {
+                "id": "a309ee72-7c67-4de0-b5b2-cdcf8a9c3e73",
+                "name": "Hạn bảo hành",
+                "options": [
+                    {
+                        "id": "0e41ce67-cf7a-4634-9722-3197eefd07e7",
+                        "name": "3Thang"
+                    },
+                    {
+                        "id": "1e7ccfde-8d4e-4e59-8f46-580778b19fe9",
+                        "name": "2Thang"
+                    },
+                    {
+                        "id": "a30b5998-ba5c-4d7e-a096-9d2a13a58814",
+                        "name": "Hetbaohanh"
+                    },
+                    {
+                        "id": "fd93294e-0ba0-440b-81a9-1c996d5995fb",
+                        "name": "1Thang"
+                    }
+                ],
+                "isRequired": false,
+                "isEnter": false
+            },
+            {
+                "id": "f5811f7d-e69e-4fd8-809e-bf682cced649",
+                "name": "Xuất xứ.",
+                "options": [
+                    {
+                        "id": "210a0643-062b-41ad-a787-151a908e44e6",
+                        "name": "Vietnam"
+                    },
+                    {
+                        "id": "7df25115-0b32-434d-983d-e0d407d2a58f",
+                        "name": "Japan"
+                    },
+                    {
+                        "id": "9cb9a9c4-c8e8-400a-bc11-3e27b6770a50",
+                        "name": "Thailand"
+                    },
+                    {
+                        "id": "eb7b8c04-9600-453e-8c9b-ae326134bbab",
+                        "name": "USA"
+                    }
+                ],
+                "isRequired": false,
+                "isEnter": false
+            }
+        ]
+    },
+    "images": [
+        {
+            "id": "d84393bb-ffa8-427d-a663-4b4daca4344e",
+            "url": "https://res.cloudinary.com/dt2tfpjrm/image/upload/v1731747422/secondhandmarket/7cced58b-41e4-410c-9462-906ff7329faa/images/u3khszra9m0ngwegg9up.webp"
+        },
+        {
+            "id": "483656ed-e853-4c9d-8a2b-22329dcde436",
+            "url": "https://res.cloudinary.com/dt2tfpjrm/image/upload/v1731747420/secondhandmarket/7cced58b-41e4-410c-9462-906ff7329faa/images/axcuxqieiuoox1uhodn3.webp"
+        },
+        {
+            "id": "71bbf3c8-e015-41db-a97f-b79a99ba6e6e",
+            "url": "https://res.cloudinary.com/dt2tfpjrm/image/upload/v1731747417/secondhandmarket/7cced58b-41e4-410c-9462-906ff7329faa/images/dquxyhxidif02bukrybp.webp"
+        }
+    ],
+    "productAttributes": [
+        {
+            "id": "dc29b09a-4d5e-4387-8ffa-48f18c886ae8",
+            "attribute": {
+                "id": "0982cacf-062d-4f80-9d23-33818f630094",
+                "name": "Hãng",
+                "options": [
+                    {
+                        "id": "23a53b64-b6b2-4175-81db-4d5412ceaec5",
+                        "name": "Lenovo"
+                    },
+                    {
+                        "id": "29b914f6-23c9-44f0-b936-4fdbf2e12872",
+                        "name": "Alaska"
+                    },
+                    {
+                        "id": "6b9510c4-7893-4f57-b7bf-d25f8ffa4c38",
+                        "name": "Bosch"
+                    },
+                    {
+                        "id": "c2cbf2a9-46fa-4ae5-ada8-5373ccc0b572",
+                        "name": "AQUA"
+                    }
+                ],
+                "isRequired": true,
+                "isEnter": true
+            },
+            "value": "Bosch"
+        },
+        {
+            "id": "15d4d64d-1b0c-4d91-8ea8-7062719bb008",
+            "attribute": {
+                "id": "6b289b02-76fa-4de7-913b-61bd3665014e",
+                "name": "Thể tích",
+                "options": [
+                    {
+                        "id": "1e2d3f3f-66e6-4de6-9d8c-a4cba2119591",
+                        "name": "150-199lit"
+                    },
+                    {
+                        "id": "921fe359-0cd7-4cd7-be86-9559bb51459e",
+                        "name": "<100lit"
+                    },
+                    {
+                        "id": "ab236e4f-8bbb-4c9f-b6cc-f9341d1d1278",
+                        "name": "200-299lit"
+                    },
+                    {
+                        "id": "b8378fe0-f4e2-485a-a397-a1ea9fa970e4",
+                        "name": "100-149lit"
+                    }
+                ],
+                "isRequired": true,
+                "isEnter": true
+            },
+            "value": "<100lit"
+        },
+        {
+            "id": "cbbe72ad-79f3-469f-b3ca-85b27ac440eb",
+            "attribute": {
+                "id": "a309ee72-7c67-4de0-b5b2-cdcf8a9c3e73",
+                "name": "Hạn bảo hành",
+                "options": [
+                    {
+                        "id": "0e41ce67-cf7a-4634-9722-3197eefd07e7",
+                        "name": "3Thang"
+                    },
+                    {
+                        "id": "1e7ccfde-8d4e-4e59-8f46-580778b19fe9",
+                        "name": "2Thang"
+                    },
+                    {
+                        "id": "a30b5998-ba5c-4d7e-a096-9d2a13a58814",
+                        "name": "Hetbaohanh"
+                    },
+                    {
+                        "id": "fd93294e-0ba0-440b-81a9-1c996d5995fb",
+                        "name": "1Thang"
+                    }
+                ],
+                "isRequired": false,
+                "isEnter": false
+            },
+            "value": "2Thang"
+        },
+        {
+            "id": "2e9cc30e-7c09-4885-aa60-4ffbe485cf0d",
+            "attribute": {
+                "id": "f5811f7d-e69e-4fd8-809e-bf682cced649",
+                "name": "Xuất xứ.",
+                "options": [
+                    {
+                        "id": "210a0643-062b-41ad-a787-151a908e44e6",
+                        "name": "Vietnam"
+                    },
+                    {
+                        "id": "7df25115-0b32-434d-983d-e0d407d2a58f",
+                        "name": "Japan"
+                    },
+                    {
+                        "id": "9cb9a9c4-c8e8-400a-bc11-3e27b6770a50",
+                        "name": "Thailand"
+                    },
+                    {
+                        "id": "eb7b8c04-9600-453e-8c9b-ae326134bbab",
+                        "name": "USA"
+                    }
+                ],
+                "isRequired": false,
+                "isEnter": false
+            },
+            "value": "Japan"
+        }
+    ]
+}

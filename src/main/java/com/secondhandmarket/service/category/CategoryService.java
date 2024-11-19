@@ -108,6 +108,7 @@ public class CategoryService {
         List<Category> categories = categoryRepository.findAll();
         Map<String, Category> categoryMap = new HashMap<>();
         for (Category category : categories) {
+            category.setAttributes(null);  // Loại bỏ attributes
             categoryMap.put(category.getId(), category);
         }
         List<Category> categoryTree = new ArrayList<>();
