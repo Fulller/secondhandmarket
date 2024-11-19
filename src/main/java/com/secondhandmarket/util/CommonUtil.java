@@ -31,4 +31,8 @@ public class CommonUtil {
     public static String toProductSlug(String productName) {
         return CommonUtil.toSlug(productName) + "." + CommonUtil.generateVerificationCode();
     }
+
+    public static Integer getMaxReported(){
+        return 5;
+    }
 }

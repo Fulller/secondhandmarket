@@ -2,6 +2,7 @@ package com.secondhandmarket.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.secondhandmarket.enums.ERole;
+import com.secondhandmarket.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,13 +31,19 @@ public class User {
     private String avatar;
 
     @Column(nullable = false)
-    private boolean isFromOutside = false;
+    private Boolean isFromOutside = false;
 
     private String providerName;
 
     private String providerId;
 
     private Double rating;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus status = UserStatus.ACTIVE;
+
+    private Integer reported = 0;
 
     @ElementCollection(targetClass = ERole.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
@@ -51,8 +58,9 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "seller", orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<Product> products = new HashSet<>();
-
-    public boolean getIsFromOutside() {
-        return this.isFromOutside;
+    @PrePersist
+    protected void onCreate() {
+        this.reported = 0;
+        this.status = UserStatus.ACTIVE;
     }
 }

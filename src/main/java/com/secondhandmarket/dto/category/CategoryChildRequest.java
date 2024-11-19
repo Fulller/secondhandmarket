@@ -17,7 +17,4 @@ public class CategoryChildRequest {
     private Integer level = 2;
 
     private Category parent;
-
-    @Size(min = 1, message = "Bạn cần chọn ít nhất 1 thuộc tính!")
-    Set<Attribute> attributes = new HashSet<>();
 }

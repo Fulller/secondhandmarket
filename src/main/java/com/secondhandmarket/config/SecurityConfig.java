@@ -96,6 +96,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, GET_PUBLIC_ROUTES).permitAll()
                         .requestMatchers(("/css/**")).permitAll()
                         .requestMatchers(("/js/**")).permitAll()
+                        .requestMatchers(("/video/**")).permitAll()
                         .requestMatchers(("/images/**")).permitAll()
                         .requestMatchers(("/api/**")).permitAll()
                         .requestMatchers(("/dashboard/**")).authenticated()
@@ -111,7 +112,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/sign-in")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/dashboard")
+                        .defaultSuccessUrl("/receive-token")
 //                .successHandler((request, response, authentication) -> {
 //                    response.sendRedirect("/dashboard");
 //                })
@@ -128,7 +129,7 @@ public class SecurityConfig {
 
         httpSecurity.oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo
-                                .userService(oAuth2UserService)
+                            .userService(oAuth2UserService)
                         )
                         .defaultSuccessUrl("/auth/login/oauth2/success", true)
                 )

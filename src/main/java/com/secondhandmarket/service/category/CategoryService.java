@@ -2,26 +2,30 @@ package com.secondhandmarket.service.category;
 
 import com.secondhandmarket.dto.category.CategoryChildRequest;
 import com.secondhandmarket.dto.category.CategoryParentRequest;
+import com.secondhandmarket.exception.AppException;
 import com.secondhandmarket.model.Attribute;
 import com.secondhandmarket.model.Category;
+import com.secondhandmarket.model.Option;
+import com.secondhandmarket.repository.AttributeRepository;
 import com.secondhandmarket.repository.CategoryRepository;
+import com.secondhandmarket.repository.OptionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryService implements ICategoryService {
-
-    @Autowired
+public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final AttributeRepository attributeRepository;
+    private final OptionRepository optionRepository;
 
-    @Override
     public void saveCategoryParent(CategoryParentRequest categoryParentRequest) {
         Category category = new Category();
         category.setId(UUID.randomUUID().toString());
@@ -30,7 +34,6 @@ public class CategoryService implements ICategoryService {
         categoryRepository.save(category);
     }
 
-    @Override
     public void saveCategoryChild(CategoryChildRequest categoryChildRequest) {
         Category category = new Category();
         category.setId(UUID.randomUUID().toString());
@@ -39,19 +42,18 @@ public class CategoryService implements ICategoryService {
         if (categoryChildRequest.getParent() != null) {
             category.setParent(categoryChildRequest.getParent());
         }
-        for (Attribute attribute : categoryChildRequest.getAttributes()) {
-            category.getAttributes().add(attribute);
-            attribute.getCategories().add(category);
-        }
         categoryRepository.save(category);
     }
 
-    @Override
     public void deleteCategory(String id) {
-
+        Optional<Category> category = categoryRepository.findById(id);
+        if (category.isPresent()) {
+            categoryRepository.delete(category.get());
+        } else {
+            throw new AppException(HttpStatus.NOT_FOUND, "Category not found with id: " + id);
+        }
     }
 
-    @Override
     public Optional<Category> findById(String id) {
         return categoryRepository.findById(id);
     }
@@ -60,43 +62,61 @@ public class CategoryService implements ICategoryService {
         return categoryRepository.findAll(pageable);
     }
 
-    @Override
     public void updateCategoryParent(String id, CategoryParentRequest categoryParentRequest) {
-
+        Optional<Category> categoryOptional = categoryRepository.findById(id);
+        if (categoryOptional.isPresent()) {
+            Category existingCategoryParent = categoryOptional.get();
+            existingCategoryParent.setName(categoryParentRequest.getName());
+            categoryRepository.save(existingCategoryParent);
+        } else {
+            throw new AppException(HttpStatus.NOT_FOUND, "Category not found with id: " + id);
+        }
     }
 
-    @Override
     public void updateCategoryChild(String id, CategoryChildRequest categoryChildRequest) {
-
+        Optional<Category> attributeOptional = categoryRepository.findById(id);
+        if (attributeOptional.isPresent()) {
+            Category existingCategoryChild = attributeOptional.get();
+            existingCategoryChild.setName(categoryChildRequest.getName());
+            existingCategoryChild.setLevel(categoryChildRequest.getLevel());
+            if (categoryChildRequest.getParent() != null) {
+                existingCategoryChild.setParent(categoryChildRequest.getParent());
+            }
+            categoryRepository.save(existingCategoryChild);
+        } else {
+            throw new AppException(HttpStatus.NOT_FOUND, "Category not found with id: " + id);
+        }
     }
 
-    @Override
+    public Page<Category> findAllCategoryParent(Pageable pageable) {
+        return categoryRepository.findAllByParentIsNull(pageable);
+    }
+
     public List<Category> findAllCategoryParent() {
-        return categoryRepository.findAllByParentNull();
+        return categoryRepository.findAllByParentIsNull();
     }
 
-    @Override
+    public List<Category> findAllCategoryChild() {
+        return categoryRepository.findAllByParentIsNotNull();
+    }
+
+    public Page<Category> findAllCategoryChild(Pageable pageable) {
+        return categoryRepository.findAllByParentIsNotNull(pageable);
+    }
+
     public List<Category> getCategoryTree() {
         List<Category> categories = categoryRepository.findAll();
         Map<String, Category> categoryMap = new HashMap<>();
-
-        // Đầu tiên, thêm tất cả các danh mục vào map
         for (Category category : categories) {
             categoryMap.put(category.getId(), category);
         }
-
         List<Category> categoryTree = new ArrayList<>();
-
-        // Xây dựng cây danh mục
         for (Category category : categories) {
             if (category.getParent() == null) {
-                // Nếu danh mục không có cha, thêm vào cây
                 categoryTree.add(category);
             } else {
-                // Nếu có cha, tìm cha và thêm danh mục vào danh sách con của cha
                 Category parent = categoryMap.get(category.getParent().getId());
                 if (parent != null) {
-                    // Kiểm tra xem danh mục đã có trong danh sách con của cha chưa
                     if (!parent.getCategoryChildren().contains(category)) {
                         parent.getCategoryChildren().add(category);
                     }
@@ -106,13 +126,27 @@ public class CategoryService implements ICategoryService {
         return categoryTree;
     }
 
-    @Override
-    public Set<Attribute> getAttributesByCategoryId(String categoryId) {
+    public List<Attribute> getAttributesByCategoryId(String categoryId) {
         Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
         if (categoryOptional.isPresent()) {
-            return categoryOptional.get().getAttributes();
+            List<Attribute> attributes = attributeRepository.findByCategoryId(categoryId);
+            for (Attribute attribute : attributes) {
+                List<Option> options = optionRepository.findByAttributeId(attribute.getId());
+                attribute.setOptions(options);
+            }
+            return attributes;
         } else {
-            throw new EntityNotFoundException("Danh mục không tồn tại");
+            throw new AppException(HttpStatus.NOT_FOUND, "Category not found with id: " + categoryId);
+        }
+    }
+
+    public List<Category> getCategoryChildByCategoryId(String categoryId) {
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+        if (categoryOptional.isPresent()) {
+            List<Category> categoryChildren = categoryOptional.get().getCategoryChildren();
+            return categoryChildren;
+        } else {
+            throw new AppException(HttpStatus.NOT_FOUND, "Category not found with id: " + categoryId);
         }
     }
 }

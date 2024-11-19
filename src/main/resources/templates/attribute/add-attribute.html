@@ -39,9 +39,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <form method="post" th:action="@{/attribute/add-attribute-post}"
+                            <form method="post" th:action="@{/attribute/add-attribute}"
                                   th:object="${attributeRequest}">
                                 <div class="flex flex-col gap-5.5 p-6.5">
+                                    <div class="min-w-[220px]]">
+                                        <label class="mb-3 block text-base font-medium text-black dark:text-white">
+                                            Chọn danh mục <span class="text-red-500"> (*) </span>
+                                        </label>
+                                        <select class=" rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                th:field="*{categoryId}" required>
+                                            <option th:each="category : ${categories}"
+                                                    th:value="${category.id}"
+                                                    th:text="${category.name}"></option>
+                                        </select>
+                                    </div>
                                     <div>
                                         <label class="mb-3 block text-base font-medium text-black dark:text-white">
                                             Tên thuộc tính <span class="text-red-500"> (*) </span>
@@ -49,10 +60,33 @@
                                         <input type="text" placeholder="Ví dụ: Ram, Hãng, ..."
                                                class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                th:field="*{name}" name="name" id="name">
-                                        <div th:if="${errorMessage}" class="italic text-red-500">
-                                            <p th:text="${errorMessage}"></p>
+                                        <div th:if="${#fields.hasErrors('name')}" class="italic text-red-500">
+                                            <p th:errors="*{name}"></p>
                                         </div>
                                     </div>
+                                    <div>
+                                        <label class="mb-3 block text-base font-medium text-black dark:text-white">
+                                            Tên option
+                                        </label>
+                                        <input type="text" placeholder="Cách nhập: &quot;option1&quot; &quot;option2&quot;"
+                                        class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                               name="options" id="options">
+                                    </div>
+                                    <div class="flex gap-4">
+                                        <div class="flex items-center">
+                                            <input type="checkbox"
+                                                   class="rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                   name="isRequired" id="isRequired">
+                                            <label for="isRequired" class="text-base font-medium text-black dark:text-white ml-2">Bắt buộc</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input type="checkbox" placeholder="Nhập tay"
+                                                   class="rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                   name="isEnter" id="isEnter">
+                                            <label for="isEnter" class="text-base font-medium text-black dark:text-white ml-2">Nhập tay</label>
+                                        </div>
+                                    </div>
+
                                     <button type="submit"
                                             class="inline-flex items-center justify-center rounded-md bg-primary px-10 py-4 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
                                         Lưu thuộc tính mới

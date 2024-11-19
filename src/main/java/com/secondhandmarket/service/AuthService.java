@@ -2,11 +2,12 @@ package com.secondhandmarket.service;
 
 import com.secondhandmarket.dto.auth.*;
 import com.secondhandmarket.dto.jwt.JWTPayloadDto;
-import com.secondhandmarket.model.RefreshToken;
-import com.secondhandmarket.model.User;
 import com.secondhandmarket.enums.ERole;
+import com.secondhandmarket.enums.UserStatus;
 import com.secondhandmarket.exception.AppException;
 import com.secondhandmarket.mapper.UserMapper;
+import com.secondhandmarket.model.RefreshToken;
+import com.secondhandmarket.model.User;
 import com.secondhandmarket.repository.RefreshTokenRepository;
 import com.secondhandmarket.repository.UserRepository;
 import com.secondhandmarket.util.PasswordUtil;
@@ -35,7 +36,7 @@ public class AuthService {
 
     public void register(AuthRegisterRequest request) {
         boolean existedUser = userRepository.existsByEmailAndIsFromOutsideFalse(request.getEmail());
-        if(existedUser){
+        if (existedUser) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Email has existed", "auth-e-01");
         }
     }
@@ -44,7 +45,7 @@ public class AuthService {
     public AuthResponse verifyRegister(AuthRegisterRequest request) {
         // Find user if not existed
         boolean existedUser = userRepository.existsByEmailAndIsFromOutsideFalse(request.getEmail());
-        if(existedUser){
+        if (existedUser) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Email has existed", "auth-e-01");
         }
         // Hash password
@@ -57,46 +58,49 @@ public class AuthService {
         User user = User.builder()
                 .email(request.getEmail())
                 .password(request.getPassword())
+                .isFromOutside(false)
                 .build();
         user.setRoles(roles);
         userRepository.save(user);
 
         // Generate a pair of token
-        String accessTokenString =  accessTokenUtil.generateToken(userMapper.toJWTPayloadDto(user));
-        String refreshTokenString =  refreshTokenUtil.generateToken(userMapper.toJWTPayloadDto(user),user);
+        String accessTokenString = accessTokenUtil.generateToken(userMapper.toJWTPayloadDto(user));
+        String refreshTokenString = refreshTokenUtil.generateToken(userMapper.toJWTPayloadDto(user), user);
         return AuthResponse.builder()
                 .accessToken(accessTokenString)
                 .refreshToken(refreshTokenString)
                 .build();
     }
 
-    public AuthResponse login(AuthLoginRequest request){
+    public AuthResponse login(AuthLoginRequest request) {
         User user = userRepository.findByEmailAndIsFromOutsideFalse(request.getEmail()).orElseThrow(
-                ()-> new AppException(HttpStatus.NOT_FOUND, "Email user not found", "auth-e-02")
+                () -> new AppException(HttpStatus.NOT_FOUND, "Email user not found", "auth-e-02")
         );
+        // CHECK ACTIVE
+        checkStatus(user);
         boolean isMatchPassword = passwordUtil.checkPassword(request.getPassword(), user.getPassword());
-        if(!isMatchPassword){
+        if (!isMatchPassword) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Wrong password", "auth-e-03");
         }
-        String accessTokenString =  accessTokenUtil.generateToken(userMapper.toJWTPayloadDto(user));
-        String refreshTokenString =  refreshTokenUtil.generateToken(userMapper.toJWTPayloadDto(user),user);
+        String accessTokenString = accessTokenUtil.generateToken(userMapper.toJWTPayloadDto(user));
+        String refreshTokenString = refreshTokenUtil.generateToken(userMapper.toJWTPayloadDto(user), user);
         return AuthResponse.builder()
                 .accessToken(accessTokenString)
                 .refreshToken(refreshTokenString)
                 .build();
     }
 
-    public AuthResponse refreshToken(AuthRefreshTokenRequest request){
+    public AuthResponse refreshToken(AuthRefreshTokenRequest request) {
         JWTPayloadDto payload = refreshTokenUtil.verifyToken(request.getRefreshToken());
-        String accessTokenString =  accessTokenUtil.generateToken(payload);
+        String accessTokenString = accessTokenUtil.generateToken(payload);
         return AuthResponse.builder()
                 .accessToken(accessTokenString)
                 .build();
     }
 
-    public void logOut(AuthLogOutRequest request){
+    public void logOut(AuthLogOutRequest request) {
         JWTPayloadDto payload = refreshTokenUtil.verifyToken(request.getRefreshToken());
-        RefreshToken refreshToken =  refreshTokenRepository
+        RefreshToken refreshToken = refreshTokenRepository
                 .findByUserId(payload.getId())
                 .orElseThrow(
                         () -> new AppException(HttpStatus.NOT_FOUND, "Refresh token not found", "auth-e-04")
@@ -105,17 +109,17 @@ public class AuthService {
         refreshTokenRepository.save(refreshToken);
     }
 
-    public void changePassword(String userId, AuthChangePasswordRequest request){
+    public void changePassword(String userId, AuthChangePasswordRequest request) {
         User user = userRepository
                 .findById(userId)
                 .orElseThrow(
                         () -> new AppException(HttpStatus.NOT_FOUND, "User not found", "auth-e-05")
                 );
-        if(user.getIsFromOutside()){
+        if (user.getIsFromOutside()) {
             throw new AppException(HttpStatus.BAD_REQUEST, "User is not internal", "auth-e-06");
         }
         boolean isMatchPassword = passwordUtil.checkPassword(request.getCurrentPassword(), user.getPassword());
-        if(!isMatchPassword){
+        if (!isMatchPassword) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Wrong current password", "auth-e-07");
         }
         String hashedNewPassword = passwordUtil.encodePassword(request.getNewPassword());
@@ -123,7 +127,7 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public AuthResponse loginOAuth2Success(OAuth2User oAuth2User){
+    public AuthResponse loginOAuth2Success(OAuth2User oAuth2User) {
         String userOAuthId = oAuth2User.getAttribute("sub");
         String providerName = oAuth2User.getAttribute("provider");
         User user = userRepository.findByIsFromOutsideTrueAndProviderNameAndProviderId(providerName, userOAuthId)
@@ -141,7 +145,8 @@ public class AuthService {
                             .build();
                     return userRepository.save(newUser);
                 });
-
+        // CHECK ACTIVE
+        checkStatus(user);
         JWTPayloadDto payload = userMapper.toJWTPayloadDto(user);
         String accessToken = accessTokenUtil.generateToken(payload);
         String refreshToken = refreshTokenUtil.generateToken(payload, user);
@@ -152,21 +157,23 @@ public class AuthService {
                 .build();
     }
 
-    public void forgotPassword(AuthForgotPasswordRequest request){
-        userRepository.findByEmailAndIsFromOutsideFalse(request.getEmail()).orElseThrow(
-                ()-> new AppException(HttpStatus.NOT_FOUND, "Email user not found", "auth-e-02")
+    public void forgotPassword(AuthForgotPasswordRequest request) {
+        User user = userRepository.findByEmailAndIsFromOutsideFalse(request.getEmail()).orElseThrow(
+                () -> new AppException(HttpStatus.NOT_FOUND, "Email user not found", "auth-e-02")
         );
+        // CHECK ACTIVE
+        checkStatus(user);
     }
 
-    public AuthResponse verifyForgotPassword(String email, AuthVerifyForgotPasswordRequest request){
+    public AuthResponse verifyForgotPassword(String email, AuthVerifyForgotPasswordRequest request) {
         User user = userRepository.findByEmailAndIsFromOutsideFalse(email).orElseThrow(
-                ()-> new AppException(HttpStatus.NOT_FOUND, "Email user not found", "auth-e-02")
+                () -> new AppException(HttpStatus.NOT_FOUND, "Email user not found", "auth-e-02")
         );
         String hashedPassword = passwordUtil.encodePassword(request.getNewPassword());
         user.setPassword(hashedPassword);
         userRepository.save(user);
-        String accessTokenString =  accessTokenUtil.generateToken(userMapper.toJWTPayloadDto(user));
-        String refreshTokenString =  refreshTokenUtil.generateToken(userMapper.toJWTPayloadDto(user),user);
+        String accessTokenString = accessTokenUtil.generateToken(userMapper.toJWTPayloadDto(user));
+        String refreshTokenString = refreshTokenUtil.generateToken(userMapper.toJWTPayloadDto(user), user);
         return AuthResponse.builder()
                 .accessToken(accessTokenString)
                 .refreshToken(refreshTokenString)
@@ -180,5 +187,11 @@ public class AuthService {
                         () -> new AppException(HttpStatus.NOT_FOUND, "User not found", "auth-e-05")
                 );
         return userMapper.toUserInfo(user);
+    }
+
+    private void checkStatus(User user){
+        if(!user.getStatus().equals(UserStatus.ACTIVE)){
+            throw new AppException(HttpStatus.BAD_REQUEST, "User is not active", "auth-e-06");
+        }
     }
 }
