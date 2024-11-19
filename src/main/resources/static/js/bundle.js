@@ -37,3 +37,12 @@ document.querySelectorAll('.modal-background').forEach(background => {
 
 
 
+
+
+function openAddOptionModal() {
+    document.getElementById('addOptionModal').classList.remove('hidden');
+}
+
+function closeAddOptionModal() {
+    document.getElementById('addOptionModal').classList.add('hidden');
+}

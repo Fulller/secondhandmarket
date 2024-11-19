@@ -255,4 +255,124 @@ public class CategoryController {
         modelAndView.setViewName("redirect:/category/list-category");
         return modelAndView;
     }
+
+    @GetMapping("/update-category-parent/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView ShowUpdateCategoryParent(@PathVariable("id") String id) {
+        ModelAndView modelAndView = new ModelAndView();
+        Optional<Category> categoryOptional = categoryService.findById(id);
+        Category category = categoryOptional.get();
+        CategoryParentRequest categoryParentRequest = new CategoryParentRequest();
+        categoryParentRequest.setName(category.getName());
+        modelAndView.addObject("categoryParentRequest", categoryParentRequest);
+        modelAndView.addObject("id", id);
+        modelAndView.setViewName("/category/update-category-parent");
+        return modelAndView;
+    }
+
+    @PostMapping("/update-category-parent-put/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView updateCategoryParent(@PathVariable("id") String id,
+                                             @Valid @ModelAttribute("categoryParentRequest") CategoryParentRequest categoryParentRequest,
+                                             BindingResult bindingResult) {
+        ModelAndView modelAndView = new ModelAndView();
+        if (bindingResult.hasErrors()) {
+            modelAndView.addObject("errorMessage", bindingResult.getAllErrors().get(0).getDefaultMessage());
+            modelAndView.setViewName("/category/update-category-parent");
+            return modelAndView;
+        }
+        categoryService.updateCategoryParent(id, categoryParentRequest);
+        modelAndView.addObject("successMessage","Cập nhật danh mục thành công!");
+        modelAndView.setViewName("/category/update-category-parent");
+        return modelAndView;
+    }
+
+    @GetMapping("/update-category-child/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView showUpdateCategoryChild(@PathVariable("id") String id) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        List<Category> parentCategories = categoryService.findAllCategoryParent();
+        List<Attribute> attributes = attributeService.findAll();
+
+        Optional<Category> categoryOptional = categoryService.findById(id);
+        Category category = categoryOptional.get();
+        CategoryChildRequest categoryChildRequest = new CategoryChildRequest();
+        categoryChildRequest.setName(category.getName());
+        categoryChildRequest.setParent(category.getParent());
+        modelAndView.addObject("categoryChildRequest", categoryChildRequest);
+        modelAndView.addObject("parentCategories", parentCategories);
+        modelAndView.addObject("attributes", attributes);
+        modelAndView.addObject("id", id);
+        modelAndView.setViewName("/category/update-category-child");
+        return modelAndView;
+    }
+
+    @PostMapping("/update-category-child-put/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView updateCategoryChild(@PathVariable("id") String id,
+                                            @Valid @ModelAttribute("categoryChildRequest") CategoryChildRequest categoryChildRequest,
+                                            BindingResult bindingResult) {
+        ModelAndView modelAndView = new ModelAndView();
+        List<Category> parentCategories = categoryService.findAllCategoryParent();
+        if (bindingResult.hasErrors()) {
+            modelAndView.addObject("categoryChildRequest", categoryChildRequest);
+            modelAndView.addObject("parentCategories", parentCategories);
+            modelAndView.setViewName("/category/update-category-child");
+            return modelAndView;
+        }
+        categoryService.updateCategoryChild(id, categoryChildRequest);
+        modelAndView.addObject("successMessage","Cập nhật danh mục thành công!");
+        modelAndView.addObject("categoryChildRequest", categoryChildRequest);
+        modelAndView.addObject("parentCategories", parentCategories);
+        modelAndView.setViewName("/category/update-category-child");
+        return modelAndView;
+    }
+
+    @GetMapping("/detail-category-child/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView detailCategoryChild(@PathVariable("id") String id) {
+        ModelAndView modelAndView = new ModelAndView();
+        List<Category> parentCategories = categoryService.findAllCategoryParent();
+        Optional<Category> categoryOptional = categoryService.findById(id);
+        Category category = categoryOptional.get();
+        CategoryChildRequest categoryChildRequest = new CategoryChildRequest();
+        categoryChildRequest.setName(category.getName());
+        categoryChildRequest.setParent(category.getParent());
+        modelAndView.addObject("categoryChildRequest", categoryChildRequest);
+        modelAndView.addObject("parentCategories", parentCategories);
+        modelAndView.addObject("id", id);
+        modelAndView.setViewName("/category/detail-category-child");
+        return modelAndView;
+    }
+
+    @GetMapping("/delete-category-parent/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView deleteCategoryParent(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
+        ModelAndView modelAndView = new ModelAndView();
+        if (categoryRepository.existsByCategoryChildrenIsNotEmptyAndId(id)){
+            redirectAttributes.addFlashAttribute("errorMessage", "Bạn không thể xóa!");
+            modelAndView.setViewName("redirect:/category/list-category-parent");
+            return modelAndView;
+        }
+        categoryService.deleteCategory(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Xóa thành công!");
+        modelAndView.setViewName("redirect:/category/list-category-parent");
+        return modelAndView;
+    }
+
+    @GetMapping("/delete-category-child/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView deleteCategoryChild(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
+        ModelAndView modelAndView = new ModelAndView();
+        if (categoryRepository.existsByAttributesIsNotEmptyAndId(id)){
+            redirectAttributes.addFlashAttribute("errorMessage", "Bạn không thể xóa!");
+            modelAndView.setViewName("redirect:/category/list-category");
+            return modelAndView;
+        }
+        categoryService.deleteCategory(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Xóa thành công!");
+        modelAndView.setViewName("redirect:/category/list-category");
+        return modelAndView;
+    }
 }

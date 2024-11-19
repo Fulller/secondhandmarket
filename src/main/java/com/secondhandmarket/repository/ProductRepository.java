@@ -19,6 +19,8 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     List<Product> findBySellerId(String sellerId);
 
+    List<Product> findBySellerIdAndStatus(String sellerId, ProductStatus status);
+
     boolean existsByAddress(Address address);
 
     Page<Product> findAllByStatus(ProductStatus status, Pageable pageable);
