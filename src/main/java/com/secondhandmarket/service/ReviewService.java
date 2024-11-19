@@ -15,6 +15,7 @@ import com.secondhandmarket.repository.ProductRepository;
 import com.secondhandmarket.repository.ReviewRepository;
 import com.secondhandmarket.repository.UserRepository;
 import com.secondhandmarket.security.SecurityUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Service
 public class ReviewService {
     @Autowired
@@ -43,8 +45,11 @@ public class ReviewService {
                 .orElseThrow(() -> new AppException("Review not found"));
         review.setComment(request.getComment());
         review.setRating(request.getRating());
-        review.setImage(request.getImage());
-
+        if(request.getImage() == null) {
+            review.setImage("");
+        }else {
+            review.setImage(request.getImage());
+        }
         review.setStatus(ReviewStatus.PUBLIC);
 
         reviewRepository.save(review);
@@ -104,15 +109,29 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
-    public List<ReviewResponse> getBySeller() {
+    public List<ReviewResponse> getBySeller(ReviewStatus status) {
         User seller = securityUtil.getCurrentUser();
-        List<Review> reviews = reviewRepository.findBySeller(seller);
+        List<Review> reviews;
+        if(status == null) {
+            reviews = reviewRepository.findBySeller(seller);
+        }else {
+            reviews = reviewRepository.findByStatusAndSeller(status, seller);
+        }
         return reviewMapper.toReviewResponses(reviews);
     }
 
-    public List<ReviewResponse> getByReviewer() {
+    public List<ReviewResponse> getByReviewer(ReviewStatus status) {
         User reviewer = securityUtil.getCurrentUser();
-        List<Review> reviews = reviewRepository.findByReviewer(reviewer);
+        List<Review> reviews;
+        log.info(status.toString());
+        if(status == null) {
+            reviews = reviewRepository.findByReviewer(reviewer);
+        }else {
+            reviews = reviewRepository.findByStatusAndReviewer(status, reviewer);
+        }
+        log.info("chạy tới ây");
+        log.info(reviews.toString());
+
         return reviewMapper.toReviewResponses(reviews);
     }
 

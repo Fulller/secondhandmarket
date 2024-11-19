@@ -22,4 +22,6 @@ public class ReportRequest {
 
     @NotNull(message = "Thêm id bị cáo")
     String defendant_id;
+
+    String reviewId;
 }

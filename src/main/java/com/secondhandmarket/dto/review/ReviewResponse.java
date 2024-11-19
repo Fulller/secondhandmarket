@@ -1,5 +1,6 @@
 package com.secondhandmarket.dto.review;
 
+import com.secondhandmarket.enums.ReviewStatus;
 import com.secondhandmarket.enums.ReviewType;
 import com.secondhandmarket.model.Product;
 import com.secondhandmarket.model.User;
@@ -26,7 +27,9 @@ public class ReviewResponse {
     UserDTO seller;
     UserDTO reviewer;
     ReviewType reviewType;
+    ReviewStatus status;
     LocalDateTime created_at;
+    Boolean isReport;
 
     @Data
     public static class ProductDTO {
