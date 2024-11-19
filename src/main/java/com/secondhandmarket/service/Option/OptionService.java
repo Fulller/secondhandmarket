@@ -25,6 +25,9 @@ public class OptionService {
     public void saveOption(OptionRequest request, String attributeId) {
         Option option = new Option();
         Attribute attribute = attributeRepository.findById(attributeId).orElse(null);
+        if (attribute == null) {
+            throw new IllegalArgumentException("Attribute not found for ID: " + attributeId);
+        }
         option.setAttribute(attribute);
         option.setId(UUID.randomUUID().toString());
         option.setName(request.getName());

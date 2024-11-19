@@ -49,4 +49,10 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     @Query("SELECT p FROM Product p WHERE p.status = 'AVAILABLE'")
     Page<Product> findAllByStatusIsAvailable(Pageable pageable);
+
+    @Query("SELECT p FROM Product p WHERE p.status = 'REJECTED'")
+    Page<Product> findAllByStatusIsRejected(Pageable pageable);
+
+    @Query("SELECT p FROM Product p WHERE p.status = 'HIDDEN'")
+    Page<Product> findAllByStatusIsHidden(Pageable pageable);
 }

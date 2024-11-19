@@ -8,5 +8,4 @@ import java.util.List;
 public interface AttributeRepository extends JpaRepository<Attribute, String> {
     Boolean existsByName(String name);
     List<Attribute> findByCategoryId(String categoryId);
-
 }

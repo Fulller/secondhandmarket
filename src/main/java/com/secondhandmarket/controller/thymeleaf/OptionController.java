@@ -31,14 +31,10 @@ public class OptionController {
                                   @PathVariable("attributeId") String attributeId,
                                   BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes) {
-
         ModelAndView modelAndView = new ModelAndView();
-        if (optionRepository.existsByName(request.getName())) {
-            bindingResult.rejectValue("name", "error.name", "Tên thuộc tính đã tồn tại");
-        }
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errorMessage", bindingResult.getAllErrors().get(0).getDefaultMessage());
-            redirectAttributes.addFlashAttribute("optionRequest", request); // retain data across redirect
+            redirectAttributes.addFlashAttribute("optionRequest", request);
             modelAndView.setViewName("redirect:/attribute/list-attribute");
             return modelAndView;
         }
@@ -104,10 +100,4 @@ public class OptionController {
         modelAndView.setViewName("redirect:/attribute/list-attribute");
         return modelAndView;
     }
-
-//    @PostMapping("/add-option-attribute/{attributeId}")
-//    public ModelAndView addOptionAttribute(@PathVariable("attributeId") String attributeId){
-//        optionService
-//    }
-
 }

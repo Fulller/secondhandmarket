@@ -50,4 +50,16 @@ public class CategoryApiController {
     }
 
 
+    @GetMapping("/list-category-child/{categoryId}")
+    public ResponseEntity<List<Category>> getCategoryChild(@PathVariable String categoryId) {
+        List<Category> categories = categoryService.getCategoryChildByCategoryId(categoryId);
+        return ResponseEntity.ok(categories);
+    }
+
+    @GetMapping("/attribute/{categoryId}")
+    public ResponseEntity<List<Attribute>> getAttributesByCategoryIdThymeLeaf(@PathVariable String categoryId) {
+        List<Attribute> attributes = categoryService.getAttributesByCategoryId(categoryId);
+        return ResponseEntity.ok(attributes);
+    }
+
 }

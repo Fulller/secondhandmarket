@@ -122,15 +122,18 @@ public class CategoryController {
 
     @GetMapping("/list-category")
     @PreAuthorize("hasRole('ADMIN')")
-    public String listCategories(@RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "10") int size,
-                                 Model model) {
+    public ModelAndView listCategories(@RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "10") int size) {
+        ModelAndView modelAndView = new ModelAndView();
         Pageable pageable = PageRequest.of(page, size);
+        List<Category> categoriesParent = categoryService.findAllCategoryParent();
         Page<Category> categoryPage = categoryService.findAllCategoryChild(pageable);
-        model.addAttribute("categories", categoryPage.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", categoryPage.getTotalPages());
-        return "category/list-category";
+        modelAndView.addObject("categoryParent", categoriesParent);
+        modelAndView.addObject("categories", categoryPage.getContent());
+        modelAndView.addObject("currentPage", page);
+        modelAndView.addObject("totalPages", categoryPage.getTotalPages());
+        modelAndView.setViewName("category/list-category");
+        return modelAndView;
     }
 
     @GetMapping("/update-category-parent/{id}")

@@ -107,24 +107,16 @@ public class CategoryService {
     public List<Category> getCategoryTree() {
         List<Category> categories = categoryRepository.findAll();
         Map<String, Category> categoryMap = new HashMap<>();
-
-        // Đầu tiên, thêm tất cả các danh mục vào map
         for (Category category : categories) {
             categoryMap.put(category.getId(), category);
         }
-
         List<Category> categoryTree = new ArrayList<>();
-
-        // Xây dựng cây danh mục
         for (Category category : categories) {
             if (category.getParent() == null) {
-                // Nếu danh mục không có cha, thêm vào cây
                 categoryTree.add(category);
             } else {
-                // Nếu có cha, tìm cha và thêm danh mục vào danh sách con của cha
                 Category parent = categoryMap.get(category.getParent().getId());
                 if (parent != null) {
-                    // Kiểm tra xem danh mục đã có trong danh sách con của cha chưa
                     if (!parent.getCategoryChildren().contains(category)) {
                         parent.getCategoryChildren().add(category);
                     }
@@ -136,14 +128,23 @@ public class CategoryService {
 
     public List<Attribute> getAttributesByCategoryId(String categoryId) {
         Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
-
         if (categoryOptional.isPresent()) {
             List<Attribute> attributes = attributeRepository.findByCategoryId(categoryId);
             for (Attribute attribute : attributes) {
                 List<Option> options = optionRepository.findByAttributeId(attribute.getId());
-                attribute.setOptions(options);  // Giả sử bạn có phương thức setOptions trong Attribute
+                attribute.setOptions(options);
             }
             return attributes;
+        } else {
+            throw new AppException(HttpStatus.NOT_FOUND, "Category not found with id: " + categoryId);
+        }
+    }
+
+    public List<Category> getCategoryChildByCategoryId(String categoryId) {
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+        if (categoryOptional.isPresent()) {
+            List<Category> categoryChildren = categoryOptional.get().getCategoryChildren();
+            return categoryChildren;
         } else {
             throw new AppException(HttpStatus.NOT_FOUND, "Category not found with id: " + categoryId);
         }
