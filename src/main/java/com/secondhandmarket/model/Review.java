@@ -20,10 +20,8 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false)
     private Integer rating;
 
-    @Column(nullable = false)
     private String comment;
 
     private String image;
