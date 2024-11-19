@@ -14,6 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Data
 public class Review {
 
     @Id
@@ -48,6 +49,8 @@ public class Review {
 
     @Column(nullable = false)
     private LocalDateTime created_at;
+
+    private Boolean isReport;
 
     @PrePersist
     protected void onCreate() {

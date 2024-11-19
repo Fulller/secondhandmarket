@@ -3,20 +3,19 @@ package com.secondhandmarket.service;
 import com.secondhandmarket.dto.report.ReportRequest;
 import com.secondhandmarket.enums.UserStatus;
 import com.secondhandmarket.exception.AppException;
-import com.secondhandmarket.model.Product;
 import com.secondhandmarket.model.RefreshToken;
 import com.secondhandmarket.model.Report;
+import com.secondhandmarket.model.Review;
 import com.secondhandmarket.model.User;
 import com.secondhandmarket.repository.*;
 import com.secondhandmarket.security.SecurityUtil;
 import com.secondhandmarket.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
-import ognl.Token;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +28,9 @@ public class ReportService {
     private final ReportRepository reportRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final EmailService emailService;
+    private final ReviewRepository reviewRepository;
 
+    @Transactional
     public void post(ReportRequest request) {
         User accused = securityUtil.getCurrentUser();
 
@@ -39,6 +40,10 @@ public class ReportService {
         if(!orderRepository.existsBySellerAndBuyer(defendant,accused)){
             throw new AppException(HttpStatus.BAD_REQUEST,"No right to report","report-e-02");
         }
+        Review review = reviewRepository.findById(request.getReviewId())
+                .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST,"Review does not exist","report-e-03"));
+
+        review.setIsReport(true);
 
         Report report = Report.builder()
                 .reportedAt(LocalDateTime.now())
@@ -57,6 +62,7 @@ public class ReportService {
             userRepository.save(defendant);
         }
         reportRepository.save(report);
+        reviewRepository.save(review);
         //GUI MAIL
         emailService.sendEmailReport(defendant.getEmail(), report);
     }

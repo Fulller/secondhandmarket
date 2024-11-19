@@ -138,6 +138,7 @@ public class OrderService {
                 .product(product)
                 .seller(product.getSeller())
                 .reviewType(ReviewType.PURCHASED_PRODUCT)
+                .isReport(false)
                 .build();
         log.info("code chạy tới aaay");
         reviewRepository.save(review);
