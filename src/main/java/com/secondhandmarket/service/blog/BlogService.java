@@ -23,11 +23,15 @@ public class BlogService {
         return productRepository.findAllByStatusIsAvailable(pageable);
     }
 
+    public Page<Product> findAllProductRejected(Pageable pageable) {
+        return productRepository.findAllByStatusIsRejected(pageable);
+    }
+
     public Product updateProductAvailable(String id) {
         Product oldProduct = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy id"));
         oldProduct.setStatus(ProductStatus.AVAILABLE);
-        return productRepository.save(oldProduct); // Return updated product
+        return productRepository.save(oldProduct);
     }
 
     public Product updateProductRemove(String id) {

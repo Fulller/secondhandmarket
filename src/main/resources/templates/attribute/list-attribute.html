@@ -35,6 +35,254 @@
                                     th:value="${child.id}"
                                     th:text="${child.name}"></option>
                         </select>
+                        <script>
+                            function showDeletePopup(optionId, optionName, confirmCallback) {
+                                const modal = document.createElement('div');
+                                modal.id = 'popup-modal';
+                                modal.classList = 'fixed inset-0 z-50 flex items-center justify-center bg-opacity-50';
+
+                                modal.innerHTML = `
+        <div class="relative w-full max-w-sm p-4 mx-auto bg-white rounded-lg shadow dark:bg-gray-700">
+            <button type="button" class="absolute top-5 right-3 text-gray-400 hover:bg-gray-200 rounded-lg close-popup">
+                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                </svg>
+            </button>
+            <div class="p-4 text-center">
+                <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                    Bạn có chắc muốn xóa option "<span>${optionName}</span>"?
+                </h3>
+                <div class="flex justify-center space-x-4">
+                <form action="/option/delete-option/${optionId}" method="GET" style="display: inline;">
+                  <button data-modal-hide="popup-modal-option" type="submit"
+                        style="color: white !important; background-color: #c53030 !important;"
+                        class="font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                    Chắc chắn
+                </button>
+                </form>
+
+                    <button class="px-5 py-2 text-gray-900 bg-white border rounded-lg hover:bg-gray-100 close-popup">Hủy</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+                                document.body.appendChild(modal);
+
+                                modal.querySelectorAll('.close-popup').forEach(btn =>
+                                    btn.addEventListener('click', () => modal.remove())
+                                );
+
+                                document.getElementById('confirmDelete').addEventListener('click', () => {
+                                    confirmCallback();
+                                    modal.remove();
+                                });
+                            }
+
+                            function showDeletePopupForAttribute(attributeId, attributeName, confirmCallback) {
+                                const modal = document.createElement('div');
+                                modal.id = 'popup-modal-' + attributeId;
+                                modal.classList = 'fixed inset-0 z-50 flex items-center justify-center bg-opacity-50';
+
+                                modal.innerHTML = `
+        <div class="relative w-full max-w-sm p-4 mx-auto bg-white rounded-lg shadow dark:bg-gray-700">
+            <button type="button" class="absolute top-5 right-3 text-gray-400 hover:bg-gray-200 rounded-lg close-popup">
+                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                </svg>
+            </button>
+            <div class="p-4 text-center">
+                <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                    Bạn có chắc muốn xóa thuộc tính "<span>${attributeName}</span>"?
+                </h3>
+                <div class="flex justify-center space-x-4">
+                <form action="/attribute/delete-attribute/${attributeId}" method="GET" style="display: inline;">
+                  <button data-modal-hide="popup-modal-${attributeId}" type="submit"
+                        style="color: white !important; background-color: #c53030 !important;"
+                        class="font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                    Chắc chắn
+                </button>
+                </form>
+
+                    <button class="px-5 py-2 text-gray-900 bg-white border rounded-lg hover:bg-gray-100 close-popup">Hủy</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+                                document.body.appendChild(modal);
+
+                                modal.querySelectorAll('.close-popup').forEach(btn =>
+                                    btn.addEventListener('click', () => modal.remove())
+                                );
+
+                            }
+
+                            function showAddOptionPopup(attributeId, attributeName) {
+
+                                const modal = document.createElement('div');
+                                modal.id = 'popup-modal';
+                                modal.classList = 'fixed inset-0 z-50 flex items-center justify-center bg-opacity-50';
+
+                                modal.innerHTML = `
+        <div class="relative w-full max-w-sm p-4 mx-auto bg-white rounded-lg shadow dark:bg-gray-700">
+            <button type="button" class="absolute top-5 right-3 text-gray-400 hover:bg-gray-200 rounded-lg close-popup">
+                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                </svg>
+            </button>
+            <div class="p-4 text-center">
+                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                    Thêm option cho thuộc tính: <span>${attributeName}</span>
+                </h3>
+                <form id="addOptionForm" action="/option/add-option/${attributeId}" method="POST">
+                    <div class="mb-4">
+                        <input type="text" id="optionName" name="name" placeholder="Tên Option" required
+                               class="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                    </div>
+                    <div class="flex justify-center space-x-4">
+                        <button type="submit"
+                                style="color: white !important; background-color: #3182ce !important;"
+                                class="font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                            Thêm Option
+                        </button>
+                        <button type="button" class="px-5 py-2 text-gray-900 bg-white border rounded-lg hover:bg-gray-100 close-popup">
+                            Hủy
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+
+                                document.body.appendChild(modal);
+
+                                modal.querySelectorAll('.close-popup').forEach(btn =>
+                                    btn.addEventListener('click', () => modal.remove())
+                                );
+                                document.getElementById('addOptionForm').addEventListener('submit', function(event) {
+                                    event.preventDefault();
+                                    const optionName = document.getElementById('optionName').value;
+                                    if (optionName.trim() === '') {
+                                        alert('Tên Option không thể trống!');
+                                        return;
+                                    }
+                                    this.submit();
+                                });
+                            }
+
+                            document.getElementById('childCategorySelect').addEventListener('change', function () {
+                                const childCategoryId = this.value;
+                                fetch(`/api/attribute/${childCategoryId}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const attributeTableBody = document.getElementById('attributeTableBody');
+                                        attributeTableBody.innerHTML = ''; // Xóa dữ liệu cũ trong bảng
+
+
+                                        data.forEach((attribute, index) => {
+                                            const row = document.createElement('tr');
+                                            const options = attribute.options || [];
+                                            const optionHtml = options.map(option => `
+                                            <div class="flex items-center space-x-2">
+                                                <span class="mr-3">${option.name}</span>
+                                                <a href="/option/update-option/${option.id}" class="text-blue-500 hover:text-blue-700">
+                                                    <svg class="fill-current" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25ZM20.71 7.04C21.1 6.65 21.1 6 20.71 5.61L18.39 3.29C18 2.9 17.35 2.9 16.96 3.29L15.13 5.12L18.88 8.87L20.71 7.04Z" fill="currentColor"></path>
+                                                    </svg>
+                                                </a>
+                                                    |
+                                                <button tabindex="-1" data-id="${option.id}" data-name="${option.name}" class="text-red-500 hover:text-red-700 delete-option-button">
+                                                    <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M13.7535 2.47502H11.5879V1.9969C11.5879 1.15315 10.9129 0.478149 10.0691 0.478149H7.90352C7.05977 0.478149 6.38477 1.15315 6.38477 1.9969V2.47502H4.21914C3.40352 2.47502 2.72852 3.15002 2.72852 3.96565V4.8094C2.72852 5.42815 3.09414 5.9344 3.62852 6.1594L4.07852 15.4688C4.13477 16.6219 5.09102 17.5219 6.24414 17.5219H11.7004C12.8535 17.5219 13.8098 16.6219 13.866 15.4688L14.3441 6.13127C14.8785 5.90627 15.2441 5.3719 15.2441 4.78127V3.93752C15.2441 3.15002 14.5691 2.47502 13.7535 2.47502ZM7.67852 1.9969C7.67852 1.85627 7.79102 1.74377 7.93164 1.74377H10.0973C10.2379 1.74377 10.3504 1.85627 10.3504 1.9969V2.47502H7.70664V1.9969H7.67852ZM4.02227 3.96565C4.02227 3.85315 4.10664 3.74065 4.24727 3.74065H13.7535C13.866 3.74065 13.9785 3.82502 13.9785 3.96565V4.8094C13.9785 4.9219 13.8941 5.0344 13.7535 5.0344H4.24727C4.13477 5.0344 4.02227 4.95002 4.02227 4.8094V3.96565ZM11.7285 16.2563H6.27227C5.79414 16.2563 5.40039 15.8906 5.37227 15.3844L4.95039 6.2719H13.0785L12.6566 15.3844C12.6004 15.8625 12.2066 16.2563 11.7285 16.2563Z" fill=""></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            `).join('');
+
+                                            row.dataset.attributeId = attribute.id;
+                                            row.dataset.attributeName = attribute.name;
+
+                                            row.innerHTML = `
+                                            <td>${index + 1}</td>
+                                            <td class="text-center">${attribute.name}</td>
+                                            <td>${attribute.isRequired ? 'Có' : 'Không'}</td>
+                                            <td>${attribute.isEnter ? 'Có' : 'Không'}</td>
+                                            <td>${optionHtml}</td>
+                                            <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                                                <div class="flex items-center space-x-3.5">
+                                                    <button class="text-blue-500 hover:text-blue-700 add-option-button">
+                                                        <svg class="fill-current" width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        </svg>
+                                                    </button>
+                                                    <a href="/attribute/update-attribute/${attribute.id}"
+                                                       class="hover:text-primary">
+                                                        <svg class="fill-current" width="18" height="18" viewBox="0 0 24 24"
+                                                             fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25ZM20.71 7.04C21.1 6.65 21.1 6 20.71 5.61L18.39 3.29C18 2.9 17.35 2.9 16.96 3.29L15.13 5.12L18.88 8.87L20.71 7.04Z"
+                                                                  fill="currentColor"></path>
+                                                        </svg>
+                                                    </a>
+                                                    <button tabindex="-1"
+                                                            class="block text-red-500 hover:text-red-700 delete-attribute" type="button">
+                                                        <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18"
+                                                             fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M13.7535 2.47502H11.5879V1.9969C11.5879 1.15315 10.9129 0.478149 10.0691 0.478149H7.90352C7.05977 0.478149 6.38477 1.15315 6.38477 1.9969V2.47502H4.21914C3.40352 2.47502 2.72852 3.15002 2.72852 3.96565V4.8094C2.72852 5.42815 3.09414 5.9344 3.62852 6.1594L4.07852 15.4688C4.13477 16.6219 5.09102 17.5219 6.24414 17.5219H11.7004C12.8535 17.5219 13.8098 16.6219 13.866 15.4688L14.3441 6.13127C14.8785 5.90627 15.2441 5.3719 15.2441 4.78127V3.93752C15.2441 3.15002 14.5691 2.47502 13.7535 2.47502ZM7.67852 1.9969C7.67852 1.85627 7.79102 1.74377 7.93164 1.74377H10.0973C10.2379 1.74377 10.3504 1.85627 10.3504 1.9969V2.47502H7.70664V1.9969H7.67852ZM4.02227 3.96565C4.02227 3.85315 4.10664 3.74065 4.24727 3.74065H13.7535C13.866 3.74065 13.9785 3.82502 13.9785 3.96565V4.8094C13.9785 4.9219 13.8941 5.0344 13.7535 5.0344H4.24727C4.13477 5.0344 4.02227 4.95002 4.02227 4.8094V3.96565ZM11.7285 16.2563H6.27227C5.79414 16.2563 5.40039 15.8906 5.37227 15.3844L4.95039 6.2719H13.0785L12.6566 15.3844C12.6004 15.8625 12.2066 16.2563 11.7285 16.2563Z"
+                                                                  fill=""></path>
+                                                            <path d="M9.00039 9.11255C8.66289 9.11255 8.35352 9.3938 8.35352 9.75942V13.3313C8.35352 13.6688 8.63477 13.9782 9.00039 13.9782C9.33789 13.9782 9.64727 13.6969 9.64727 13.3313V9.75942C9.64727 9.3938 9.33789 9.11255 9.00039 9.11255Z"
+                                                                  fill=""></path>
+                                                            <path d="M11.2502 9.67504C10.8846 9.64692 10.6033 9.90004 10.5752 10.2657L10.4064 12.7407C10.3783 13.0782 10.6314 13.3875 10.9971 13.4157C11.0252 13.4157 11.0252 13.4157 11.0533 13.4157C11.3908 13.4157 11.6721 13.1625 11.6721 12.825L11.8408 10.35C11.8408 9.98442 11.5877 9.70317 11.2502 9.67504Z"
+                                                                  fill=""></path>
+                                                            <path d="M6.72245 9.67504C6.38495 9.70317 6.1037 10.0125 6.13182 10.35L6.3287 12.825C6.35683 13.1625 6.63808 13.4157 6.94745 13.4157C6.97558 13.4157 6.97558 13.4157 7.0037 13.4157C7.3412 13.3875 7.62245 13.0782 7.59433 12.7407L7.39745 10.2657C7.39745 9.90004 7.08808 9.64692 6.72245 9.67504Z"
+                                                                  fill=""></path>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            `;
+
+                                            attributeTableBody.appendChild(row);
+                                            row.querySelectorAll('.delete-option-button').forEach(deleteButton => {
+                                                deleteButton.addEventListener('click', function () {
+                                                    const optionId = this.dataset.id;
+                                                    const optionName = this.dataset.name;
+                                                    showDeletePopup(optionId, optionName, () => {
+                                                    });
+                                                });
+                                            });
+                                            row.querySelectorAll('.add-option-button').forEach(addButton => {
+                                                addButton.addEventListener('click', function () {
+                                                    const attributeId = this.closest('tr').dataset.attributeId;
+                                                    const attributeName = attribute.name;
+                                                    const optionName = this.dataset.name;
+                                                    showAddOptionPopup(attributeId, attributeName, () => {
+                                                    });
+                                                });
+                                            });
+                                            row.querySelectorAll('.delete-attribute').forEach(deleteAttribute => {
+                                                deleteAttribute.addEventListener('click', function () {
+                                                    const attributeId = this.closest('tr').dataset.attributeId;
+                                                    const attributeName = attribute.name;
+                                                    showDeletePopupForAttribute(attributeId, attributeName,() => {
+                                                    });
+                                                });
+                                            });
+                                        });
+                                    });
+                            });
+                        </script>
                     </div>
                     <div class="max-w-full overflow-x-auto">
                         <table class="w-full table-auto">

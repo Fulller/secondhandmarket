@@ -18,7 +18,7 @@
                                 <a class="font-medium text-primary" th:href="@{/dashboard}">Dashboard /</a>
                             </li>
                             <li>
-                                <a class="font-medium text-primary" th:href="@{/templates/blog/list-available-blog}">Danh sách bài đăng đã duyệt</a>
+                                <a class="font-medium text-primary" th:href="@{/templates/blog/list-rejected-blog}">Danh sách bài đăng đã hủy</a>
                             </li>
                         </ol>
                     </nav>
@@ -28,7 +28,7 @@
                 <!-- ====== Table Three Start -->
                 <div class="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
                     <div class="flex justify-between items-center w-full">
-                        <h2 class="font-extra bold mb-4">DANH SÁCH BÀI ĐĂNG ĐÃ DUYỆT</h2>
+                        <h2 class="font-extra bold mb-4">DANH SÁCH BÀI ĐĂNG ĐÃ HỦY</h2>
                         <div th:if="${errorMessage}" class="text-red-500">
                             <p th:text="${errorMessage}"></p>
                         </div>

@@ -49,6 +49,20 @@ public class BlogController {
         return modelAndView;
     }
 
+    @GetMapping("/list-rejected-blog")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView listBlogRejected(@RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(defaultValue = "10") int size) {
+        ModelAndView modelAndView = new ModelAndView();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> blogPage = blogService.findAllProductRejected(pageable);
+        modelAndView.addObject("blogs", blogPage);
+        modelAndView.addObject("currentPage", page);
+        modelAndView.addObject("totalPages", blogPage.getTotalPages());
+        modelAndView.setViewName("blog/list-rejected-blog");
+        return modelAndView;
+    }
+
     @PostMapping("/update-status-available/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView updateProductAvailable(@PathVariable("id") String id, RedirectAttributes redirectAttributes){

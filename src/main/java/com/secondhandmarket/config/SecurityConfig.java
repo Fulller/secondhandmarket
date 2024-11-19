@@ -112,7 +112,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/sign-in")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/dashboard")
+                        .defaultSuccessUrl("/receive-token")
 //                .successHandler((request, response, authentication) -> {
 //                    response.sendRedirect("/dashboard");
 //                })

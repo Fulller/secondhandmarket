@@ -26,20 +26,15 @@ public class OptionController {
     private final OptionRepository optionRepository;
 
     @PostMapping("/add-option/{attributeId}")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView addOption(@ModelAttribute("optionRequest") @Valid OptionRequest request,
                                   @PathVariable("attributeId") String attributeId,
                                   BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes) {
-        System.out.println("attributeId: " + attributeId);
-        System.out.println("Tên option: " + request.getName());
         ModelAndView modelAndView = new ModelAndView();
-        if (optionRepository.existsByName(request.getName())) {
-            bindingResult.rejectValue("name", "error.name", "Tên thuộc tính đã tồn tại");
-        }
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errorMessage", bindingResult.getAllErrors().get(0).getDefaultMessage());
-            redirectAttributes.addFlashAttribute("optionRequest", request); // retain data across redirect
+            redirectAttributes.addFlashAttribute("optionRequest", request);
             modelAndView.setViewName("redirect:/attribute/list-attribute");
             return modelAndView;
         }
@@ -105,5 +100,4 @@ public class OptionController {
         modelAndView.setViewName("redirect:/attribute/list-attribute");
         return modelAndView;
     }
-
 }
