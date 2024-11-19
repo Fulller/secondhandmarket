@@ -18,7 +18,7 @@
                                 <a class="font-medium text-primary" th:href="@{/dashboard}">Dashboard /</a>
                             </li>
                             <li>
-                                <a class="font-medium text-primary" th:href="@{/templates/blog/list-blog}">Danh sách bài đăng cần duyệt</a>
+                                <a class="font-medium text-primary" th:href="@{/templates/blog/list-rejected-blog}">Danh sách bài đăng bị ẩn</a>
                             </li>
                         </ol>
                     </nav>
@@ -28,7 +28,7 @@
                 <!-- ====== Table Three Start -->
                 <div class="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
                     <div class="flex justify-between items-center w-full">
-                        <h2 class="font-extra bold mb-4">DANH SÁCH BÀI ĐĂNG CẦN DUYỆT</h2>
+                        <h2 class="font-extra bold mb-4">DANH SÁCH BÀI ĐĂNG BỊ ẨN</h2>
                         <div th:if="${errorMessage}" class="text-red-500">
                             <p th:text="${errorMessage}"></p>
                         </div>
@@ -50,13 +50,10 @@
                                     Tiêu đề
                                 </th>
                                 <th class="min-w-[220px] px-4 py-4 font-medium text-center text-black dark:text-white xl:pl-11">
+                                    Email
+                                </th>
+                                <th class="min-w-[220px] px-4 py-4 font-medium text-center text-black dark:text-white xl:pl-11">
                                     Ngày đăng
-                                </th>
-                                <th class=" px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                                    Duyệt
-                                </th>
-                                <th class="px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                                    Từ chối
                                 </th>
                                 <th class="px-4 py-4 font-medium text-black dark:text-white">
                                     Thao tác
@@ -75,25 +72,11 @@
                                 <td th:text="${blog.name}"
                                     class="border-b border-[#eee] px-4 py-5 dark:border-strokedark text-center">
                                 </td>
+                                <td th:text="${blog.seller.getEmail()}"
+                                    class="border-b border-[#eee] px-4 py-5 dark:border-strokedark text-center">
+                                </td>
                                 <td th:text="${#temporals.format(blog.postedAt, 'dd/MM/yyyy HH:mm')}"
                                     class="border-b border-[#eee] px-4 py-5 dark:border-strokedark text-center">
-                                </td>
-                                <td
-                                    class="border-b border-[#eee] px-4 py-5 dark:border-strokedark text-center">
-                                    <form th:action="@{'update-status-available/' + ${blog.id}}" method="post">
-                                        <button type="submit"
-                                                class="rounded-lg px-4 py-2 border-2 border-green-700 text-green-700 hover:bg-green-700 hover:text-green-100 duration-300">
-                                            Duyệt
-                                        </button>
-                                    </form>
-                                </td>
-                                <td
-                                    class="border-b border-[#eee] px-4 py-5 dark:border-strokedark text-center">
-                                    <form th:action="@{'update-status-remove/' + ${blog.id}}" method="post">
-                                        <button class="rounded-lg px-4 py-2 border-2 border-red-600 text-black-600 bg-red duration-300">
-                                            Từ chối
-                                        </button>
-                                    </form>
                                 </td>
                                 <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark text-center">
                                     <div class="flex justify-center items-center">
@@ -108,6 +91,7 @@
                                     </div>
                                 </td>
 
+
                             </tr>
 
                             </tbody>
@@ -118,7 +102,7 @@
                 <!-- Phân trang Start -->
                 <div class="flex justify-center items-center mt-4 space-x-4">
                     <div>
-                        <a th:href="@{/blog/list-blog(page=${currentPage - 1}, size=${size})}"
+                        <a th:href="@{/blog/list-available-blog(page=${currentPage - 1}, size=${size})}"
                            th:if="${currentPage > 0}"
                            class="text-primary">Trước</a>
                     </div>
@@ -127,7 +111,7 @@
                                 th:text="${totalPages}"></span></span>
                     </div>
                     <div>
-                        <a th:href="@{/blog/list-blog(page=${currentPage + 1}, size=${size})}"
+                        <a th:href="@{/blog/list-available-blog(page=${currentPage + 1}, size=${size})}"
                            th:if="${currentPage + 1 < totalPages}"
                            class="text-primary">Sau</a>
                     </div>

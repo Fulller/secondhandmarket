@@ -26,6 +26,10 @@ public class BlogService {
         return productRepository.findAllByStatusIsRejected(pageable);
     }
 
+    public Page<Product> findAllProductHidden(Pageable pageable) {
+        return productRepository.findAllByStatusIsHidden(pageable);
+    }
+
     public Product updateProductAvailable(String id) {
         Product oldProduct = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy id"));
@@ -37,6 +41,13 @@ public class BlogService {
         Product oldProduct = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy id"));
         oldProduct.setStatus(ProductStatus.REJECTED);
+        return productRepository.save(oldProduct);
+    }
+
+    public Product updateProductHidden(String id) {
+        Product oldProduct = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy id"));
+        oldProduct.setStatus(ProductStatus.HIDDEN);
         return productRepository.save(oldProduct);
     }
 

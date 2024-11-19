@@ -58,11 +58,12 @@
                                 </button>
                             </div>
                             <video controls class="w-full h-auto rounded-md mt-4">
-                                <source th:src="@{/video/{video}(video=${product.video})}" type="video/mp4">
+                                <source th:src="@{{video}(video=${product?.video})}" type="video/mp4">
                             </video>
                         </div>
                         <div class="w-full lg:w-1/2 pl-4">
                             <p class="mb-5"><strong>Ảnh đại diện:</strong> <img th:src="@{${product.thumbnail}}" alt="Thumbnail" class="w-[150px] h-[150px]"></p>
+                            <h3 class="font-bold text-lg mb-2">Thông tin bài đăng</h3>
                             <p class="mb-2"><strong>Tên sản phẩm:</strong> <span th:text="${product.name}"></span></p>
                             <p class="mb-2"><strong>Giá:</strong>
                                 <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 3, 'POINT')} + ' VNĐ'"></span>
@@ -77,8 +78,12 @@
                             </p>
                             <p class="mb-2"><strong>Địa chỉ:</strong> <span th:text="${product.address.getDetail()} + ' - ' + ${product.address.getWard()} + ' - ' + ${product.address.getDistrict()} + ' - ' + ${product.address.getProvince()}"></span></p>
                             <p class="mb-2"><strong>Slug:</strong> <span th:text="${product.slug}"></span></p>
-                            <p class="mb-2"><strong>Trạng thái:</strong> <span th:text="${product.status}"></span></p>
+                            <p class="mb-7"><strong>Trạng thái:</strong> <span th:text="${product.status}"></span></p>
+
+                            <h3 class="font-bold text-lg mb-2">Thông tin người bán</h3>
                             <p class="mb-2"><strong>Người bán:</strong> <span th:text="${product.seller.name}"></span></p>
+                            <p class="mb-2"><strong>Email:</strong> <span th:text="${product.seller.getEmail()}"></span></p>
+                            <p class="mb-2"><strong>SĐT:</strong> <span th:text="${product.seller?.getPhone()}"></span></p>
                         </div>
                     </div>
                 </div>

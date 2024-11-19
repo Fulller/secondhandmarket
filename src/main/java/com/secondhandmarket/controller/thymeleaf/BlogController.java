@@ -63,6 +63,20 @@ public class BlogController {
         return modelAndView;
     }
 
+    @GetMapping("/list-hidden-blog")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView listBlogHidden(@RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "10") int size) {
+        ModelAndView modelAndView = new ModelAndView();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> blogPage = blogService.findAllProductHidden(pageable);
+        modelAndView.addObject("blogs", blogPage);
+        modelAndView.addObject("currentPage", page);
+        modelAndView.addObject("totalPages", blogPage.getTotalPages());
+        modelAndView.setViewName("blog/list-hidden-blog");
+        return modelAndView;
+    }
+
     @PostMapping("/update-status-available/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView updateProductAvailable(@PathVariable("id") String id, RedirectAttributes redirectAttributes){
@@ -80,6 +94,16 @@ public class BlogController {
         blogService.updateProductRemove(id);
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thành công");
         modelAndView.setViewName("redirect:/blog/list-blog");
+        return modelAndView;
+    }
+
+    @PostMapping("/update-status-hidden/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView updateProductHidden(@PathVariable("id") String id, RedirectAttributes redirectAttributes){
+        ModelAndView modelAndView = new ModelAndView();
+        blogService.updateProductHidden(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thành công");
+        modelAndView.setViewName("redirect:/blog/list-available-blog");
         return modelAndView;
     }
 
