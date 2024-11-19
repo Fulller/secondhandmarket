@@ -76,7 +76,7 @@
                             <p class="mb-2"><strong>Ngày hết hạn:</strong>
                                 <span th:text="${#temporals.format(product.expiredAt, 'dd/MM/yyyy HH:mm')}"></span>
                             </p>
-                            <p class="mb-2"><strong>Địa chỉ:</strong> <span th:text="${product.address.getDetail()} + ' - ' + ${product.address.getWard()} + ' - ' + ${product.address.getDistrict()} + ' - ' + ${product.address.getProvince()}"></span></p>
+                            <p class="mb-2"><strong>Địa chỉ:</strong> <span th:text="${product.address.getDetail()} + ' - ' + ${wardName} + ' - ' + ${districtName} + ' - ' + ${provinceName}"></span></p>
                             <p class="mb-2"><strong>Slug:</strong> <span th:text="${product.slug}"></span></p>
                             <p class="mb-7"><strong>Trạng thái:</strong> <span th:text="${product.status}"></span></p>
 
