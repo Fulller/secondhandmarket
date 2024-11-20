@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Chợ Cũ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .content {
+            padding: 24px;
+            text-align: center;
+        }
+
+        .content h1 {
+            font-size: 20px;
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 16px;
+        }
+
+        .content a {
+            display: inline-block;
+            background-color: #10b981;
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .content a:hover {
+            background-color: #059669;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background-color: #f9fafb;
+            text-align: center;
+            padding: 12px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="content">
+        <h1>{{emailText}}</h1>
+        <a href="http://localhost:3000/">Khám phá ngay</a>
+    </div>
+    <div class="footer">
+        &copy; 2024 Chợ Cũ. All Rights Reserved.
+    </div>
+</div>
+</body>
+</html>

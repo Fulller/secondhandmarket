@@ -6,11 +6,16 @@ import com.secondhandmarket.model.Report;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +38,6 @@ public class EmailService {
             helper.setFrom(systemEmail);
             mailSender.send(message);
         } catch (MessagingException e) {
-            System.out.print(e.toString());
             throw new AppException(HttpStatus.BAD_REQUEST, "Failed to send email", "mail-e-01");
         }
     }
@@ -44,44 +48,64 @@ public class EmailService {
                 .path("/auth/register/verify/{verificationCode}")
                 .buildAndExpand(verificationCode)
                 .toUriString();
-        String emailText = "Please click the link below to verify your email and complete the registration process:\n" + verifyUrl;
+        String content = loadEmailTemplate("templates/mail/register.html");
+        String emailText = "Hãy nhấn vào nút bên dưới để xác nhận và hoàn tất quá trình đăng ký!";
+        content = content.replace("{{verifyUrl}}", verifyUrl) // Đúng cú pháp
+                            .replace("{{emailText}}", emailText);
+        System.out.println("aaa"+  content);
         SendEmailDto emailPayload = SendEmailDto.builder()
                 .to(toEmail)
-                .subject("Verity email to register")
-                .text(emailText)
+                .subject("MAIL XÁC NHẬN ĐĂNG KÝ")
+                .text(content)
                 .build();
         sendEmail(emailPayload);
     }
 
     public void sendEmailToWelcome(String toEmail) {
-        String emailText = "Welcome to Secondhand Market";
+        String emailText = "Chào mừng bạn đến với Chợ Cũ!";
+        String content = loadEmailTemplate("templates/mail/welcome.html");
+        content = content.replace("{{emailText}}", emailText);
         SendEmailDto emailPayload = SendEmailDto.builder()
                 .to(toEmail)
-                .subject("Secondhand Market welcome")
-                .text(emailText)
+                .subject("CHÀO MỪNG BẠN ĐẾN VỚI CHỢ CŨ")
+                .text(content)
                 .build();
         sendEmail(emailPayload);
     }
 
     public void sendEmailToVerifyForgotPassword(String toEmail, String verificationCode) {
-        String emailText = "Verify forgot password code:\n" + verificationCode;
+        String content = loadEmailTemplate("templates/mail/forget-password.html");
+        content = content.replace("{{emailCode}}", verificationCode);
         SendEmailDto emailPayload = SendEmailDto.builder()
                 .to(toEmail)
-                .subject("Verity to create new password")
-                .text(emailText)
+                .subject("KHÔI PHỤC MẬT KHẨU")
+                .text(content)
                 .build();
         sendEmail(emailPayload);
     }
 
     public void sendEmailReport(String toEmail, Report report) {
-        String emailText = """
-                <div>Report to Secondhand Market</div>
-                """;
+        String content = loadEmailTemplate("templates/mail/report.html");
+        content = content.replace("{{defendant}}", report.getDefendant().getName()).
+                          replace("{{accused}}", report.getAccused().getName()).
+                          replace("{{reportedAt}}", String.valueOf(report.getReportedAt())).
+                          replace("{{reason}}", report.getReason());
+
         SendEmailDto emailPayload = SendEmailDto.builder()
                 .to(toEmail)
-                .subject("Report to Secondhand Market")
-                .text(emailText)
+                .subject("MAIL BÁO CÁO")
+                .text(content)
                 .build();
         sendEmail(emailPayload);
+    }
+
+    private String loadEmailTemplate(String filePath) {
+        try {
+            ClassPathResource resource = new ClassPathResource(filePath);
+            byte[] fileData = StreamUtils.copyToByteArray(resource.getInputStream());
+            return new String(fileData, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            return "";
+        }
     }
 }

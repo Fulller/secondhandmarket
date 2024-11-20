@@ -98,15 +98,6 @@ public class CategoryController {
             modelAndView.addObject("categoryChildRequest", new CategoryChildRequest());
             return modelAndView;
         }
-//        categoryService.saveCategoryChild(categoryChildRequest);
-//        redirectAttributes.addFlashAttribute("successMessage", "Thêm danh mục con thành công!");
-//        List<Category> parentCategories = categoryService.findAllCategoryParent();
-//        List<Attribute> attributes = attributeService.findAll();
-//        modelAndView.addObject("parentCategories", parentCategories);
-//        modelAndView.addObject("attributes", attributes);
-//        modelAndView.addObject("categoryChildRequest", new CategoryChildRequest());
-//        modelAndView.setViewName("redirect:/category/add-category-child");
-//        return modelAndView;
         categoryService.saveCategoryChild(categoryChildRequest);
         redirectAttributes.addFlashAttribute("successMessage", "Thêm danh mục con thành công!");
         modelAndView.setViewName("redirect:/category/add-category-child");
@@ -194,11 +185,11 @@ public class CategoryController {
         return modelAndView;
     }
 
-    @PostMapping("/update-category-child-put/{id}")
+    @PostMapping("/update-category-child/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView updateCategoryChild(@PathVariable("id") String id,
                                             @Valid @ModelAttribute("categoryChildRequest") CategoryChildRequest categoryChildRequest,
-                                            BindingResult bindingResult) {
+                                            BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         ModelAndView modelAndView = new ModelAndView();
         List<Category> parentCategories = categoryService.findAllCategoryParent();
         if (bindingResult.hasErrors()) {
@@ -208,10 +199,9 @@ public class CategoryController {
             return modelAndView;
         }
         categoryService.updateCategoryChild(id, categoryChildRequest);
-        modelAndView.addObject("successMessage","Cập nhật danh mục thành công!");
-        modelAndView.addObject("categoryChildRequest", categoryChildRequest);
+        redirectAttributes.addFlashAttribute("successMessage","Cập nhật danh mục thành công!");
         modelAndView.addObject("parentCategories", parentCategories);
-        modelAndView.setViewName("redirect:/category/update-category-child");
+        modelAndView.setViewName("redirect:/category/update-category-child/" + id);
         return modelAndView;
     }
 

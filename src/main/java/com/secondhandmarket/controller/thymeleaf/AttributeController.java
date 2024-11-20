@@ -99,7 +99,7 @@ public class AttributeController {
         }
         attributeService.updateAttribute(id, attributeRequest);
         redirectAttributes.addFlashAttribute("successMessage", "Sửa thuộc tính thành công!");
-        return "redirect:/attribute/update-attribute/" + id;
+        return "redirect:/attribute/list-attribute";
     }
 
     @GetMapping("/delete-attribute/{id}")

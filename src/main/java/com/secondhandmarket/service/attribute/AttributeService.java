@@ -33,11 +33,16 @@ public class AttributeService {
         attribute.setName(attributeRequest.getName());
         attribute.setCategory(categoryRepository.findById(attributeRequest.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found")));
+
         List<Option> options = new ArrayList<>();
+
+        // Kiểm tra và xử lý các tùy chọn nếu có
         if (attributeRequest.getOptions() != null && !attributeRequest.getOptions().isEmpty()) {
-            String[] optionNames = attributeRequest.getOptions().split("\\s+");
+            // Tách chuỗi theo dấu phẩy và loại bỏ khoảng trắng thừa
+            String[] optionNames = attributeRequest.getOptions().split(",");
+
             for (String optionName : optionNames) {
-                optionName = optionName.replaceAll("^\"|\"$", "").trim();
+                optionName = optionName.trim();  // Loại bỏ khoảng trắng thừa ở đầu và cuối
                 if (!optionName.isEmpty()) {
                     Option option = new Option();
                     option.setId(UUID.randomUUID().toString());
@@ -47,9 +52,13 @@ public class AttributeService {
                 }
             }
         }
+
+        // Thiết lập các thuộc tính khác của attribute
         attribute.setIsRequired(attributeRequest.getIsRequired() != null && attributeRequest.getIsRequired());
         attribute.setIsEnter(attributeRequest.getIsEnter() != null && attributeRequest.getIsEnter());
         attribute.setOptions(options);
+
+        // Lưu attribute vào cơ sở dữ liệu
         attributeRepository.save(attribute);
     }
 
