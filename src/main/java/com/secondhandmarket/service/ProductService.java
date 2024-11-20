@@ -203,6 +203,8 @@ public class ProductService {
 
     public Page<ProductTagResponse> searchProducts(String query, String province, String categoryId, Double minPrice, Double maxPrice, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
+        log.info("Executing search query with parameters: query={}, province={}, categoryId={}, minPrice={}, maxPrice={}, pageable={}",
+                query, province, categoryId, minPrice, maxPrice, pageable);
         Page<Product> productPage = productRepository.searchProducts(query, province, categoryId, minPrice, maxPrice, pageable);
         return productMapper.toPageProductTagResponse(productPage);
     }

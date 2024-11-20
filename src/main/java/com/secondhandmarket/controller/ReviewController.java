@@ -82,6 +82,19 @@ public class ReviewController {
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+    //get review of shop
+    @GetMapping("/seller/{id}")
+    ResponseEntity<ApiResponse<List<ReviewResponse>>> getShopReview(
+            @PathVariable String id,
+            @RequestParam(value = "status", required = false) ReviewStatus status
+    ){
+        ApiResponse<List<ReviewResponse>> apiResponse = ApiResponse.<List<ReviewResponse>>builder()
+                .code("review-s-07")
+                .message("Get review for shop")
+                .data(reviewService.getReviewShop(id, status))
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
     //get review of reviewer
     @GetMapping("/reviewer")
     ResponseEntity<ApiResponse<List<ReviewResponse>>> getReviewerReview(

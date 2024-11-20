@@ -117,33 +117,43 @@ public class ReviewService {
         }else {
             reviews = reviewRepository.findByStatusAndSeller(status, seller);
         }
-        return reviewMapper.toReviewResponses(reviews);
+        List<ReviewResponse> reviewResponses = reviewMapper.toReviewResponses(reviews);
+        return reviewResponses;
     }
 
     public List<ReviewResponse> getByReviewer(ReviewStatus status) {
         User reviewer = securityUtil.getCurrentUser();
         List<Review> reviews;
-        log.info(status.toString());
         if(status == null) {
             reviews = reviewRepository.findByReviewer(reviewer);
         }else {
             reviews = reviewRepository.findByStatusAndReviewer(status, reviewer);
         }
-        log.info("chạy tới ây");
-        log.info(reviews.toString());
-
-        return reviewMapper.toReviewResponses(reviews);
+        List<ReviewResponse> reviewResponses = reviewMapper.toReviewResponses(reviews);
+        return reviewResponses;
     }
 
     public ReviewResponse postFeedback(String reviewId, PostFeedback request) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "review not found"));
         User seller = securityUtil.getCurrentUser();
-        if(!review.getReviewer().equals(seller)){
+        if(!review.getProduct().getSeller().equals(seller)){
             throw new AppException(HttpStatus.FORBIDDEN, "You are not owner of review");
         }
         review.setFeedbackFromSeller(request.getFeedback());
         reviewRepository.save(review);
         return reviewMapper.toReviewResponse(review);
+    }
+
+    public List<ReviewResponse> getReviewShop(String id,ReviewStatus status) {
+        User shop = userRepository.findById(id)
+                .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "user not found"));
+        List<Review> reviews;
+        if(status == null) {
+            reviews = reviewRepository.findBySeller(shop);
+        }   else{
+            reviews = reviewRepository.findBySellerAndStatus(shop, ReviewStatus.PUBLIC);
+        }
+        return reviewMapper.toReviewResponses(reviews);
     }
 }

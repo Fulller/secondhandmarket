@@ -62,5 +62,6 @@ public class User {
     protected void onCreate() {
         this.reported = 0;
         this.status = UserStatus.ACTIVE;
+        this.rating = 0.0;
     }
 }

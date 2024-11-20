@@ -1,8 +1,10 @@
 package com.secondhandmarket.service;
 
 import com.secondhandmarket.dto.report.ReportRequest;
+import com.secondhandmarket.dto.report.ReportResponse;
 import com.secondhandmarket.enums.UserStatus;
 import com.secondhandmarket.exception.AppException;
+import com.secondhandmarket.mapper.ReportMapper;
 import com.secondhandmarket.model.RefreshToken;
 import com.secondhandmarket.model.Report;
 import com.secondhandmarket.model.Review;
@@ -16,11 +18,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ReportService {
-
+    private final ReportMapper reportMapper;
     private final SecurityUtil securityUtil;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
@@ -65,5 +69,11 @@ public class ReportService {
         reviewRepository.save(review);
         //GUI MAIL
         emailService.sendEmailReport(defendant.getEmail(), report);
+    }
+
+    public List<ReportResponse> getReport(String sellerId) {
+        List<Report> reports = reportRepository.findByDefendantId(sellerId);
+        List<ReportResponse> reportResponses = reportMapper.toReportResponse(reports);
+        return reportResponses;
     }
 }

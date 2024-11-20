@@ -25,6 +25,23 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     Page<Product> findAllByStatus(ProductStatus status, Pageable pageable);
 
+//    @Query("SELECT DISTINCT p FROM Product p " +
+//            "LEFT JOIN p.productAttributes pa " +
+//            "WHERE p.status = 'AVAILABLE' AND " +
+//            "(:province IS NULL OR p.address.province = :province) AND " +
+//            "(:categoryId IS NULL OR p.category.id = :categoryId) AND " +
+//            "(:minPrice IS NULL OR p.price >= :minPrice) AND " +
+//            "(:maxPrice IS NULL OR p.price <= :maxPrice) AND " +
+//            "(LOWER(p.name) LIKE LOWER(CONCAT('%', :query, '%')) " +
+//            "OR LOWER(p.description) LIKE LOWER(CONCAT('%', :query, '%')) " +
+//            "OR LOWER(pa.value) LIKE LOWER(CONCAT('%', :query, '%'))) ")
+//    Page<Product> searchProducts(@Param("query") String query,
+//                                 @Param("province") String province,
+//                                 @Param("categoryId") String categoryId,
+//                                 @Param("minPrice") Double minPrice,
+//                                 @Param("maxPrice") Double maxPrice,
+//                                 Pageable pageable);
+
     @Query("SELECT DISTINCT p FROM Product p " +
             "LEFT JOIN p.productAttributes pa " +
             "WHERE p.status = 'AVAILABLE' AND " +
@@ -41,6 +58,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
                                  @Param("minPrice") Double minPrice,
                                  @Param("maxPrice") Double maxPrice,
                                  Pageable pageable);
+
 
     Optional<Product> findByIdOrSlugAndStatus(String id, String slug, ProductStatus status);
 

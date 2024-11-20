@@ -1,5 +1,6 @@
 package com.secondhandmarket.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.secondhandmarket.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,6 +22,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
+    @JsonBackReference
     private Product product;
 
     @ManyToOne

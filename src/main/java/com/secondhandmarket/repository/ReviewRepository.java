@@ -15,6 +15,7 @@ import java.util.Optional;
 public interface ReviewRepository extends JpaRepository<Review, String> {
     Optional<Review> findByReviewerAndSellerAndProductAndStatusAndReviewType
             (User reviewer, User seller, Product product, ReviewStatus status, ReviewType reviewType);
+    List<Review> findBySellerAndStatus(User seller, ReviewStatus status);
     List<Review> findBySeller(User seller);
     List<Review> findByReviewer(User reviewer);
     List<Review> findByStatusAndReviewer(ReviewStatus status, User reviewer);

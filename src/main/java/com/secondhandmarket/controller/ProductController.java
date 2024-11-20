@@ -79,7 +79,7 @@ public class ProductController {
     @GetMapping("/search")
     @PreAuthorize("permitAll()")
     public ResponseEntity<ApiResponse<PagedResponse<ProductTagResponse>>> getByIdOrSlug(
-            @RequestParam String q,
+            @RequestParam(defaultValue = " ") String q,
             @RequestParam(required = false) String province,
             @RequestParam(required = false) String categoryId,
             @RequestParam(required = false) Double minPrice,

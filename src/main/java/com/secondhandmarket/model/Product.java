@@ -70,9 +70,11 @@ public class Product {
     private List<ProductAttribute> productAttributes = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product", orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<PurchaseRequest> purchaseRequests = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product", orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Order> orders = new ArrayList<>();
 
     @PrePersist

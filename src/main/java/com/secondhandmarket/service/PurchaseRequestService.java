@@ -41,6 +41,9 @@ public class PurchaseRequestService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Product not found", "product-e-01"));
 
+        if (product.getSeller().getId().equals(buyerId)) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "You are owner", "purchaseRequest-e-04");
+        }
         // Kiểm tra trạng thái sản phẩm
         if (!product.getStatus().equals(ProductStatus.AVAILABLE)) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Product is not available for purchase", "product-e-02");

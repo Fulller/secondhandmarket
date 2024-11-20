@@ -1,5 +1,6 @@
 package com.secondhandmarket.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.secondhandmarket.enums.PurchaseRequestStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,10 +22,12 @@ public class PurchaseRequest {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
+    @JsonBackReference
     private Product product;
 
     @ManyToOne
     @JoinColumn(name = "buyer_id", nullable = false)
+    @JsonBackReference
     private User buyer;
 
     @Column(nullable = false)
