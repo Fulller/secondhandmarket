@@ -8,5 +8,6 @@ public class SecondhandmarketApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SecondhandmarketApplication.class, args);
 	}
+
 }
 

@@ -135,11 +135,30 @@ public class PurchaseRequestService {
 
     private PurchaseRequestResponseDTO mapToDTO(PurchaseRequest request) {
         PurchaseRequestResponseDTO dto = new PurchaseRequestResponseDTO();
+
         dto.setId(request.getId());
         dto.setProductId(request.getProduct().getId());
         dto.setBuyerId(request.getBuyer().getId());
         dto.setMessage(request.getMessage());
         dto.setStatus(request.getStatus());
+
+        if (request.getProduct() != null) {
+            dto.setProductName(request.getProduct().getName());
+            dto.setProductPrice(request.getProduct().getPrice());
+            dto.setProductDescription(request.getProduct().getDescription());
+            dto.setThumbnail(request.getProduct().getThumbnail());
+
+            // Chuyển đổi LocalDateTime thành String (ví dụ theo định dạng ISO)
+            dto.setPostedAt(request.getProduct().getPostedAt().toString());
+            dto.setExpiredAt(request.getProduct().getExpiredAt().toString());
+        }
+
+        if (request.getBuyer() != null) {
+            dto.setBuyerName(request.getBuyer().getName());
+            dto.setBuyerEmail(request.getBuyer().getEmail());
+        }
+
         return dto;
     }
+
 }

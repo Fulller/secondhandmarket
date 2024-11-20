@@ -14,16 +14,15 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Data
 public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false)
     private Integer rating;
 
-    @Column(nullable = false)
     private String comment;
 
     private String image;
@@ -50,6 +49,8 @@ public class Review {
 
     @Column(nullable = false)
     private LocalDateTime created_at;
+
+    private Boolean isReport;
 
     @PrePersist
     protected void onCreate() {

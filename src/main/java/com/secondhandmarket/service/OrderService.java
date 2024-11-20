@@ -4,12 +4,14 @@ import com.secondhandmarket.dto.order.OrderRequest;
 import com.secondhandmarket.dto.order.OrderResponse;
 import com.secondhandmarket.enums.*;
 import com.secondhandmarket.exception.AppException;
+import com.secondhandmarket.mapper.OrderMapper;
 import com.secondhandmarket.model.*;
 import com.secondhandmarket.repository.OrderRepository;
 import com.secondhandmarket.repository.ProductRepository;
 import com.secondhandmarket.repository.ReviewRepository;
 import com.secondhandmarket.repository.UserRepository;
 import com.secondhandmarket.security.SecurityUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class OrderService {
     @Autowired
@@ -26,13 +29,11 @@ public class OrderService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private SecurityUtil securityUtil;
     @Autowired
-    private ProductService productService;
-    @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private OrderMapper orderMapper;
 
     //accept order
     public void createOrder(OrderRequest orderRequest) {
@@ -51,19 +52,15 @@ public class OrderService {
     }
 
     //lấy tất cả order của seller
-    public List<OrderResponse> getYourOrderSeller() {
+    public List<OrderResponse> getYourOrderSeller(OrderStatus status) {
         User seller = securityUtil.getCurrentUser();
-
-        List<Order> orders = orderRepository.findBySeller(seller);
-        List<OrderResponse> orderResponses = new ArrayList<>();
-        for (Order order : orders) {
-            OrderResponse orderResponse = new OrderResponse();
-            orderResponse.setBuyer(order.getBuyer());
-            orderResponse.setSeller(order.getSeller());
-            orderResponse.setProduct(order.getProduct());
-            orderResponse.setPurchaseRequest(order.getPurchaseRequest());
-            orderResponses.add(orderResponse);
+        List<Order> orders;
+        if(status == null){
+            orders = orderRepository.findBySeller(seller);
+        }else {
+            orders = orderRepository.findBySellerAndStatus(seller, status);
         }
+        List<OrderResponse> orderResponses = orderMapper.toOrderResponseList(orders);
         return orderResponses;
     }
     //lấy tất cả order của product seller
@@ -77,31 +74,21 @@ public class OrderService {
         }
 
         List<Order> orders = orderRepository.findByProduct(product);
-        List<OrderResponse> orderResponses = new ArrayList<OrderResponse>();
-        for (Order order : orders) {
-            OrderResponse orderResponse = new OrderResponse();
-            orderResponse.setBuyer(order.getBuyer());
-            orderResponse.setSeller(order.getSeller());
-            orderResponse.setProduct(order.getProduct());
-            orderResponse.setPurchaseRequest(order.getPurchaseRequest());
-            orderResponses.add(orderResponse);
-        }
+        List<OrderResponse> orderResponses = orderMapper.toOrderResponseList(orders);
+
         return orderResponses;
     }
     //lấy tất cả order của người mua
-    public List<OrderResponse> getYourOrderBuyer() {
+    public List<OrderResponse> getYourOrderBuyer(OrderStatus status) {
         User buyer = securityUtil.getCurrentUser();
-
-        List<Order> orders = orderRepository.findByBuyer(buyer);
-        List<OrderResponse> orderResponses = new ArrayList<OrderResponse>();
-        for (Order order : orders) {
-            OrderResponse orderResponse = new OrderResponse();
-            orderResponse.setBuyer(order.getBuyer());
-            orderResponse.setSeller(order.getSeller());
-            orderResponse.setProduct(order.getProduct());
-            orderResponse.setPurchaseRequest(order.getPurchaseRequest());
-            orderResponses.add(orderResponse);
+        List<Order> orders;
+        if(status == null){
+            orders = orderRepository.findByBuyer(buyer);
+        }else {
+            orders = orderRepository.findByBuyerAndStatus(buyer, status);
         }
+        List<OrderResponse> orderResponses = orderMapper.toOrderResponseList(orders);
+
         return orderResponses;
     }
 
@@ -112,7 +99,7 @@ public class OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "Order not found"));
 
-        if(!order.getBuyer().equals(user) || !order.getSeller().equals(user)) {
+        if(!order.getBuyer().equals(user) && !order.getSeller().equals(user)) {
             throw new AppException(HttpStatus.BAD_REQUEST, "You are not buyer of this product");
         }
         order.setStatus(OrderStatus.CANCELED);
@@ -151,7 +138,9 @@ public class OrderService {
                 .product(product)
                 .seller(product.getSeller())
                 .reviewType(ReviewType.PURCHASED_PRODUCT)
+                .isReport(false)
                 .build();
+        log.info("code chạy tới aaay");
         reviewRepository.save(review);
     }
 }

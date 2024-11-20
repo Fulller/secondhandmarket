@@ -2,6 +2,7 @@ package com.secondhandmarket.controller;
 
 import com.secondhandmarket.dto.api.ApiResponse;
 import com.secondhandmarket.dto.order.OrderResponse;
+import com.secondhandmarket.enums.OrderStatus;
 import com.secondhandmarket.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,11 +20,13 @@ public class OrderRequestController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/seller")
-    ResponseEntity<ApiResponse<List<OrderResponse>>> getYourOrderSeller() {
+    ResponseEntity<ApiResponse<List<OrderResponse>>> getYourOrderSeller(
+            @RequestParam(value = "status", required = false) OrderStatus status
+    ) {
         ApiResponse<List<OrderResponse>> apiResponse = ApiResponse.<List<OrderResponse>>builder()
                 .code("order-s-01")
                 .message("get order seller success")
-                .data(orderService.getYourOrderSeller())
+                .data(orderService.getYourOrderSeller(status))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
@@ -39,11 +42,13 @@ public class OrderRequestController {
     }
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/buyer")
-    ResponseEntity<ApiResponse<List<OrderResponse>>> getYourOrderBuyer() {
+    ResponseEntity<ApiResponse<List<OrderResponse>>> getYourOrderBuyer(
+            @RequestParam(value = "status", required = false) OrderStatus status
+    ) {
         ApiResponse<List<OrderResponse>> apiResponse = ApiResponse.<List<OrderResponse>>builder()
                 .code("order-s-03")
                 .message("get order buyer success")
-                .data(orderService.getYourOrderBuyer())
+                .data(orderService.getYourOrderBuyer(status))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }

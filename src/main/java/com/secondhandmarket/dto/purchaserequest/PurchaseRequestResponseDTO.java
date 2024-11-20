@@ -12,5 +12,13 @@ public class PurchaseRequestResponseDTO {
     String productId;
     String buyerId;
     String message;
+    String productName;
+    Double productPrice;
+    String productDescription;
+    String buyerName;
+    String buyerEmail;
+    String thumbnail;
+    String postedAt;  // Thay kiểu thành String
+    String expiredAt; // Thay kiểu thành String
     PurchaseRequestStatus status;
 }

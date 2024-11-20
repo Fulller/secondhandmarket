@@ -5,6 +5,8 @@ import com.secondhandmarket.dto.review.PostFeedback;
 import com.secondhandmarket.dto.review.PostReviewRequest;
 import com.secondhandmarket.dto.review.ReviewResponse;
 import com.secondhandmarket.dto.review.ReviewUpdateRequest;
+import com.secondhandmarket.enums.OrderStatus;
+import com.secondhandmarket.enums.ReviewStatus;
 import com.secondhandmarket.model.Review;
 import com.secondhandmarket.service.ReviewService;
 import jakarta.validation.Valid;
@@ -70,21 +72,25 @@ public class ReviewController {
     }
     //get review of seller
     @GetMapping("/seller")
-    ResponseEntity<ApiResponse<List<ReviewResponse>>> getSellerReview(){
+    ResponseEntity<ApiResponse<List<ReviewResponse>>> getSellerReview(
+            @RequestParam(value = "status", required = false) ReviewStatus status
+    ){
         ApiResponse<List<ReviewResponse>> apiResponse = ApiResponse.<List<ReviewResponse>>builder()
                 .code("review-s-05")
                 .message("get review of seller success")
-                .data(reviewService.getBySeller())
+                .data(reviewService.getBySeller(status))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
     //get review of reviewer
     @GetMapping("/reviewer")
-    ResponseEntity<ApiResponse<List<ReviewResponse>>> getReviewerReview(){
+    ResponseEntity<ApiResponse<List<ReviewResponse>>> getReviewerReview(
+            @RequestParam(value = "status", required = false) ReviewStatus status
+    ){
         ApiResponse<List<ReviewResponse>> apiResponse = ApiResponse.<List<ReviewResponse>>builder()
                 .code("review-s-05")
                 .message("get review of reviewer success")
-                .data(reviewService.getByReviewer())
+                .data(reviewService.getByReviewer(status))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
