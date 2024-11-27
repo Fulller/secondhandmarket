@@ -1,6 +1,5 @@
 package com.secondhandmarket.dto.user;
 
-import com.secondhandmarket.model.Address;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,5 +12,5 @@ public class UserUpdateRequest {
     String name;
     String phone;
     String avatar;
-    Address address;
+    String addressId;
 }

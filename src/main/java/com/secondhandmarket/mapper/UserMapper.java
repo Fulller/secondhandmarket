@@ -10,10 +10,11 @@ import com.secondhandmarket.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.Set;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
     @Mapping(source = "roles", target = "scope", qualifiedByName = "rolesToScope")
     JWTPayloadDto toJWTPayloadDto(User user);
@@ -34,5 +35,5 @@ public interface UserMapper {
     AuthUserInfoResponse toUserInfo(User user);
 
     UserSellerInProductDTO toUserSellerInProductDto(User user);
-    
+
 }

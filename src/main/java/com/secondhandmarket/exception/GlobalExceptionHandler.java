@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import javax.naming.AuthenticationException;
 import java.nio.file.AccessDeniedException;
@@ -31,7 +33,6 @@ public class GlobalExceptionHandler {
                 .stream()
                 .map(fieldError -> fieldError.getField().toUpperCase() + ": " + fieldError.getDefaultMessage())
                 .collect(Collectors.joining(", "));
-
         ApiResponse<Void> response = ApiResponse.<Void>builder()
                 .success(false)
                 .message(errorMessage)
@@ -59,6 +60,13 @@ public class GlobalExceptionHandler {
                 .message("Access denied: " + e.getMessage())
                 .build();
         return ResponseEntity.status(403).body(response); // 403 Forbidden
+    }
+
+    @ExceptionHandler(value = NoResourceFoundException.class)
+    public ModelAndView handleNoResourceFoundException(NoResourceFoundException e) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/dashboard");
+        return modelAndView;
     }
 
     @ExceptionHandler(value = Exception.class)
