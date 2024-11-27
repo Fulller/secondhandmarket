@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Store Token</title>
+</head>
+<body>
+<h1>Your Token</h1>
+<p th:text="'Token: ' + ${accessToken}"></p>
+<script th:inline="javascript">
+    // Lưu token vào localStorage
+    var token = /*[[${accessToken}]]*/ 'undefined';
+    if (token !== 'undefined' && token !== '') {
+        localStorage.setItem('accessToken', token);
+        window.location.href = "/dashboard";
+    }
+</script>
+</body>
+</html>

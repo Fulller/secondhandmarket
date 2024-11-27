@@ -1,0 +1,426 @@
+[
+    {
+        "id": "4c1a5bf7-82d5-42d2-8412-1f8ea189d766",
+        "name": "Bất động sản",
+        "level": 1,
+        "categoryChildren": [
+            {
+                "id": "2f1e1a6e-2ce8-4e2c-b88e-a2c31d522741",
+                "name": "Căn hộ, chung cư",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "2f1e1a6e-2ce8-4e2c-b88e-a2c31d622741",
+                "name": "Văn phòng, mặt bằng kinh doanh",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "7243da48-ae20-4b3f-a9af-c392ac718f46",
+                "name": "Nhà ở",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "7453e478-5624-4520-8699-d47808f0ced5",
+                "name": "Đất",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "f6fd0915-b2aa-4754-8617-f72bcd09a87e",
+                "name": "Phòng trọ",
+                "level": 2,
+                "categoryChildren": []
+            }
+        ]
+    },
+    {
+        "id": "6d07f2f6-dbe2-4451-87eb-9e0b0bf4ddeb",
+        "name": "Xe cộ",
+        "level": 1,
+        "categoryChildren": [
+            {
+                "id": "35d98e2e-eef0-4211-a1a9-e434c7c774f2",
+                "name": "Xe đạp",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "75b66465-7382-46ec-93d6-239d946df129",
+                "name": "Phương tiện khác",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "b1f3ae8c-4eda-439f-aec9-b3be098402c7",
+                "name": "Phụ tùng xe",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "c19eeb0a-290b-4b7d-be97-819071b06df9",
+                "name": "Xen tải, xe ben",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "da2ae761-26b3-45e6-9ca7-cd839d70a672",
+                "name": "Xe điện",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "e0f41f49-ce40-4a7f-9d7f-3e43924de31f",
+                "name": "Xé máy",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "e9437f00-b154-431c-a9a0-f063d9e8f0c6",
+                "name": "Ô tô",
+                "level": 2,
+                "categoryChildren": []
+            }
+        ]
+    },
+    {
+        "id": "c27483aa-0421-4980-813c-3e1dc3f49b89",
+        "name": "Đồ điện tử",
+        "level": 1,
+        "categoryChildren": [
+            {
+                "id": "15d98e2e-eef0-4211-a1a9-e434c7c774f2",
+                "name": "Điện thoại",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "25b66465-7382-46ec-93d6-239d946df129",
+                "name": "Máy tính bảng",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "51f3ae8c-4eda-439f-aec9-b3be098402c7",
+                "name": "Laptop",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "519eeb0a-290b-4b7d-be97-819071b06df9",
+                "name": "Máy tính để bàn",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "1a2ae761-26b3-45e6-9ca7-cd839d70a672",
+                "name": "Máy ảnh, máy quay",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "10f41f49-ce40-4a7f-9d7f-3e43924de31f",
+                "name": "Tivi, âm thanh",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "19437f00-b154-431c-a9a0-f063d9e8f0c6",
+                "name": "Thiết bị đeo thông minh",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "12437f00-b154-431c-a9a0-f063d9e8f0c6",
+                "name": "Phụ kiện (Màn hình, Chuột,...)",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "13437f00-b154-431c-a9a0-f063d9e8f0c6",
+                "name": "Linh kiện (RAM, Card,...)",
+                "level": 2,
+                "categoryChildren": []
+            }
+        ]
+    },
+    {
+        "id": "a53665d9-4fa6-4884-ac04-ef295b56c288",
+        "name": "Thú cưng",
+        "level": 1,
+        "categoryChildren": [
+            {
+                "id": "a5d98e2e-eef0-4211-a1a9-e434c7c774f2",
+                "name": "Gà",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "a5b66465-7382-46ec-93d6-239d946df129",
+                "name": "Chó",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "a1f3ae8c-4eda-439f-aec9-b3be098402c7",
+                "name": "Chim",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "a19eeb0a-290b-4b7d-be97-819071b06df9",
+                "name": "Mèo",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "aa2ae761-26b3-45e6-9ca7-cd839d70a672",
+                "name": "Thú cưng khác",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "a0f41f49-ce40-4a7f-9d7f-3e43924de31f",
+                "name": "Phụ kiện, thức ăn, dịch vụ",
+                "level": 2,
+                "categoryChildren": []
+            }
+        ]
+    },
+    {
+        "id": "b37d83c2-606a-4fb2-bea5-76224f94cfe2",
+        "name": "Đồ ăn, thực thẩm & các loại khác",
+        "level": 1,
+        "categoryChildren": []
+    },
+    {
+        "id": "b68bf8fe-aafc-40d4-be53-0715782b87fd",
+        "name": "Tủ lạnh, máy lạnh, máy giặt",
+        "level": 1,
+        "categoryChildren": [
+            {
+                "id": "b5d98e2e-eef0-4211-a1a9-e434c7c774f2",
+                "name": "Tủ lạnh",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "b5b66465-7382-46ec-93d6-239d946df129",
+                "name": "Máy lạnh, điều hòa",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "b1f3ae8c-4eda-439f-aec9-b3be098402c7",
+                "name": "Máy giặt",
+                "level": 2,
+                "categoryChildren": []
+            }
+        ]
+    },
+    {
+        "id": "452bddf8-5e18-4e6d-ae53-40042c12ae35",
+        "name": "Đồ gia dụng, nội tất & cây cảnh",
+        "level": 1,
+        "categoryChildren": [
+            {
+                "id": "c5d98e2e-eef0-4211-a1a9-e434c7c774f2",
+                "name": "Bàn ghế",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "c5b66465-7382-46ec-93d6-239d946df129",
+                "name": "Tủ, kệ gia đình",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "c1f3ae8c-4eda-439f-aec9-b3be098402c7",
+                "name": "Giường, chăng ga, gối nệm",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "c19eeb0a-290b-4b7d-be97-819071b06df9",
+                "name": "Bếp, lò, đồ điện bếp",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "ca2ae761-26b3-45e6-9ca7-cd839d70a672",
+                "name": "Dụng cụ nhà bếp",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "c0f41f49-ce40-4a7f-9d7f-3e43924de31f",
+                "name": "Quạt",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "c9437f00-b154-431c-a9a0-f0c3d9e8f0c6",
+                "name": "Đèn",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "c2437f00-b154-431c-a9a0-f063d9e8f0c6",
+                "name": "Cây cảnh, đồ trang trí",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "c343cf00-b154-431c-a9a0-f063d9e8f0c6",
+                "name": "Thiết bị vệ sinh, nhà tắm",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "c3437f00-b154-431c-a9a0-f063d9e8f0c6",
+                "name": "Nội thất, đồ gia dụng khác",
+                "level": 2,
+                "categoryChildren": []
+            }
+        ]
+    },
+    {
+        "id": "5973d51d-f723-4a68-b785-00aa5677bec8",
+        "name": "Mẹ và bé",
+        "level": 1,
+        "categoryChildren": []
+    },
+    {
+        "id": "7003b043-1b21-4a38-895e-aa430f51cac2",
+        "name": "Thời trang & đồ dùng cá nhân",
+        "level": 1,
+        "categoryChildren": [
+            {
+                "id": "d5d98e2e-eef0-4211-a1a9-e434c7c774f2",
+                "name": "Quần áo",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "d5b66465-7382-46ec-93d6-239d946df129",
+                "name": "Đồng hồ",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "d1f3ae8c-4eda-439f-aec9-b3be098402c7",
+                "name": "Giày dép",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "d19eeb0a-290b-4b7d-be97-819071b06df9",
+                "name": "Túi xách",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "da2ae761-26b3-45e6-9ca7-cd839d70a672",
+                "name": "Nước hoa",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "d0f41f49-ce40-4a7f-9d7f-3e43924de31f",
+                "name": "Phụ kiện thời trang khác",
+                "level": 2,
+                "categoryChildren": []
+            }
+        ]
+    },
+    {
+        "id": "56a2c0d4-ee2b-4c45-a54d-292180a1dfe5",
+        "name": "Việc làm",
+        "level": 1,
+        "categoryChildren": [
+            {
+                "id": "e5d98e2e-eef0-4211-a1a9-e434c7c774f2",
+                "name": "Nhạc cụ",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "e5b66465-7382-46ec-93d6-239d946df129",
+                "name": "Sách",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "e1f3ae8c-4eda-439f-aec9-b3be098402c7",
+                "name": "Đồ thể thao",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "e19eeb0a-290b-4b7d-be97-819071b06df9",
+                "name": "Dã ngoại",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "ea2ae761-26b3-45e6-9ca7-cd839d70a672",
+                "name": "Đồ sưu tầm, đồ cổ",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "e0f41f49-ce40-4a7f-9d7f-3e43924de31f",
+                "name": "Thiết bị chơi game",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "e9437f00-b154-431c-a9a0-f063d9e8f0c6",
+                "name": "Sở thích khác",
+                "level": 2,
+                "categoryChildren": []
+            }
+        ]
+    },
+    {
+        "id": "b67b1055-ca7b-477e-8876-541bc4f1b74e",
+        "name": "Đồ dùng văn phòng, công nông nghiệp",
+        "level": 1,
+        "categoryChildren": [
+            {
+                "id": "f0f41f49-ce40-4a7f-9d7f-3e43924de31f",
+                "name": "Đồ dùng văn phòng",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "f9437f00-b154-431c-a9a0-f063d9e8f0c6",
+                "name": "Đồ chuyên dụng, giống nuôi trồng",
+                "level": 2,
+                "categoryChildren": []
+            }
+        ]
+    },
+    {
+        "id": "cb861c15-aae0-40b0-aae3-e6b12592b93c",
+        "name": "Dịch vụ & Du lịch",
+        "level": 1,
+        "categoryChildren": [
+            {
+                "id": "g0f41f49-ce40-4a7f-9d7f-3e43924de31f",
+                "name": "Dịch vụ",
+                "level": 2,
+                "categoryChildren": []
+            },
+            {
+                "id": "g9437f00-b154-431c-a9a0-f063d9e8f0c6",
+                "name": "Du lịch",
+                "level": 2,
+                "categoryChildren": []
+            }
+        ]
+    }
+]

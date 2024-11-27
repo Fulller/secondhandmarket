@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .email-container {
+            max-width: 600px;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .email-header {
+            background: #38a169;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 8px 8px 0 0;
+        }
+        .email-body {
+            padding: 20px;
+        }
+        .email-body h2 {
+            color: #2d3748;
+        }
+        .verify-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #38a169;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .verify-btn:hover {
+            background: #3182ce;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="email-header">
+        <h1>Email xác nhận từ Chợ Cũ</h1>
+    </div>
+    <div class="email-body">
+        <h2>{{emailText}}</h2>
+        <a href="{{verifyUrl}}" class="verify-btn">Xác nhận</a>
+    </div>
+</div>
+</body>
+</html>
